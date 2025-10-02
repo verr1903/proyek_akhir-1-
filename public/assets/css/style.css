@@ -156,7 +156,7 @@ a:focus {
 
 a:hover {
   text-decoration: none;
-  color: #f34f3f;
+  color: #485444;
 }
 
 button, input[type="submit"] {
@@ -500,7 +500,7 @@ figure {
 }
 
 .page-pagination .pagination .page-item .page-link.active, .page-pagination .pagination .page-item .page-link:hover {
-  background-color: #f34f3f;
+  background-color: #485444;
   color: #ffffff;
 }
 
@@ -740,8 +740,8 @@ figure {
 }
 
 .btn-primary:hover {
-  background-color: #f23927;
-  border-color: #f23927;
+  background-color: #485444;
+  border-color: #485444;
 }
 
 .btn-secondary {
@@ -2438,7 +2438,7 @@ blockquote p {
   background: none;
   height: 40px;
   font-size: 14px;
-  color: #222222;
+  color: #ffffff;
   font-weight: 400;
   opacity: 0.7;
   padding-right: 32px;
@@ -2452,7 +2452,7 @@ blockquote p {
   border: 0;
   background: none;
   font-size: 20px;
-  color: #666666;
+  color: #ffffff;
   height: 40px;
 }
 
@@ -2536,7 +2536,7 @@ blockquote p {
 }
 
 .header-meta-info .header-account .header-account-list.top-link .dropdown-menu li a:hover {
-  color: #f34f3f;
+  color: #485444;
 }
 
 .header-meta-info .header-account .header-account-list.mini-cart .dropdown-menu {
@@ -3759,14 +3759,14 @@ blockquote p {
   text-transform: uppercase;
   display: inline-block;
   border-bottom: 1px solid transparent;
-  color: #f34f3f;
+  color: #485444;
   -webkit-transition: all 0.3s linear;
   -o-transition: all 0.3s linear;
   transition: all 0.3s linear;
 }
 
 .product-tab-menu .nav li a.active {
-  border-color: #f34f3f;
+  border-color: #485444;
 }
 
 .product-items-tab:not(:first-child) {
