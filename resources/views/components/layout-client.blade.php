@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Kngu - Jaqyuu </title>
+    <title>{{$title}} - Jaqyuu</title>
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -175,6 +175,38 @@
         .header-mobile .header-account-list {
             display: flex;
             align-items: center;
+        }
+        .size-options {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-family: sans-serif;
+        }
+
+        .size-options label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 35px;
+            border: 2px solid #999;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .size-options input[type="radio"] {
+            display: none;
+        }
+
+        .size-options input[type="radio"]:checked+label {
+            background-color: #3f4b3f;
+            /* warna hijau gelap seperti di contoh */
+            color: white;
+            border-color: #3f4b3f;
         }
     </style>
 
