@@ -5,7 +5,7 @@
                     <div class="row ms-4 align-items-center">
                         <div class="col-lg-2">
                             <div class="header-logo">
-                                <a href="index.html">
+                                <a href="#">
                                     <img src="/assets/images/logo/logoo.jpg"
                                         alt="Logo"
                                         class="img-fluid rounded shadow"
@@ -17,8 +17,49 @@
                             <div class="site-main-nav">
                                 <nav class="site-nav">
                                     <ul class="d-flex gap-4 list-unstyled m-0">
-                                        <li><a href="index.html" class="fs-6 ms-5 link-hover">Beranda</a></li>
-                                        <li><a href="contact.html" class="fs-6 link-hover">Produk</a></li>
+                                        <li><a href="{{ route('dashboard')}}" class="fs-6 ms-5 link-hover">Beranda</a></li>
+                                        <li>
+                                            <a href="#" class="fs-6 link-hover">Produk<span class="new ms-5">New</span></a>
+                                            <ul class="mega-sub-menu d-flex justify-content-between"
+                                                style="width:700px;">
+                                                <li class="mega-dropdown flex-fill" style="max-width: 33%;">
+                                                    <a class="mega-title" href="#">Kategori</a>
+                                                    <ul class="mega-item">
+                                                        <li><a
+                                                                href="">Hoodie</a>
+                                                        </li>
+                                                        <li><a
+                                                                href="">T-Shirt</a>
+                                                        </li>
+                                                        <li><a
+                                                                href="">Sweater</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+
+                                                <!-- Koleksi Baru -->
+                                                <li class="mega-dropdown flex-fill" style="max-width: 33%;">
+                                                    <a class="mega-title" href="#">Koleksi Baru</a>
+                                                    <ul class="mega-item">
+                                                        <li><a href="">Rilisan Terbaru</a>
+                                                        </li>
+                                                        <li><a href="">Promo & Diskon</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+
+                                                <!-- Akun & Pembelian -->
+
+
+                                                <!-- Banner Gambar -->
+                                                <li class="mega-dropdown flex-fill" style="max-width: 33%;">
+                                                    <a class="menu-banner" href="">
+                                                        <img src="/assets/images/product/image1.png"
+                                                            alt="Koleksi Terbaru Jaqyuu" style="border-radius: 10px;">
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
                                         <li><a href="contact.html" class="fs-6 link-hover">History</a></li>
                                     </ul>
                                 </nav>
@@ -33,69 +74,15 @@
                                         <input type="text" class="ms-3" placeholder="Cari Produk Disini ">
                                         <button><i class="icon-search"></i></button>
                                     </form>
-
                                 </div>
                                 <div class="header-account">
                                     <div class="header-account-list dropdown mini-cart">
-                                        <a href="#" role="button" data-bs-toggle="dropdown">
+                                        <a href="{{ route('keranjang') }}" role="button">
                                             <i class="icon-shopping-bag"></i>
-                                            <span class="item-count ">3</span>
+                                            <span class="item-count ">1</span>
                                         </a>
 
-                                        <ul class="dropdown-menu ">
-                                            <li class="product-cart">
-                                                <div class="single-cart-box">
-                                                    <div class="cart-img">
-                                                        <a href="shop-single.html"><img src="/assets/images/cart/cart-1.jpg" alt=""></a>
-                                                        <span class="pro-quantity">1x</span>
-                                                    </div>
-                                                    <div class="cart-content">
-                                                        <h6 class="title"><a href="shop-single.html">Rock Soapwort</a></h6>
-                                                        <div class="cart-price">
-                                                            <span class="sale-price">$70.00</span>
-                                                            <span class="regular-price">$80.00</span>
-                                                        </div>
-                                                    </div>
-                                                    <a href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
-                                                </div>
-                                                <div class="single-cart-box">
-                                                    <div class="cart-img">
-                                                        <a href="shop-single.html"><img src="/assets/images/cart/cart-2.jpg" alt=""></a>
-                                                        <span class="pro-quantity">1x</span>
-                                                    </div>
-                                                    <div class="cart-content">
-                                                        <h6 class="title"><a href="shop-single.html">Rock Soapwort</a></h6>
-                                                        <div class="cart-price">
-                                                            <span class="sale-price">$70.00</span>
-                                                            <span class="regular-price">$80.00</span>
-                                                        </div>
-                                                    </div>
-                                                    <a href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
-                                                </div>
-                                                <div class="single-cart-box">
-                                                    <div class="cart-img">
-                                                        <a href="shop-single.html"><img src="/assets/images/cart/cart-3.jpg" alt=""></a>
-                                                        <span class="pro-quantity">1x</span>
-                                                    </div>
-                                                    <div class="cart-content">
-                                                        <h6 class="title"><a href="shop-single.html">Rock Soapwort</a></h6>
-                                                        <div class="cart-price">
-                                                            <span class="sale-price">$70.00</span>
-                                                            <span class="regular-price">$80.00</span>
-                                                        </div>
-                                                    </div>
-                                                    <a href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
-                                                </div>
-                                            </li>
-                                            <li class="product-total">
-                                                <ul class="cart-total">
-                                                    <li> Total : <span>$189.00</span></li>
-                                                </ul>
-                                            </li>
-                                            <li class="product-btn">
-                                                <a href="checkout.html" class="btn btn-dark d-block">Checkout</a>
-                                            </li>
-                                        </ul>
+
                                     </div>
                                     <div class="header-account-list dropdown top-link">
                                         <a href="#" role="button" data-bs-toggle="dropdown"><i class="icon-users"></i></a>
@@ -125,7 +112,7 @@
                 <div class="row align-items-center gx-0">
                     <div class="col-6">
                         <div class="header-logo">
-                            <a href="index.html"><img style="width: 90px;margin-top: -10px;" src="/assets/images/logo/logoo.jpg" alt="" class="img-fluid rounded shadow"></a>
+                            <a href="#"><img style="width: 90px;margin-top: -10px;" src="/assets/images/logo/logoo.jpg" alt="" class="img-fluid rounded shadow"></a>
                         </div>
                     </div>
                     <div class="col-6">
@@ -173,112 +160,49 @@
 
             <div class="header-meta-info">
                 <div class="header-search">
-                    <form action="#">
-                        <input type="text" placeholder="Search our store ">
-                        <button><i class="icon-search"></i></button>
-                    </form>
+                    <form action="#" class="btn-round"
+                                        style="background-color: #485444; width: 100%; max-width: 400px; margin-left: 0;">
+                                        <input type="text" class="ms-3" placeholder="Cari Produk Disini ">
+                                        <button><i class="icon-search"></i></button>
+                                    </form>
                 </div>
             </div>
 
             <div class="site-main-nav">
                 <nav class="site-nav">
                     <ul class="navbar-mobile-wrapper">
-                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html">Beranda</a></li>
                         <li>
-                            <a href="#">Shop <span class="new">New</span></a>
+                            <a href="#">Produk <span class="new ms-4">New</span></a>
 
                             <ul class="mega-sub-menu">
                                 <li class="mega-dropdown">
-                                    <a class="mega-title" href="#">Shop</a>
-
+                                    <a class="mega-title" href="#">Kategori</a>
                                     <ul class="mega-item">
-                                        <li><a href="shop-grid-3.html">Shop Grid 3</a></li>
-                                        <li><a href="shop-grid-4.html">Shop Grid 4</a></li>
-                                        <li><a href="shop-list.html">Shop List</a></li>
-                                        <li><a href="shop-grid-left-sidebar.html">Shop Grid Left Sidebar</a></li>
-                                        <li><a href="shop-grid-right-sidebar.html">Shop Grid Right Sidebar</a></li>
-                                        <li><a href="shop-list-left-sidebar.html">Shop List Left Sidebar</a></li>
-                                        <li><a href="shop-list-right-sidebar.html">Shop List Right Sidebar</a></li>
+                                        <li><a href="">Hoodie</a></li>
+                                        <li><a href="">T-Shirt</a></li>
+                                        <li><a href="">Sweater</a></li>
                                     </ul>
                                 </li>
                                 <li class="mega-dropdown">
-                                    <a class="mega-title" href="#">Shop Single</a>
-
+                                    <a class="mega-title" href="#">Koleksi Baru</a>
                                     <ul class="mega-item">
-                                        <li><a href="shop-single.html">Shop Single</a></li>
-                                        <li><a href="shop-single-affiliate.html">Shop Single Affiliate</a></li>
-                                        <li><a href="shop-single-variable.html">Shop Single Variable</a></li>
-                                        <li><a href="shop-single-group.html">Shop Single Group</a></li>
-                                    </ul>
-                                </li>
-                                <li class="mega-dropdown">
-                                    <a class="mega-title" href="#">Page</a>
-
-                                    <ul class="mega-item">
-                                        <li><a href="cart.html">Cart</a></li>
-                                        <li><a href="wishlist.html">Wishlist</a></li>
-                                        <li><a href="compare.html">Compare</a></li>
-                                        <li><a href="checkout.html">Checkout</a></li>
-                                        <li><a href="empty-cart.html">Empty Cart</a></li>
-                                        <li><a href="my-account.html">My Account</a></li>
+                                        <li><a href="">Rilisan Terbaru</a></li>
+                                        <li><a href="">Promo & Diskon</a></li>
                                     </ul>
                                 </li>
                                 <li class="mega-dropdown">
                                     <a class="menu-banner" href="#">
-                                        <img src="/assets/images/menu-banner.jpg" alt="">
+                                        <img src="/assets/images/product/image1.png" alt="">
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#">Blog</a>
-
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="#">Blog</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                        <li><a href="blog-right-sidebar.html">Blog Right Sidebar</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#">Blog Single</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="blog-single-left-sidebar.html">Blog Single Left Sidebar</a></li>
-                                        <li><a href="blog-single-right-sidebar.html">Blog Single Right Sidebar</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#">Pages <span class="sale">Sale</span></a>
-                            <ul class="sub-menu">
-                                <li><a href="about.html">About</a></li>
-                                <li><a href="cart.html">Cart</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
-                                <li><a href="compare.html">Compare</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                                <li><a href="empty-cart.html">Empty Cart</a></li>
-                                <li><a href="my-account.html">My Account</a></li>
-                                <li><a href="login.html">Login</a></li>
-                                <li><a href="register.html">Register</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="contact.html">History</a></li>
                     </ul>
                 </nav>
             </div>
 
-            <div class="header-social">
-                <ul class="social">
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                    <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                </ul>
-            </div>
 
         </div>
         <!--Header Mobile Menu End -->

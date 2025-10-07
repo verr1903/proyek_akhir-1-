@@ -103,11 +103,9 @@
 
                             <div class="product-action d-flex flex-wrap">
                                 <div class="action">
-                                    <button class="btn btn-primary">Add to cart</button>
+                                    <button class="btn btn-primary">Tambah KeKeranjang</button>
                                 </div>
-                                <div class="action">
-                                    <a href="#"><i class="fa fa-heart"></i></a>
-                                </div>
+                               
                             </div>
 
 
