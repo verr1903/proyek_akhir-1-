@@ -130,9 +130,9 @@
                                     </ul>
                                 </div>
                                 <div class="header-account-list mini-cart">
-                                    <a href="#">
+                                    <a href="{{ route('keranjang') }}">
                                         <i class="icon-shopping-bag"></i>
-                                        <span class="item-count ">0</span>
+                                        <span class="item-count ">1</span>
                                     </a>
                                 </div>
                                 <div class="header-account-list mobile-menu-trigger">
@@ -161,17 +161,17 @@
             <div class="header-meta-info">
                 <div class="header-search">
                     <form action="#" class="btn-round"
-                                        style="background-color: #485444; width: 100%; max-width: 400px; margin-left: 0;">
-                                        <input type="text" class="ms-3" placeholder="Cari Produk Disini ">
-                                        <button><i class="icon-search"></i></button>
-                                    </form>
+                        style="background-color: #485444; width: 100%; max-width: 400px; margin-left: 0;">
+                        <input type="text" class="ms-3" placeholder="Cari Produk Disini ">
+                        <button><i class="icon-search"></i></button>
+                    </form>
                 </div>
             </div>
 
             <div class="site-main-nav">
                 <nav class="site-nav">
                     <ul class="navbar-mobile-wrapper">
-                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="{{ route('dashboard')}}">Beranda</a></li>
                         <li>
                             <a href="#">Produk <span class="new ms-4">New</span></a>
 

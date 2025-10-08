@@ -90,10 +90,7 @@
             color: #485444 !important;
         }
 
-        .btn:hover {
-            color: #ffffff !important;
-            background-color: #48544483 !important;
-        }
+   
 
         .nav-pills .nav-link.active {
             background-color: #485444 !important;
@@ -176,6 +173,7 @@
             display: flex;
             align-items: center;
         }
+
         .size-options {
             display: flex;
             gap: 8px;
@@ -207,6 +205,46 @@
             /* warna hijau gelap seperti di contoh */
             color: white;
             border-color: #3f4b3f;
+        }
+
+        /* Warna dasar lembut */
+        .btn-soft-success {
+            background-color: #bde5c8;
+            color: #155724;
+            border: none;
+            transition: all 0.25s ease;
+            padding: 8px 12px;
+        }
+
+        /* Saat hover */
+        .btn-soft-success:hover {
+            background-color: #28a745;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Saat tombol aktif (terpilih) */
+        .btn-soft-success.active {
+            background-color: #28a745 !important;
+            color: #fff !important;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+        }
+
+        /* Tombol hapus */
+        .btn-soft-danger {
+            background-color: #f5c6cb;
+            color: #721c24;
+            border: none;
+            transition: all 0.25s ease;
+            padding: 8px 12px;
+        }
+
+        .btn-soft-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
         }
     </style>
 
