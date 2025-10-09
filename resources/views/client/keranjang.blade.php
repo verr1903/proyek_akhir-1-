@@ -109,7 +109,7 @@
                 </div>
 
                 <div class="card mb-4 rounded-3">
-                    <a href="index.html" class="text-decoration-none text-dark">
+                    <a href="{{ route('lokasi')}}" class="text-decoration-none text-dark">
                         <div class="card-body">
                             <div class="d-flex align-items-start">
                                 <i class="fa fa-map-marker-alt fa-lg text-danger me-2 mt-1"></i>
@@ -184,7 +184,7 @@
 
         <div class="mobile-view p-2">
             <div class="card mb-3 rounded-4 shadow-sm">
-                <a href="index.html" class="text-decoration-none text-dark">
+                <a href="{{ route('lokasi')}}" class="text-decoration-none text-dark">
                     <div class="card-body">
                         <div class="d-flex align-items-start">
                             <i class="fa fa-map-marker-alt fa-lg text-danger me-2 mt-1"></i>

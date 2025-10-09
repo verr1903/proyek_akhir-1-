@@ -231,6 +231,35 @@
             box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
         }
 
+        .btn-soft-success.active {
+            background-color: #28a745;
+            /* hijau utama */
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+            transform: none;
+        }
+
+        /* Tombol warning (edit / alamat utama) */
+        .btn-soft-warning {
+            background-color: #fff3cd;
+            /* kuning lembut */
+            color: #856404;
+            /* teks gelap khas warning */
+            border: none;
+            transition: all 0.25s ease;
+            padding: 8px 12px;
+        }
+
+        .btn-soft-warning:hover {
+            background-color: #ffc107;
+            /* kuning Bootstrap standard */
+            color: #fff;
+            /* teks putih */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+        }
+
+
         /* Tombol hapus */
         .btn-soft-danger {
             background-color: #f5c6cb;
