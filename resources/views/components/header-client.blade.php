@@ -79,7 +79,7 @@
                                     <div class="header-account-list dropdown mini-cart">
                                         <a href="{{ route('keranjang') }}" role="button">
                                             <i class="icon-shopping-bag"></i>
-                                            <span class="item-count ">1</span>
+                                            <span class="item-count ">2</span>
                                         </a>
 
 
@@ -107,7 +107,7 @@
 
 
         <!--Header Mobile Start-->
-        <div class="header-mobile d-lg-none">
+        <div class="header-mobile d-lg-none fixed-top bg-white shadow-sm">
             <div class="container">
                 <div class="row align-items-center gx-0">
                     <div class="col-6">
@@ -132,7 +132,7 @@
                                 <div class="header-account-list mini-cart">
                                     <a href="{{ route('keranjang') }}">
                                         <i class="icon-shopping-bag"></i>
-                                        <span class="item-count ">1</span>
+                                        <span class="item-count ">2</span>
                                     </a>
                                 </div>
                                 <div class="header-account-list mobile-menu-trigger">

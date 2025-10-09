@@ -90,7 +90,7 @@
             color: #485444 !important;
         }
 
-   
+
 
         .nav-pills .nav-link.active {
             background-color: #485444 !important;
@@ -245,6 +245,67 @@
             color: #fff;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .desktop-view {
+                display: none;
+            }
+
+            .mobile-view {
+                display: block;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .desktop-view {
+                display: block;
+            }
+
+            .mobile-view {
+                display: none;
+            }
+        }
+
+        .fci {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #aaa;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .fci:checked {
+            background-color: #445244;
+            border-color: #445244;
+            box-shadow: 0 0 4px rgba(68, 82, 68, 0.4);
+        }
+
+        @media (max-width: 991px) {
+            body {
+                padding-bottom: 70px;
+                padding-top: 50px;
+                /* sesuaikan tinggi header-mobile kamu */
+            }
+
+            .checkout-footer {
+                z-index: 1030;
+                /* agar di atas elemen lain */
+            }
+
+            .cd {
+                transition: all 0.2s ease-in-out;
+            }
+
+            .cd:hover {
+                background-color: #f8f9fa;
+                /* warna abu muda saat hover */
+                transform: scale(1.01);
+            }
+
+            .cd-body {
+                padding: 12px 16px;
+            }
         }
     </style>
 
