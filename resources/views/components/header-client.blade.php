@@ -85,15 +85,7 @@
 
                                     </div>
                                     <div class="header-account-list dropdown top-link">
-                                        <a href="#" role="button" data-bs-toggle="dropdown"><i class="icon-users"></i></a>
-
-                                        <ul class="dropdown-menu ">
-                                            <li><a href="#">Delivery</a></li>
-                                            <li><a href="#">Legal Notice</a></li>
-                                            <li><a href="#">Secure payment</a></li>
-                                            <li><a href="#">Sitemap</a></li>
-                                            <li><a href="#">About us</a></li>
-                                        </ul>
+                                        <a href="{{ route('profile') }}" role="button"><i class="icon-users"></i></a>
                                     </div>
 
                                 </div>
@@ -119,15 +111,7 @@
                         <div class="header-meta-info">
                             <div class="header-account">
                                 <div class="header-account-list dropdown top-link">
-                                    <a href="#" role="button" data-bs-toggle="dropdown"><i class="icon-users"></i></a>
-
-                                    <ul class="dropdown-menu ">
-                                        <li><a href="#">Delivery</a></li>
-                                        <li><a href="#">Legal Notice</a></li>
-                                        <li><a href="#">Secure payment</a></li>
-                                        <li><a href="#">Sitemap</a></li>
-                                        <li><a href="#">About us</a></li>
-                                    </ul>
+                                    <a href="{{ route('profile') }}" role="button"><i class="icon-users"></i></a>
                                 </div>
                                 <div class="header-account-list mini-cart">
                                     <a href="{{ route('keranjang') }}">
