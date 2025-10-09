@@ -55,7 +55,7 @@
                                 <label class="form-label fw-semibold">Password</label>
                                 <input type="password" class="form-control" placeholder="Masukkan password baru">
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Konfirmasi Password</label>
                                 <input type="password" class="form-control" placeholder="Masukkan konfirmasi password baru">
@@ -79,105 +79,89 @@
 
         <!-- mobile view -->
         <div class="mobile-view p-2">
-            <!-- Notifikasi Info -->
-            <div class="alert alert-warning text-center fw-semibold py-2 mb-3 rounded-3"
-                style="background-color: #f39e1f; color: #fff;">
-                <i class="fa fa-info-circle me-2"></i>
-                Untuk Saat Ini Pengantaran Hanya Melayani Daerah Sekitaran Pekanbaru
+
+            <div class="card border-0 shadow-sm rounded-4 mb-5">
+                <div class="card-body p-3">
+
+                    <!-- Judul -->
+                    <h5 class="fw-bold text-center text-dark mb-3">Kelola Profil</h5>
+
+                    <!-- Foto Profil -->
+                    <div class="text-center mb-4">
+                        <div class="position-relative d-inline-block">
+                            <img id="avatar-preview-mobile"
+                                src="/assets/images/profile/default.png"
+                                alt="Avatar"
+                                class="rounded-circle border shadow-sm"
+                                style="width: 100px; height: 100px; object-fit: cover;">
+                            <label for="avatar-upload-mobile"
+                                class="position-absolute bottom-0 end-0 bg-success text-white rounded-circle p-2"
+                                style="cursor: pointer; transform: translate(25%, 25%);">
+                                <i class="fa fa-camera"></i>
+                            </label>
+                            <input type="file" id="avatar-upload-mobile" class="d-none" accept="image/*">
+                        </div>
+                        <p class="small text-muted mt-2 mb-0">Ketuk ikon kamera untuk ganti foto</p>
+                    </div>
+
+                    <!-- Form Profil -->
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary mb-1">Username</label>
+                            <input type="text" class="form-control rounded-3" value="verry_adrian">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary mb-1">Email</label>
+                            <input type="email" class="form-control rounded-3" value="verry@example.com">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary mb-1">Password Lama</label>
+                            <input type="password" class="form-control rounded-3" placeholder="Masukkan password lama">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary mb-1">Password Baru</label>
+                            <input type="password" class="form-control rounded-3" placeholder="Masukkan password baru">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-semibold text-secondary mb-1">Konfirmasi Password</label>
+                            <input type="password" class="form-control rounded-3" placeholder="Masukkan konfirmasi password">
+                        </div>
+
+                        <!-- Tombol Aksi -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success rounded-3 pb-3 fw-semibold">
+                                <i class="fa fa-save me-1"></i> Simpan Perubahan
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary rounded-3 py-2 fw-semibold">
+                                <i class="fa fa-arrow-left me-1"></i> Kembali
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
             </div>
 
-            <!-- Header & Tombol Tambah -->
-            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-                <h5 class="fw-bold mb-2">Pilih Alamat</h5>
-                <a href="#" class="btn btn-success btn-sm rounded-3 d-flex align-items-center px-3 py-2">
-                    <i class="fa fa-plus-circle me-2"></i> Tambah
-                </a>
-            </div>
-
-            <!-- Daftar Alamat -->
-            <div class="address-list-mobile">
-
-                <!-- Card 1 -->
-                <div class="card border-0 shadow-sm rounded-4 mb-3">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-column">
-                            <div class="mb-2">
-                                <strong class="d-block">Budi</strong>
-                                <small class="text-muted d-block mb-1">(+62) 895-35435-54354</small>
-                                <span class="small text-secondary d-block">
-                                    Jalan Tegal Sari Ujung, Villamas Permai Blok C No 20, Kelurahan Sri Meranti, Kecamatan Rumbai.
-                                </span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <button class="btn btn-soft-success active rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-check me-1"></i>
-                                </button>
-                                <button class="btn btn-soft-warning rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-pen me-1"></i>
-                                </button>
-                                <button class="btn btn-soft-danger rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-trash me-1"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="card border-0 shadow-sm rounded-4 mb-3">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-column">
-                            <div class="mb-2">
-                                <strong class="d-block">Andi</strong>
-                                <small class="text-muted d-block mb-1">(+62) 895-35435-43354</small>
-                                <span class="small text-secondary d-block">
-                                    Jalan Indra Puri Perm Puri Sejahtera Blok A No 23, Kelurahan Rejo Sari, Kecamatan Tenayan Raya.
-                                </span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <button class="btn btn-soft-success rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-check me-1"></i>
-                                </button>
-                                <button class="btn btn-soft-warning rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-pen me-1"></i>
-                                </button>
-                                <button class="btn btn-soft-danger rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-trash me-1"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="card border-0 shadow-sm rounded-4 mb-3">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-column">
-                            <div class="mb-2">
-                                <strong class="d-block">Gilang</strong>
-                                <small class="text-muted d-block mb-1">(+62) 895-35435-54354</small>
-                                <span class="small text-secondary d-block">
-                                    Jalan Umban Sari Perm Meranti Blok B No 31, Kelurahan Sri Meranti, Kecamatan Rumbai.
-                                </span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <button class="btn btn-soft-success rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-check me-1"></i>
-                                </button>
-                                <button class="btn btn-soft-warning rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-pen me-1"></i>
-                                </button>
-                                <button class="btn btn-soft-danger rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-trash me-1"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div> 
         </div>
         <!-- end mobile view -->
+
+        <script>
+            // Preview avatar untuk mobile
+            document.getElementById('avatar-upload-mobile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('avatar-preview-mobile').src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        </script>
+
 
 
         <x-footer-client></x-footer-client>
