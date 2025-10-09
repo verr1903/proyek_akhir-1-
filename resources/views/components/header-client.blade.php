@@ -182,7 +182,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li><a href="contact.html">History</a></li>
+                        <li><a href="{{ route('riwayat')}}">Riwayat</a></li>
                     </ul>
                 </nav>
             </div>
