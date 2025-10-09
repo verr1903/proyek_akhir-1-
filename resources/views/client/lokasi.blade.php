@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <!-- Halaman Pilih Alamat -->
+        <!-- Desktop View -->
         <div class="shop-single-page section-padding-4 mb-5 desktop-view">
             <div class="container mb-5">
 
@@ -94,6 +94,7 @@
 
             </div>
         </div>
+        <!-- End Desktop View -->
 
         <!-- Mobile View -->
         <div class="mobile-view p-2">
@@ -196,6 +197,7 @@
                 </div> <!-- End address list -->
             
         </div>
+        <!-- End Mobile View -->
 
 
         <x-footer-client></x-footer-client>

@@ -60,7 +60,7 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li><a href="contact.html" class="fs-6 link-hover">History</a></li>
+                                        <li><a href="{{ route('riwayat')}}" class="fs-6 link-hover">Riwayat</a></li>
                                     </ul>
                                 </nav>
 

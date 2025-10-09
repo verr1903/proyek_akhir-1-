@@ -336,6 +336,26 @@
                 padding: 12px 16px;
             }
         }
+
+        .btn-outline-custom {
+            color: #445244;
+            border: 1.5px solid #445244;
+            background-color: transparent;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-outline-custom:hover,
+        .btn-outline-custom:focus {
+            background-color: #445244;
+            color: #fff;
+        }
+
+        .btn-outline-custom.active,
+        .btn-outline-custom:active {
+            background-color: #445244 !important;
+            color: #fff !important;
+            border-color: #445244 !important;
+        }
     </style>
 
 </head>
