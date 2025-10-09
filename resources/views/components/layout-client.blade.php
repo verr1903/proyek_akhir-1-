@@ -356,6 +356,98 @@
             color: #fff !important;
             border-color: #445244 !important;
         }
+
+        .star-rating {
+            display: inline-flex;
+            flex-direction: row;
+            font-size: 2.2rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .star {
+            color: #ccc;
+            position: relative;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .star::before {
+            content: '\f005';
+            /* fa-star */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: #ccc;
+        }
+
+        .star.active::before,
+        .star.hover::before {
+            color: #f7c600;
+        }
+
+        /* Setengah bintang */
+        .star.half::before {
+            background: linear-gradient(90deg, #f7c600 50%, #ccc 50%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hover efek */
+        .star:hover {
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 576px) {
+            .star-rating {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Modal mobile style */
+        .mobile-ulasan-content {
+            background-color: #fff;
+        }
+
+        .mobile-ulasan-stars {
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .mobile-star {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .mobile-star::before {
+            content: '\f005';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+        }
+
+        .mobile-star.active,
+        .mobile-star.hover {
+            color: #ffcc00;
+        }
+
+        /* Tambahan agar nyaman di mobile */
+        @media (max-width: 576px) {
+            .mobile-ulasan-content {
+                border-radius: 0 !important;
+            }
+
+            .modal-body {
+                padding: 1rem 1.2rem;
+            }
+
+            .mobile-star {
+                font-size: 1.8rem;
+            }
+
+            #mobileUlasanText {
+                font-size: 15px;
+            }
+        }
+        
     </style>
 
 </head>
