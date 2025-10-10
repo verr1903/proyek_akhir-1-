@@ -14,7 +14,7 @@
         <div class="shop-single-page section-padding-4 mb-5 desktop-view">
             <div class="container mb-5">
 
-                <div class="card shadow-sm border-0 rounded-4">
+                <div class="card shadow-sm border-0 rounded-4 p-3">
                     <div class="card-header bg-white border-0 pb-0">
                         <h4 class="fw-bold text-center text-dark mb-3">Kelola Profil</h4>
                     </div>
@@ -62,7 +62,7 @@
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mt-4">
-                                <button type="button" class="btn btn-outline-secondary rounded-3 px-4">
+                                <button type="button" class="btn btn-outline-secondary rounded-3 px-4"  onclick="window.history.back();">
                                     <i class="fa fa-arrow-left me-1"></i> Kembali
                                 </button>
                                 <button type="submit" class="btn btn-success rounded-3 px-4">
@@ -136,9 +136,13 @@
                             <button type="submit" class="btn btn-success rounded-3 pb-3 fw-semibold">
                                 <i class="fa fa-save me-1"></i> Simpan Perubahan
                             </button>
-                            <button type="button" class="btn btn-outline-secondary rounded-3 py-2 fw-semibold">
+                            <button
+                                type="button"
+                                class="btn btn-outline-secondary rounded-3 py-2 fw-semibold"
+                                onclick="window.history.back();">
                                 <i class="fa fa-arrow-left me-1"></i> Kembali
                             </button>
+
                         </div>
                     </form>
 
