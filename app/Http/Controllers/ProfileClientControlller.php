@@ -8,7 +8,7 @@ class ProfileClientControlller extends Controller
 {
     public function index()
     {
-        return view('client.profile', [
+        return view('register', [
             'title'            => 'Profile'
         ]);
     }

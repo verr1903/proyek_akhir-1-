@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{{$title}} - Jaqyuu</title>
+    <title>{{$title}} | Jaqyuu</title>
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,7 +23,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        
+        .google-btn:hover {
+            background-color: #445244;
+            box-shadow: 0 4px 10px rgba(68, 82, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .google-btn:hover img {
+            transform: scale(1.4);
+        }
+
         body {
             background-color: #f0ecec;
         }
