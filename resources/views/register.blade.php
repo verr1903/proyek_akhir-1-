@@ -15,7 +15,7 @@
         </div>
 
         <!-- Register Section -->
-        <div class="register-page p-5">
+        <div class="register-page p-5 desktop-view">
             <div class="container">
 
                 <div class="card shadow-lg border-0 rounded-3 p-5 text-center"
@@ -85,6 +85,65 @@
             </div>
         </div>
 
+        <div class="register-page mobile-view p-3" style="background-color:#f8f9fa; ">
+            <div class="">
+                <div class="card border-0 shadow-sm rounded-4 p-4">
+                    <h4 class="fw-bold mb-3 text-center" style="color:#445244;">Register</h4>
+
+                    <!-- Avatar -->
+                    <div class="text-center mb-3">
+                        <img src="/assets/images/profile/default.png" alt="Avatar"
+                            class="rounded-circle border" style="width:80px; height:80px; object-fit:cover;">
+                        <div class="mt-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-4">
+                                Ganti Avatar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form -->
+                    <form action="#" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Username:</label>
+                            <input type="text" class="form-control rounded-3" name="username" placeholder="Masukkan username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Email:</label>
+                            <input type="email" class="form-control rounded-3" name="email" placeholder="Masukkan email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Password:</label>
+                            <input type="password" class="form-control rounded-3" name="password" placeholder="Masukkan password" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold small">Konfirmasi Password:</label>
+                            <input type="password" class="form-control rounded-3" name="password_confirmation" placeholder="Ulangi password" required>
+                        </div>
+
+                        <!-- Tombol Register -->
+                        <button type="submit" class="btn btn-success w-100 rounded-4 fw-semibold mb-3">Register</button>
+
+                        <div class="text-center fw-semibold text-muted mb-2">Or</div>
+
+                        <a href="#" class="btn w-100 rounded-4 d-flex justify-content-center align-items-center google-btn"
+                            style="background-color:#e6ebe7; border:1px solid #445244; color:#445244; transition:all 0.3s ease;">
+                            <img src="https://developers.google.com/identity/images/g-logo.png"
+                                style="width:20px; height:20px; margin-right:8px; transition:transform 0.3s ease;">
+                            Sign In With Google
+                        </a>
+
+                        <!-- Link ke Login -->
+                        <div class="text-center mt-4">
+                            <p class="small text-muted mb-1">Sudah memiliki akun?</p>
+                            <a href="login.html" class="btn btn-outline-dark btn-sm rounded-4 px-4 fw-semibold">
+                                Login Disini
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <!-- Back To Top -->
         <a href="#" class="back-to-top">
@@ -92,4 +151,13 @@
         </a>
 
     </div>
+    <style>
+        /* Responsif hanya untuk halaman login */
+        @media (max-width: 991px) {
+            body {
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+            }
+        }
+    </style>
 </x-layout-client>

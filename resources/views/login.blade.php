@@ -69,8 +69,8 @@
         </div>
 
         <!-- MOBILE VIEW -->
-        <div class="login-page mobile-view py-5" style="background-color:#f8f9fa;">
-            <div class="container">
+        <div class="login-page mobile-view p-3" style="background-color:#f8f9fa;">
+            <div class="">
                 <div class="card border-0 shadow-sm rounded-4 p-4">
                     <h4 class="fw-bold mb-3 text-center" style="color:#445244;">Login</h4>
 
@@ -121,4 +121,13 @@
         </a>
 
     </div>
+    <style>
+    /* Responsif hanya untuk halaman login */
+    @media (max-width: 991px) {
+        body {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+    }
+    </style>
 </x-layout-client>
