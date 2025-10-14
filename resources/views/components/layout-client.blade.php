@@ -13,10 +13,17 @@
 
     <!-- All CSS is here -->
     <link rel="stylesheet" href="/assets/css/plugins-min/plugins.min.css">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
     <link rel="stylesheet" href="/assets/css/style.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
+        
         body {
             background-color: #f0ecec;
         }
@@ -447,7 +454,36 @@
                 font-size: 15px;
             }
         }
-        
+
+        .header-mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            /* tersembunyi */
+            width: 80%;
+            height: 100vh;
+            background: white;
+            transition: right 0.3s ease;
+            z-index: 1050;
+        }
+
+        .header-mobile-menu.active {
+            right: 0;
+            /* muncul dari kanan */
+        }
+
+        /* backdrop hitam transparan */
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            display: none;
+        }
+
+        .menu-overlay.show {
+            display: block;
+        }
     </style>
 
 </head>

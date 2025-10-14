@@ -135,7 +135,7 @@
         <!--Header Mobile End-->
 
         <!-- Header Mobile Menu Start-->
-        <div class="header-mobile-menu d-lg-none">
+        <div class="header-mobile-menu  d-lg-none">
 
             <a href="javascript:void(0)" class="mobile-menu-close">
                 <span></span>
@@ -190,3 +190,5 @@
 
         </div>
         <!--Header Mobile Menu End -->
+
+        

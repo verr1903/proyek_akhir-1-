@@ -15,9 +15,22 @@
             <div class="container mb-5">
 
                 <div class="card shadow-sm border-0 rounded-4 p-3">
-                    <div class="card-header bg-white border-0 pb-0">
-                        <h4 class="fw-bold text-center text-dark mb-3">Kelola Profil</h4>
+                    <div class="card-header bg-white d-flex align-items-center justify-content-between border-0 pb-0 position-relative">
+
+                        <!-- Judul di tengah -->
+                        <h4 class="fw-bold text-dark mb-0 text-center flex-grow-1">Kelola Profil</h4>
+
+                        <!-- Tombol logout di kanan -->
+                        <form action="" method="POST" class="position-absolute end-0 top-50 translate-middle-y me-2 mb-0">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                                <i class="fa fa-sign-out-alt me-1"></i> Logout
+                            </button>
+                        </form>
+
                     </div>
+
+
 
                     <div class="card-body">
                         <!-- Avatar Upload -->
@@ -62,7 +75,7 @@
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mt-4">
-                                <button type="button" class="btn btn-outline-secondary rounded-3 px-4"  onclick="window.history.back();">
+                                <button type="button" class="btn btn-outline-secondary rounded-3 px-4" onclick="window.history.back();">
                                     <i class="fa fa-arrow-left me-1"></i> Kembali
                                 </button>
                                 <button type="submit" class="btn btn-success rounded-3 px-4">
@@ -133,15 +146,29 @@
 
                         <!-- Tombol Aksi -->
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-success rounded-3 pb-3 fw-semibold">
-                                <i class="fa fa-save me-1"></i> Simpan Perubahan
-                            </button>
-                            <button
-                                type="button"
-                                class="btn btn-outline-secondary rounded-3 py-2 fw-semibold"
-                                onclick="window.history.back();">
-                                <i class="fa fa-arrow-left me-1"></i> Kembali
-                            </button>
+                            <div class="d-grid gap-2">
+                                <!-- Simpan -->
+                                <button type="submit" class="btn btn-success rounded-3 fw-semibold pb-3">
+                                    <i class="fa fa-save me-1"></i> Simpan Perubahan
+                                </button>
+
+                                <!-- Logout -->
+                                <form action="" method="POST" class="mb-0">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger rounded-3 fw-semibold pb-3 w-100">
+                                        <i class="fa fa-sign-out-alt me-1"></i> Logout
+                                    </button>
+                                </form>
+
+                                <!-- Kembali -->
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-3 fw-semibold pb-3"
+                                    onclick="window.history.back();">
+                                    <i class="fa fa-arrow-left me-1"></i> Kembali
+                                </button>
+                            </div>
+
 
                         </div>
                     </form>
