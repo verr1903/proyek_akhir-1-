@@ -75,7 +75,7 @@
                         <!-- Link ke Login -->
                         <div class="mt-4 text-center">
                             <p class="mb-1 text-muted">Sudah Memiliki Akun?</p>
-                            <a href="login.html" class="btn rounded-4 btn-outline-dark btn-sm px-4">
+                            <a href="{{ route('login') }}" class="btn rounded-4 btn-outline-dark btn-sm px-4">
                                 Login Disini
                             </a>
                         </div>
@@ -91,14 +91,21 @@
                     <h4 class="fw-bold mb-3 text-center" style="color:#445244;">Register</h4>
 
                     <!-- Avatar -->
-                    <div class="text-center mb-3">
-                        <img src="/assets/images/profile/default.png" alt="Avatar"
-                            class="rounded-circle border" style="width:80px; height:80px; object-fit:cover;">
-                        <div class="mt-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-4">
-                                Ganti Avatar
-                            </button>
+                    <div class="text-center mb-4">
+                        <div class="position-relative d-inline-block">
+                            <img id="avatar-preview-mobile"
+                                src="/assets/images/profile/default.png"
+                                alt="Avatar"
+                                class="rounded-circle border shadow-sm"
+                                style="width: 100px; height: 100px; object-fit: cover;">
+                            <label for="avatar-upload-mobile"
+                                class="position-absolute bottom-0 end-0 bg-success text-white rounded-circle p-2"
+                                style="cursor: pointer; transform: translate(25%, 25%);">
+                                <i class="fa fa-camera"></i>
+                            </label>
+                            <input type="file" id="avatar-upload-mobile" class="d-none" accept="image/*">
                         </div>
+                        <p class="small text-muted mt-2 mb-0">Ketuk ikon kamera untuk ganti foto</p>
                     </div>
 
                     <!-- Form -->
@@ -126,7 +133,7 @@
 
                         <div class="text-center fw-semibold text-muted mb-2">Or</div>
 
-                        <a href="#" class="btn w-100 rounded-4 d-flex justify-content-center align-items-center google-btn"
+                        <a href="#" class="btn w-100 rounded-4 d-flex justify-content-center align-items-center google-btn py-4"
                             style="background-color:#e6ebe7; border:1px solid #445244; color:#445244; transition:all 0.3s ease;">
                             <img src="https://developers.google.com/identity/images/g-logo.png"
                                 style="width:20px; height:20px; margin-right:8px; transition:transform 0.3s ease;">
@@ -136,7 +143,7 @@
                         <!-- Link ke Login -->
                         <div class="text-center mt-4">
                             <p class="small text-muted mb-1">Sudah memiliki akun?</p>
-                            <a href="login.html" class="btn btn-outline-dark btn-sm rounded-4 px-4 fw-semibold">
+                            <a href="{{ route('login') }}" class="btn btn-outline-dark btn-sm rounded-4 px-4 fw-semibold">
                                 Login Disini
                             </a>
                         </div>

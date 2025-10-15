@@ -21,12 +21,13 @@
                         <h4 class="fw-bold text-dark mb-0 text-center flex-grow-1">Kelola Profil</h4>
 
                         <!-- Tombol logout di kanan -->
-                        <form action="" method="POST" class="position-absolute end-0 top-50 translate-middle-y me-2 mb-0">
+                        <!-- <form action="" method="POST" class="position-absolute end-0 top-50 translate-middle-y me-2 mb-0"> -->
+                        <a href="{{ route('login') }}">
                             @csrf
                             <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">
                                 <i class="fa fa-sign-out-alt me-1"></i> Logout
                             </button>
-                        </form>
+                        </a>
 
                     </div>
 
@@ -153,12 +154,13 @@
                                 </button>
 
                                 <!-- Logout -->
-                                <form action="" method="POST" class="mb-0">
+                                <!-- <form action="" method="POST" class="mb-0"> -->
+                                <a href="{{ route('login') }}">
                                     @csrf
                                     <button type="submit" class="btn btn-danger rounded-3 fw-semibold pb-3 w-100">
                                         <i class="fa fa-sign-out-alt me-1"></i> Logout
                                     </button>
-                                </form>
+                                </a>
 
                                 <!-- Kembali -->
                                 <button

@@ -59,7 +59,7 @@
                         <!-- Link ke Register -->
                         <div class="mt-4 text-center">
                             <p class="mb-1 text-muted">Belum memiliki akun?</p>
-                            <a href="register.html" class="btn rounded-4 btn-outline-dark btn-sm px-4 fw-semibold">
+                            <a href="{{ route('register') }}" class="btn rounded-4 btn-outline-dark btn-sm px-4 fw-semibold">
                                 Daftar Disini
                             </a>
                         </div>
@@ -99,7 +99,7 @@
 
                         <div class="text-center fw-semibold text-muted mb-2">Or</div>
 
-                        <a href="#" class="btn w-100 rounded-4 d-flex justify-content-center align-items-center google-btn"
+                        <a href="#" class="btn w-100 rounded-4 d-flex justify-content-center align-items-center google-btn py-4"
                             style="background-color:#e6ebe7; border:1px solid #445244; color:#445244; transition:all 0.3s ease;">
                             <img src="https://developers.google.com/identity/images/g-logo.png"
                                 style="width:20px; height:20px; margin-right:8px; transition:transform 0.3s ease;">
@@ -108,7 +108,7 @@
 
                         <div class="text-center mt-4">
                             <p class="small text-muted mb-1">Belum memiliki akun?</p>
-                            <a href="register.html" class="btn btn-outline-dark btn-sm rounded-4 px-4 fw-semibold">Daftar Disini</a>
+                            <a href="{{ route('register') }}" class="btn btn-outline-dark btn-sm rounded-4 px-4 fw-semibold">Daftar Disini</a>
                         </div>
                     </form>
                 </div>
