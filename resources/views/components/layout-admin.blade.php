@@ -116,7 +116,7 @@
 
 
     <!-- Top Bar -->
-    <x-navbar-admin></x-navbar-admin>
+    <x-navbar-admin :title="$title" />
 
     <!-- Sidebar -->
     <x-sidebar-admin></x-sidebar-admin>

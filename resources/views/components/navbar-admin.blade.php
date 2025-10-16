@@ -34,7 +34,7 @@
             letter-spacing: 0.5px; 
             margin-left: 5px;
         ">
-                    Dashboard
+                    {{ $title }}
                 </span>
             </li>
         </ul>
