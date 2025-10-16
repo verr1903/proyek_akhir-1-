@@ -8,7 +8,7 @@
     <div class="col-lg-4 col-md-6">
         <div class="footer-widget">
             <a class="footer-logo" href="#">
-                <img src="/assets/images/logo/logoo.jpg" class="img-fluid rounded shadow"
+                <img src="/clientAssets/images/logo/logoo.jpg" class="img-fluid rounded shadow"
                      style="width: 150px; object-fit: contain;" alt="">
             </a>
             <div class="footer-widget-text">

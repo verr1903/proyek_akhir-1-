@@ -6,7 +6,7 @@
 
         <div class="page-banner" style="background-color: #445244; padding: 20px 0; text-align: center;">
             <div class="container">
-                <img src="/assets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
+                <img src="/clientAssets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
             </div>
         </div>
 

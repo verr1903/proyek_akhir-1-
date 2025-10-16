@@ -9,7 +9,7 @@
 
         <div class="page-banner" style="background-color: #445244; padding: 20px 0; text-align: center;">
             <div class="container">
-                <img src="/assets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
+                <img src="/clientAssets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
             </div>
         </div>
 
@@ -34,7 +34,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="py-4"><img src="/assets/images/product/image1.png" alt="Produk" class="img-thumbnail" style="width:70px; height:80px; object-fit:cover;"></td>
+                                    <td class="py-4"><img src="/clientAssets/images/product/image1.png" alt="Produk" class="img-thumbnail" style="width:70px; height:80px; object-fit:cover;"></td>
                                     <td class="py-4 text-start">
                                         <strong>Tshirt Oversize Series “WHOA”</strong><br>
                                         <small class="text-muted">Kode: TS-01</small>
@@ -69,7 +69,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="py-4"><img src="/assets/images/product/image1.png" alt="Produk" class="img-thumbnail" style="width:70px; height:80px; object-fit:cover;"></td>
+                                    <td class="py-4"><img src="/clientAssets/images/product/image1.png" alt="Produk" class="img-thumbnail" style="width:70px; height:80px; object-fit:cover;"></td>
                                     <td class="py-4 text-start">
                                         <strong>Tshirt Oversize Series “WHOA”</strong><br>
                                         <small class="text-muted">Kode: TS-01</small>
@@ -202,7 +202,7 @@
                     <input type="checkbox" class="form-check-input fci me-2 mt-2 p-2">
 
                     <!-- Gambar Produk -->
-                    <img src="/assets/images/product/image1.png" class="rounded-3 me-3"
+                    <img src="/clientAssets/images/product/image1.png" class="rounded-3 me-3"
                         style="width: 80px; height: 120px; object-fit: cover;">
 
                     <!-- Detail Produk -->
@@ -250,7 +250,7 @@
                     <input type="checkbox" class="form-check-input fci me-2 mt-2 p-2">
 
                     <!-- Gambar Produk -->
-                    <img src="/assets/images/product/image1.png" class="rounded-3 me-3"
+                    <img src="/clientAssets/images/product/image1.png" class="rounded-3 me-3"
                         style="width: 80px; height: 120px; object-fit: cover;">
 
                     <!-- Detail Produk -->

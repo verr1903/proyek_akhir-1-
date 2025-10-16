@@ -6,7 +6,7 @@
 
         <div class="page-banner" style="background-color: #445244; padding: 20px 0; text-align: center;">
             <div class="container">
-                <img src="/assets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
+                <img src="/clientAssets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
             </div>
         </div>
 
@@ -61,7 +61,7 @@
                         <div class="d-flex align-items-start justify-content-between flex-wrap">
                             <!-- Gambar dan Info Produk -->
                             <div class="d-flex align-items-start flex-grow-1">
-                                <img src="/assets/images/product/image.png"
+                                <img src="/clientAssets/images/product/image.png"
                                     alt="Produk"
                                     class="rounded border me-3"
                                     style="width: 100px; height: 120px; object-fit: cover;">
@@ -113,7 +113,7 @@
                         <div class="d-flex align-items-start justify-content-between flex-wrap">
                             <!-- Gambar dan Info Produk -->
                             <div class="d-flex align-items-start flex-grow-1">
-                                <img src="/assets/images/product/image.png"
+                                <img src="/clientAssets/images/product/image.png"
                                     alt="Produk"
                                     class="rounded border me-3"
                                     style="width: 100px; height: 120px; object-fit: cover;">
@@ -227,7 +227,7 @@
                         <div class="border rounded-3 p-3 mb-3">
                             <h6 class="fw-bold text-dark mb-3">Detail Produk</h6>
                             <div class="d-flex align-items-start mb-2">
-                                <img src="/assets/images/product/image.png" class="rounded me-2 border" style="width:60px;height:70px;object-fit:cover;">
+                                <img src="/clientAssets/images/product/image.png" class="rounded me-2 border" style="width:60px;height:70px;object-fit:cover;">
                                 <div>
                                     <p class="fw-semibold mb-1 small">TSHIRT OVERSIZE SERIES "WHOA"</p>
                                     <p class="text-muted mb-1 small">Size: L</p>
@@ -236,7 +236,7 @@
                             </div>
                             <hr class="my-2">
                             <div class="d-flex align-items-start">
-                                <img src="/assets/images/product/image.png" class="rounded me-2 border" style="width:60px;height:70px;object-fit:cover;">
+                                <img src="/clientAssets/images/product/image.png" class="rounded me-2 border" style="width:60px;height:70px;object-fit:cover;">
                                 <div>
                                     <p class="fw-semibold mb-1 small">HOODIE SERIES "WHOA"</p>
                                     <p class="text-muted mb-1 small">Size: L</p>
@@ -317,7 +317,7 @@
 
                     <!-- Isi -->
                     <div class="d-flex gap-3 mb-3">
-                        <img src="/assets/images/product/image.png" alt="Produk"
+                        <img src="/clientAssets/images/product/image.png" alt="Produk"
                             class="rounded border" style="width: 80px; height: 100px; object-fit: cover;">
                         <div class="flex-grow-1">
                             <h6 class="fw-bold mb-1 small">TSHIRT OVERSIZE SERIES 'WHON'</h6>
@@ -362,7 +362,7 @@
 
                     <!-- Isi -->
                     <div class="d-flex gap-3 mb-3">
-                        <img src="/assets/images/product/image.png" alt="Produk"
+                        <img src="/clientAssets/images/product/image.png" alt="Produk"
                             class="rounded border" style="width: 80px; height: 100px; object-fit: cover;">
                         <div class="flex-grow-1">
                             <h6 class="fw-bold mb-1 small">TSHIRT OVERSIZE SERIES 'WHON'</h6>
@@ -470,7 +470,7 @@
 
                             <!-- Produk 1 -->
                             <div class="d-flex align-items-start mb-3">
-                                <img src="/assets/images/product/image.png" class="rounded border me-3"
+                                <img src="/clientAssets/images/product/image.png" class="rounded border me-3"
                                     style="width:70px;height:80px;object-fit:cover;">
                                 <div class="flex-grow-1">
                                     <p class="fw-semibold mb-1 small">TSHIRT OVERSIZE SERIES "WHOA"</p>
@@ -483,7 +483,7 @@
 
                             <!-- Produk 2 -->
                             <div class="d-flex align-items-start">
-                                <img src="/assets/images/product/image.png" class="rounded border me-3"
+                                <img src="/clientAssets/images/product/image.png" class="rounded border me-3"
                                     style="width:70px;height:80px;object-fit:cover;">
                                 <div class="flex-grow-1">
                                     <p class="fw-semibold mb-1 small">HOODIE SERIES "WHOA"</p>

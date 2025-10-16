@@ -11,7 +11,7 @@
             <div class="swiper-container slider-active">
                 <div class="swiper-wrapper">
                     <!--Single Slider Start-->
-                    <div class="single-slider swiper-slide animation-style-01" style="background-image: url(assets/images/slider/gambar11.png);">
+                    <div class="single-slider swiper-slide animation-style-01" style="background-image: url(clientAssets/images/slider/gambar11.png);">
                         <div class="container">
                             <div class="slider-content">
                                 <h5 class="sub-title">20% Off For <br> New Members</h5>
@@ -27,7 +27,7 @@
                     <!--Single Slider End-->
 
                     <!--Single Slider Start-->
-                    <div class="single-slider swiper-slide animation-style-01" style="background-image: url(/assets/images/slider/slider-2.jpg);">
+                    <div class="single-slider swiper-slide animation-style-01" style="background-image: url(/clientAssets/images/slider/slider-2.jpg);">
                         <div class="container">
                             <div class="slider-content">
                                 <h5 class="sub-title">20% Off For <br> New Members</h5>
@@ -147,7 +147,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -174,7 +174,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -199,7 +199,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-10%</span>
@@ -226,7 +226,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-18%</span>
@@ -254,7 +254,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -281,7 +281,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -306,7 +306,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-27%</span>
@@ -333,7 +333,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -361,7 +361,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-18%</span>
@@ -388,7 +388,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -413,7 +413,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-10%</span>
@@ -440,7 +440,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-35%</span>
@@ -473,7 +473,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -497,7 +497,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -525,7 +525,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -552,7 +552,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -580,7 +580,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -607,7 +607,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -645,7 +645,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-27%</span>
@@ -672,7 +672,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -700,7 +700,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-10%</span>
@@ -727,7 +727,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-18%</span>
@@ -755,7 +755,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -782,7 +782,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -807,7 +807,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -834,7 +834,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -859,7 +859,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -883,7 +883,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -911,7 +911,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-10%</span>
@@ -938,7 +938,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-35%</span>
@@ -971,7 +971,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-18%</span>
@@ -998,7 +998,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -1023,7 +1023,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -1050,7 +1050,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -1078,7 +1078,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -1105,7 +1105,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -1143,7 +1143,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -1170,7 +1170,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -1195,7 +1195,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-27%</span>
@@ -1222,7 +1222,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -1250,7 +1250,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -1277,7 +1277,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -1302,7 +1302,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-18%</span>
@@ -1329,7 +1329,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -1354,7 +1354,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-10%</span>
@@ -1381,7 +1381,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-18%</span>
@@ -1409,7 +1409,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -1436,7 +1436,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -1464,7 +1464,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -1488,7 +1488,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -1516,7 +1516,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -1543,7 +1543,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -1571,7 +1571,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-10%</span>
@@ -1598,7 +1598,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="{{ route('detail') }}">
-                                                    <img src="/assets/images/product/image1.png" alt="">
+                                                    <img src="/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-35%</span>

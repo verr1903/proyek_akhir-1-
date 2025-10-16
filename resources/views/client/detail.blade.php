@@ -9,7 +9,7 @@
 
         <div class="page-banner" style="background-color: #445244; padding: 20px 0; text-align: center;">
             <div class="container" >
-                <img src="/assets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
+                <img src="/clientAssets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
             </div>
         </div>
 
@@ -24,25 +24,25 @@
                     <div class="col-lg-6 col-md-8">
                         <div class="shop-image">
                             <div class="shop-single-preview-image">
-                                <img class="product-zoom" src="assets/images/product/image1.png" alt="">
+                                <img class="product-zoom" src="clientAssets/images/product/image1.png" alt="">
 
                                 <span class="sticker-new label-sale">-34%</span>
                             </div>
                             <div id="gallery_01" class="shop-single-thumb-image shop-thumb-active swiper-container">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide single-product-thumb">
-                                        <a class="active" href="#" data-image="assets/images/product/image1.png">
-                                            <img src="assets/images/product/image1.png" alt="">
+                                        <a class="active" href="#" data-image="clientAssets/images/product/image1.png">
+                                            <img src="clientAssets/images/product/image1.png" alt="">
                                         </a>
                                     </div>
                                     <div class="swiper-slide single-product-thumb">
-                                        <a href="#" data-image="assets/images/product/image2.png">
-                                            <img src="assets/images/product/image2.png" alt="">
+                                        <a href="#" data-image="clientAssets/images/product/image2.png">
+                                            <img src="clientAssets/images/product/image2.png" alt="">
                                         </a>
                                     </div>
                                     <div class="swiper-slide single-product-thumb">
-                                        <a href="#" data-image="assets/images/product/image3.png">
-                                            <img src="assets/images/product/image3.png" alt="">
+                                        <a href="#" data-image="clientAssets/images/product/image3.png">
+                                            <img src="clientAssets/images/product/image3.png" alt="">
                                         </a>
                                     </div>
 

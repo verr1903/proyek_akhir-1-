@@ -6,7 +6,7 @@
 
         <div class="page-banner" style="background-color: #445244; padding: 20px 0; text-align: center;">
             <div class="container">
-                <img src="/assets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
+                <img src="/clientAssets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
             </div>
         </div>
 
@@ -37,7 +37,7 @@
                         <!-- Avatar Upload -->
                         <div class="text-center mb-4">
                             <img id="avatar-preview"
-                                src="/assets/images/profile/default.png"
+                                src="/clientAssets/images/profile/default.png"
                                 alt="Avatar"
                                 class="rounded-circle border shadow-sm"
                                 style="width: 120px; height: 120px; object-fit: cover;">
@@ -104,7 +104,7 @@
                     <div class="text-center mb-4">
                         <div class="position-relative d-inline-block">
                             <img id="avatar-preview-mobile"
-                                src="/assets/images/profile/default.png"
+                                src="/clientAssets/images/profile/default.png"
                                 alt="Avatar"
                                 class="rounded-circle border shadow-sm"
                                 style="width: 100px; height: 100px; object-fit: cover;">

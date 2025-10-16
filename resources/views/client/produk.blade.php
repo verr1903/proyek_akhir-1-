@@ -6,7 +6,7 @@
 
         <div class="page-banner" style="background-color: #445244; padding: 20px 0; text-align: center;">
             <div class="container">
-                <img src="/assets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
+                <img src="/clientAssets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
             </div>
         </div>
 
@@ -42,7 +42,7 @@
                                     <a href="shop-single.html" class="text-decoration-none text-dark">
                                         <div class="product-image">
                                             <a href="shop-single.html">
-                                                <img src="assets/images/product/product-1.jpg" alt="">
+                                                <img src="clientAssets/images/product/product-1.jpg" alt="">
                                             </a>
 
                                             <span class="sticker-new soldout-title">Soldout</span>
@@ -67,7 +67,7 @@
                                     <a href="shop-single.html" class="text-decoration-none text-dark">
                                         <div class="product-image">
                                             <a href="shop-single.html">
-                                                <img src="assets/images/product/product-2.jpg" alt="">
+                                                <img src="clientAssets/images/product/product-2.jpg" alt="">
                                             </a>
 
 
@@ -89,7 +89,7 @@
                                     <a href="shop-single.html" class="text-decoration-none text-dark">
                                         <div class="product-image">
                                             <a href="shop-single.html">
-                                                <img src="assets/images/product/product-3.jpg" alt="">
+                                                <img src="clientAssets/images/product/product-3.jpg" alt="">
                                             </a>
 
                                             <span class="sticker-new label-sale">-35%</span>
@@ -120,7 +120,7 @@
                                     <a href="shop-single.html" class="text-decoration-none text-dark">
                                         <div class="product-image">
                                             <a href="shop-single.html">
-                                                <img src="assets/images/product/product-1.jpg" alt="">
+                                                <img src="clientAssets/images/product/product-1.jpg" alt="">
                                             </a>
 
                                             <span class="sticker-new soldout-title">Soldout</span>
@@ -145,7 +145,7 @@
                                     <a href="shop-single.html" class="text-decoration-none text-dark">
                                         <div class="product-image">
                                             <a href="shop-single.html">
-                                                <img src="assets/images/product/product-2.jpg" alt="">
+                                                <img src="clientAssets/images/product/product-2.jpg" alt="">
                                             </a>
 
 
@@ -167,7 +167,7 @@
                                     <a href="shop-single.html" class="text-decoration-none text-dark">
                                         <div class="product-image">
                                             <a href="shop-single.html">
-                                                <img src="assets/images/product/product-3.jpg" alt="">
+                                                <img src="clientAssets/images/product/product-3.jpg" alt="">
                                             </a>
 
                                             <span class="sticker-new label-sale">-35%</span>
@@ -198,7 +198,7 @@
                         <div class="single-product product-list">
                             <div class="product-image">
                                 <a href="shop-single.html">
-                                    <img src="assets/images/product/product-4.jpg" alt="">
+                                    <img src="clientAssets/images/product/product-4.jpg" alt="">
                                 </a>
 
                                 <div class="action-links">
@@ -228,7 +228,7 @@
                         <div class="single-product product-list">
                             <div class="product-image">
                                 <a href="shop-single.html">
-                                    <img src="assets/images/product/product-8.jpg" alt="">
+                                    <img src="clientAssets/images/product/product-8.jpg" alt="">
                                 </a>
 
                                 <span class="sticker-new label-sale">-34%</span>
@@ -261,7 +261,7 @@
                         <div class="single-product product-list">
                             <div class="product-image">
                                 <a href="shop-single.html">
-                                    <img src="assets/images/product/product-9.jpg" alt="">
+                                    <img src="clientAssets/images/product/product-9.jpg" alt="">
                                 </a>
 
                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -294,7 +294,7 @@
                         <div class="single-product product-list">
                             <div class="product-image">
                                 <a href="shop-single.html">
-                                    <img src="assets/images/product/product-2.jpg" alt="">
+                                    <img src="clientAssets/images/product/product-2.jpg" alt="">
                                 </a>
 
                                 <div class="action-links">
@@ -324,7 +324,7 @@
                         <div class="single-product product-list">
                             <div class="product-image">
                                 <a href="shop-single.html">
-                                    <img src="assets/images/product/product-3.jpg" alt="">
+                                    <img src="clientAssets/images/product/product-3.jpg" alt="">
                                 </a>
 
                                 <span class="sticker-new label-sale">-35%</span>
@@ -361,7 +361,7 @@
                         <div class="single-product product-list">
                             <div class="product-image">
                                 <a href="shop-single.html">
-                                    <img src="assets/images/product/product-1.jpg" alt="">
+                                    <img src="clientAssets/images/product/product-1.jpg" alt="">
                                 </a>
 
                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -394,7 +394,7 @@
                         <div class="single-product product-list">
                             <div class="product-image">
                                 <a href="shop-single.html">
-                                    <img src="assets/images/product/product-5.jpg" alt="">
+                                    <img src="clientAssets/images/product/product-5.jpg" alt="">
                                 </a>
 
                                 <span class="sticker-new label-sale">-18%</span>
@@ -427,7 +427,7 @@
                         <div class="single-product product-list">
                             <div class="product-image">
                                 <a href="shop-single.html">
-                                    <img src="assets/images/product/product-2.jpg" alt="">
+                                    <img src="clientAssets/images/product/product-2.jpg" alt="">
                                 </a>
 
                                 <span class="sticker-new label-sale">-27%</span>
@@ -460,7 +460,7 @@
                         <div class="single-product product-list">
                             <div class="product-image">
                                 <a href="shop-single.html">
-                                    <img src="assets/images/product/product-7.jpg" alt="">
+                                    <img src="clientAssets/images/product/product-7.jpg" alt="">
                                 </a>
 
                                 <div class="action-links">
@@ -532,7 +532,7 @@
                     <a href="shop-single.html" class="text-decoration-none text-dark">
                         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                             <a href="shop-single.html" class="d-block">
-                                <img src="assets/images/product/image.png"
+                                <img src="clientAssets/images/product/image.png"
                                     class="card-img-top product-img"
                                     alt="Spring Snowflake">
                             </a>
@@ -553,7 +553,7 @@
                     <a href="shop-single.html" class="text-decoration-none text-dark">
                         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                             <a href="shop-single.html" class="d-block">
-                                <img src="assets/images/product/image.png"
+                                <img src="clientAssets/images/product/image.png"
                                     class="card-img-top product-img"
                                     alt="Spring Snowflake">
                             </a>
@@ -572,7 +572,7 @@
                     <a href="shop-single.html" class="text-decoration-none text-dark">
                         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                             <a href="shop-single.html" class="d-block">
-                                <img src="assets/images/product/image.png"
+                                <img src="clientAssets/images/product/image.png"
                                     class="card-img-top product-img"
                                     alt="Spring Snowflake">
                             </a>
@@ -590,7 +590,7 @@
                     <a href="shop-single.html" class="text-decoration-none text-dark">
                         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                             <a href="shop-single.html" class="d-block">
-                                <img src="assets/images/product/image.png"
+                                <img src="clientAssets/images/product/image.png"
                                     class="card-img-top product-img"
                                     alt="Spring Snowflake">
                             </a>
@@ -608,7 +608,7 @@
                     <a href="shop-single.html" class="text-decoration-none text-dark">
                         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                             <a href="shop-single.html" class="d-block">
-                                <img src="assets/images/product/image.png"
+                                <img src="clientAssets/images/product/image.png"
                                     class="card-img-top product-img"
                                     alt="Spring Snowflake">
                             </a>
@@ -626,7 +626,7 @@
                     <a href="shop-single.html" class="text-decoration-none text-dark">
                         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                             <a href="shop-single.html" class="d-block">
-                                <img src="assets/images/product/image.png"
+                                <img src="clientAssets/images/product/image.png"
                                     class="card-img-top product-img"
                                     alt="Spring Snowflake">
                             </a>

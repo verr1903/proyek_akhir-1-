@@ -9,17 +9,17 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/logo/logo.jpg">
+    <link rel="shortcut icon" type="image/x-icon" href="/clientAssets/images/logo/logo.jpg">
 
     <!-- All CSS is here -->
-    <link rel="stylesheet" href="/assets/css/plugins-min/plugins.min.css">
+    <link rel="stylesheet" href="/clientAssets/css/plugins-min/plugins.min.css">
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
-    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <link rel="stylesheet" href="/clientAssets/css/style.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -505,26 +505,26 @@
     ============================================ -->
 
     <!-- Modernizer JS -->
-    <script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="/clientAssets/js/vendor/modernizr-3.6.0.min.js"></script>
     <!-- jQuery JS -->
-    <script src="/assets/js/vendor/jquery-3.3.1.min.js"></script>
+    <script src="/clientAssets/js/vendor/jquery-3.3.1.min.js"></script>
     <!-- Bootstrap JS -->
-    <!-- <script src="/assets/js/vendor/popper.min.js"></script>
-    <script src="/assets/js/vendor/bootstrap.min.js"></script> -->
+    <!-- <script src="/clientAssets/js/vendor/popper.min.js"></script>
+    <script src="/clientAssets/js/vendor/bootstrap.min.js"></script> -->
 
     <!-- Plugins JS -->
-    <!-- <script src="/assets/js/plugins/swiper-bundle.min.js"></script>
-    <script src="/assets/js/plugins/jquery.countdown.min.js"></script>
-    <script src="/assets/js/plugins/jquery.elevateZoom.min.js"></script>
-    <script src="/assets/js/plugins/select2.min.js"></script>
-    <script src="/assets/js/plugins/ajax-contact.js"></script> -->
+    <!-- <script src="/clientAssets/js/plugins/swiper-bundle.min.js"></script>
+    <script src="/clientAssets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="/clientAssets/js/plugins/jquery.elevateZoom.min.js"></script>
+    <script src="/clientAssets/js/plugins/select2.min.js"></script>
+    <script src="/clientAssets/js/plugins/ajax-contact.js"></script> -->
 
 
     <!--====== Use the minified version files listed below for better performance and remove the files listed above ======-->
-    <script src="/assets/js/plugins.min.js"></script>
+    <script src="/clientAssets/js/plugins.min.js"></script>
 
     <!-- Main JS -->
-    <script src="/assets/js/main.js"></script>
+    <script src="/clientAssets/js/main.js"></script>
 
 </body>
 

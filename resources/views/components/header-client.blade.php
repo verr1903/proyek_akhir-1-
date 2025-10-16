@@ -6,7 +6,7 @@
                         <div class="col-lg-2">
                             <div class="header-logo">
                                 <a href="#">
-                                    <img src="/assets/images/logo/logoo.jpg"
+                                    <img src="/clientAssets/images/logo/logoo.jpg"
                                         alt="Logo"
                                         class="img-fluid rounded shadow"
                                         style="width: 130px; object-fit: contain;">
@@ -54,7 +54,7 @@
                                                 <!-- Banner Gambar -->
                                                 <li class="mega-dropdown flex-fill" style="max-width: 33%;">
                                                     <a class="menu-banner" href="">
-                                                        <img src="/assets/images/product/image1.png"
+                                                        <img src="/clientAssets/images/product/image1.png"
                                                             alt="Koleksi Terbaru Jaqyuu" style="border-radius: 10px;">
                                                     </a>
                                                 </li>
@@ -104,7 +104,7 @@
                 <div class="row align-items-center gx-0">
                     <div class="col-6">
                         <div class="header-logo">
-                            <a href="#"><img style="width: 90px;margin-top: -10px;" src="/assets/images/logo/logoo.jpg" alt="" class="img-fluid rounded shadow"></a>
+                            <a href="#"><img style="width: 90px;margin-top: -10px;" src="/clientAssets/images/logo/logoo.jpg" alt="" class="img-fluid rounded shadow"></a>
                         </div>
                     </div>
                     <div class="col-6">
@@ -177,7 +177,7 @@
                                 </li>
                                 <li class="mega-dropdown">
                                     <a class="menu-banner" href="#">
-                                        <img src="/assets/images/product/image1.png" alt="">
+                                        <img src="/clientAssets/images/product/image1.png" alt="">
                                     </a>
                                 </li>
                             </ul>
