@@ -16,7 +16,42 @@
     <link rel="stylesheet" href="/AdminAssets/plugins/morrisjs/morris.css" />
     <!-- Custom Css -->
     <link rel="stylesheet" href="/AdminAssets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="/AdminAssets/css/color_skins.css">
+
+    <style>
+        /* navbar */
+        .notif-shake {
+            font-size: 22px;
+            margin-top: 10px;
+            color: black;
+            transition: color 0.3s ease;
+        }
+
+        .notif-shake:hover {
+            color: #445244;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(10deg);
+            }
+
+            75% {
+                transform: rotate(-10deg);
+            }
+        }
+        
+
+    </style>
+
 </head>
 
 <body class="theme-orange">

@@ -2,7 +2,7 @@
 
     <x-slot:title>{{$title}}</x-slot:title>
 
-    <section class="content home">
+    <section class="content home" style="margin-top: 80px;">
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
