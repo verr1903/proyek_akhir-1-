@@ -48,8 +48,54 @@
                 transform: rotate(-10deg);
             }
         }
-        
 
+        .swap-glow i {
+            font-size: 28px;
+            color: black;
+            transition: all 0.3s ease;
+        }
+
+        .swap-glow:hover i {
+            color: #445244;
+            animation: wiggle 0.4s ease;
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(10deg);
+            }
+
+            75% {
+                transform: rotate(-10deg);
+            }
+        }
+
+        .user-dropdown {
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+
+        .user-dropdown img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        /* Hover efek */
+        .user-dropdown:hover img {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+            border-color: #ffffffaa;
+        }
     </style>
 
 </head>

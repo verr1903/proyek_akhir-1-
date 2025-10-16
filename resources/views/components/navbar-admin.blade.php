@@ -7,7 +7,7 @@
         max-width: 140px; 
         height: 55px;
         margin-left: 50px;
-        margin-top: -18px;
+        margin-top: -21px;
         margin-bottom: -25px;
         border-radius: 20px; 
         box-shadow: 2px 4px 12px #445244;
@@ -22,16 +22,15 @@
         <ul class="nav navbar-nav navbar-left align-items-center"
             style="margin-top: 10px; margin-left: -20px;">
             <li class="d-flex align-items-center">
-                <a href="javascript:void(0);"
-                    class="ls-toggle-btn d-flex align-items-center"
-                    data-close="true"
-                    style="text-decoration:none; color:black;">
-                    <i class="zmdi zmdi-swap" style="font-size: 28px; color: black;"></i>
+                <a href="javascript:void(0);" class="ls-toggle-btn swap-glow" data-close="true">
+                    <i class="zmdi zmdi-swap"></i>
                 </a>
+
                 <span style="
             font-size: 25px; 
             font-weight: 800; 
             color: black; 
+            pointer-events: none;
             letter-spacing: 0.5px; 
             margin-left: 5px;
         ">
@@ -78,31 +77,23 @@
             <!-- Dropdown User -->
             <li class="dropdown me-3">
                 <a href="javascript:void(0);"
-                    class="dropdown-toggle d-flex align-items-center"
-                    data-toggle="dropdown" role="button"
-                    style="text-decoration: none;">
+                    class="dropdown-toggle d-flex align-items-center user-dropdown"
+                    data-toggle="dropdown" role="button" style="text-decoration: none;">
 
                     <div class="d-flex align-items-center me-2" style="justify-content: flex-end;">
-                        <div class="info-container " style="text-align: right;margin-right: 10px;">
+                        <div class="info-container" style="text-align: right;margin-right: 10px;">
                             <div class="name fw-bold">John Doe</div>
                             <div class="email text-muted small">john.doe@example.com</div>
                         </div>
                         <img src="/clientAssets/images/profile/default.png"
                             alt="User"
-                            class="rounded-circle border border-light"
-                            style="width:40px; height:40px;margin-right: 10px;">
+                            class="rounded-circle border border-light">
                     </div>
-
-
-
                 </a>
+
 
                 <ul class="dropdown-menu slideUp" style="margin-right: 20px;margin-top: -8px;">
                     <li><a href="profile.html"><i class="material-icons">person</i>Profile</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#"><i class="material-icons">group</i>Followers</a></li>
-                    <li><a href="#"><i class="material-icons">shopping_cart</i>Sales</a></li>
-                    <li><a href="#"><i class="material-icons">favorite</i>Likes</a></li>
                     <li class="divider"></li>
                     <li><a href="sign-in.html"><i class="material-icons">input</i>Sign Out</a></li>
                 </ul>
