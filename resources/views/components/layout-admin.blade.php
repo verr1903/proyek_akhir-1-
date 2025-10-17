@@ -96,6 +96,33 @@
             box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
             border-color: #ffffffaa;
         }
+
+        /* dashboar */
+        .progress {
+            background-color: #e9ecef;
+            border-radius: 50px;
+            height: 12px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 50px;
+            transition: width 1s ease-in-out;
+        }
+
+        .card-value {
+            font-size: 26px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .btn.dropdown-toggle.btn-default {
+            display: none !important;
+        }
+        
     </style>
 
 </head>
@@ -132,10 +159,12 @@
     <script src="/AdminAssets/bundles/morrisscripts.bundle.js"></script><!-- Morris Plugin Js -->
     <script src="/AdminAssets/bundles/sparkline.bundle.js"></script> <!-- Sparkline Plugin Js -->
     <script src="/AdminAssets/bundles/knob.bundle.js"></script> <!-- Jquery Knob Plugin Js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script src="/AdminAssets/bundles/mainscripts.bundle.js"></script>
     <script src="/AdminAssets/js/pages/index.js"></script>
     <script src="/AdminAssets/js/pages/charts/jquery-knob.min.js"></script>
+    @stack('scripts')
 </body>
 
 </html>
