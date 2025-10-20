@@ -3,7 +3,7 @@
     <!-- Menu -->
     <div class="menu">
         <ul class="list mt-4">
-             <li class="{{ Route::is('dashboardAdmin') ? 'active' : '' }}">
+            <li class="{{ Route::is('dashboardAdmin') ? 'active' : '' }}">
                 <a class="py-4 px-4 d-flex align-items-center" href="{{ route('dashboardAdmin') }}">
                     <i class="zmdi zmdi-view-dashboard me-2"></i>
                     <span>Dashboard</span>
@@ -16,13 +16,34 @@
                     <span>Produk</span>
                 </a>
             </li>
+            @php
+            $pesananOnlineActive = request()->routeIs('pesananOnlineAdmin');
+            $pesananOfflineActive = request()->routeIs('pesananOfflineAdmin');
+            $pesananActive = $pesananOnlineActive || $pesananOfflineActive;
+            @endphp
 
-            <li>
-                <a class="py-4 px-4" href=>
-                    <i class="zmdi zmdi-receipt"></i>
-                    <span>Pesanan</span>
+            <li class="{{ $pesananActive ? 'active open' : '' }}">
+                <a href="javascript:void(0);"
+                    class="menu-toggle py-4 px-4 d-flex align-items-center {{ $pesananActive ? 'toggled' : '' }}">
+                    <i class="zmdi zmdi-receipt me-2"></i><span>Pesanan</span>
                 </a>
+
+                <ul class="ml-menu">
+                    <li>
+                        <a href="{{ route('pesananOnlineAdmin') }}"
+                            class="py-4 px-4 d-flex align-items-center {{ $pesananOnlineActive ? 'active-menu' : '' }}">
+                            <span>Pesanan Online</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('pesananOfflineAdmin') }}"
+                            class="py-4 px-4 d-flex align-items-center {{ $pesananOfflineActive ? 'active-menu' : '' }}">
+                            <span>Pesanan Offline</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
+
 
             <li>
                 <a class="py-4 px-4" href=>

@@ -103,11 +103,12 @@
                                         <td class="text-center">
                                             <a href="javascript:void(0);"
                                                 class="btn-action waves-effect waves-blue"
-                                                data-toggle="modal"
-                                                data-target="#stokDetailModal"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#stokDetailModal"
                                                 title="Lihat Detail Stok">
                                                 <i class="zmdi zmdi-eye"></i>
                                             </a>
+
                                         </td>
                                         <td class="text-center">
                                             <a href="javascript:void(0);" class="btn-action waves-effect waves-yellow" title="Edit"

@@ -194,12 +194,18 @@
         .modal-header .btn[data-bs-dismiss="modal"] {
             background: transparent !important;
             box-shadow: none !important;
-        }.modal-header .btn[data-bs-dismiss="modal"]:hover {
+        }
+
+        .modal-header .btn[data-bs-dismiss="modal"]:hover {
             background: transparent !important;
-        }.modal-header .btn[data-bs-dismiss="modal"] i {
+        }
+
+        .modal-header .btn[data-bs-dismiss="modal"] i {
             transition: all 0.3s ease;
             color: white;
-        }.modal-header .btn[data-bs-dismiss="modal"]:hover i {
+        }
+
+        .modal-header .btn[data-bs-dismiss="modal"]:hover i {
             color: #ffb6b6;
             transform: rotate(90deg);
         }
@@ -219,11 +225,37 @@
             /* teks putih agar kontras */
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
-        }.kategori-select{
-              appearance: none;
-              width: 100%;
-              border-radius: 5px ;
-              
+        }
+
+        .kategori-select {
+            appearance: none;
+            width: 100%;
+            border-radius: 5px;
+
+        }
+
+        /* pesanan online */
+        .ml-menu a.active-menu {
+            background-color: #f0f0f0;
+            font-weight: 600;
+            border-left: 3px solid rgba(15, 92, 47, 0.5);
+            color: #333 !important;
+        }
+
+        .ml-menu a.active-menu i {
+            color: rgba(15, 92, 47, 0.5);
+        }
+
+        .status-badge {
+            display: inline-block;
+            min-width: 120px;
+            /* ubah sesuai kebutuhan */
+            text-align: center;
+            padding: 10px 0;
+            /* atur tinggi agar proporsional */
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
         }
     </style>
 
@@ -237,7 +269,7 @@
             <div class="line"></div>
             <div class="line"></div>
             <p>Please wait...</p>
-            <div class="m-t-30"><img src="/AdminAssets/images/logo.svg" width="48" height="48" alt="Nexa"></div>
+
         </div>
     </div>
     <!-- Overlay For Sidebars -->
