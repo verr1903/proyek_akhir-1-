@@ -410,6 +410,13 @@
                 img.src = URL.createObjectURL(file);
             }
         });
+        document.getElementById('tambahGambar').addEventListener('change', function(event) {
+            const img = document.getElementById('previewGambarTambah');
+            const file = event.target.files[0];
+            if (file) {
+                img.src = URL.createObjectURL(file);
+            }
+        });
     </script>
     @endpush
 </x-layout-admin>
