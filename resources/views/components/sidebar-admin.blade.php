@@ -3,16 +3,16 @@
     <!-- Menu -->
     <div class="menu">
         <ul class="list mt-4">
-            <li>
-                <a class="py-4 px-4" href=>
-                    <i class="zmdi zmdi-view-dashboard"></i>
+             <li class="{{ Route::is('dashboardAdmin') ? 'active' : '' }}">
+                <a class="py-4 px-4 d-flex align-items-center" href="{{ route('dashboardAdmin') }}">
+                    <i class="zmdi zmdi-view-dashboard me-2"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
 
-            <li>
-                <a class="py-4 px-4" href=>
-                    <i class="zmdi zmdi-shopping-basket"></i>
+            <li class="{{ Route::is('produkAdmin') ? 'active' : '' }}">
+                <a class="py-4 px-4 d-flex align-items-center" href="{{ route('produkAdmin') }}">
+                    <i class="zmdi zmdi-shopping-basket me-2"></i>
                     <span>Produk</span>
                 </a>
             </li>

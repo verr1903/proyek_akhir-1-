@@ -122,7 +122,109 @@
         .btn.dropdown-toggle.btn-default {
             display: none !important;
         }
-        
+
+
+        /* produk */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: #f4f4f4;
+            color: #555;
+            margin: 0 3px;
+            transition: all 0.25s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hover effect: berubah warna + sedikit naik */
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+        }
+
+        /* Efek klik (aktif) */
+        .btn-action:active {
+            transform: scale(0.9);
+        }
+
+        /* Warna spesifik berdasarkan fungsi */
+        .btn-action.waves-yellow:hover {
+            background-color: #e2de01ff;
+            color: #fff;
+        }
+
+        /* Warna spesifik berdasarkan fungsi */
+        .btn-action.waves-blue:hover {
+            background-color: #2196f3;
+            color: #fff;
+        }
+
+        .btn-action.waves-red:hover {
+            background-color: #e53935;
+            color: #fff;
+        }
+
+        /* Tombol Tambah Produk */
+        .btn-success.btn-rounded {
+            transition: all 0.3s ease;
+            border-radius: 50px;
+            font-weight: 600;
+            border-radius: 10px !important;
+            box-shadow: 0 4px 8px rgba(0, 128, 0, 0.2);
+        }
+
+        /* Efek hover: membesar dan warna lebih terang */
+        .btn-success.btn-rounded:hover {
+            transform: scale(1.07);
+            background-color: #2ecc71;
+            /* hijau lebih cerah */
+            box-shadow: 0 6px 15px rgba(46, 204, 113, 0.5);
+        }
+
+        /* Efek klik (active): sedikit mengecil */
+        .btn-success.btn-rounded:active {
+            transform: scale(0.95);
+            box-shadow: 0 3px 8px rgba(39, 174, 96, 0.4);
+        }
+
+        .modal-header .btn[data-bs-dismiss="modal"] {
+            background: transparent !important;
+            box-shadow: none !important;
+        }.modal-header .btn[data-bs-dismiss="modal"]:hover {
+            background: transparent !important;
+        }.modal-header .btn[data-bs-dismiss="modal"] i {
+            transition: all 0.3s ease;
+            color: white;
+        }.modal-header .btn[data-bs-dismiss="modal"]:hover i {
+            color: #ffb6b6;
+            transform: rotate(90deg);
+        }
+
+        .close-footer {
+            transition: all 0.3s ease;
+            border-color: #6c757d;
+            /* warna default bootstrap */
+            color: #6c757d;
+        }
+
+        .close-footer:hover {
+            background-color: #dc3545;
+            /* merah bootstrap */
+            border-color: #dc3545;
+            color: #fff;
+            /* teks putih agar kontras */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }.kategori-select{
+              appearance: none;
+              width: 100%;
+              border-radius: 5px ;
+              
+        }
     </style>
 
 </head>
@@ -154,6 +256,12 @@
     <!-- Jquery Core Js -->
     <script src="/AdminAssets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
     <script src="/AdminAssets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+
+
+    <!-- Font Awesome 6.6.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-KC6o7bL5Q12h5tWzP4D0g+6HL0DqF6AblFdvXJ7z9F3MUt1SCJQF6DBrZ6KPRsInH9ZBvJ07PrlxqUAWk+QZ3Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Bootstrap 5 Bundle (sudah termasuk Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="/AdminAssets/bundles/jvectormap.bundle.js"></script> <!-- JVectorMap Plugin Js -->
     <script src="/AdminAssets/bundles/morrisscripts.bundle.js"></script><!-- Morris Plugin Js -->

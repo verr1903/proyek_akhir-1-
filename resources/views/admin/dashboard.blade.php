@@ -25,13 +25,15 @@
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-12 text-center">
-                    <div class="card tasks_report p-3">
-                        <div class="card-value">26</div>
-                        <div class="progress">
-                            <div class="progress-bar" style="width:100%; background-color:#ffa07a;"></div>
+                    <a href="{{ route('produkAdmin') }}" style="text-decoration: none;color: black;">
+                        <div class="card tasks_report p-3">
+                            <div class="card-value">26</div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width:100%; background-color:#ffa07a;"></div>
+                            </div>
+                            <h6>Total Produk Tersedia</h6>
                         </div>
-                        <h6>Total Produk Tersedia</h6>
-                    </div>
+                    </a>
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-12 text-center">
@@ -46,7 +48,8 @@
 
                 <div class="col-lg-3 col-md-6 col-sm-12 text-center">
                     <div class="card tasks_report p-3">
-                        <div class="card-value">100</div>
+                        <div class="card-value"><i class="fa fa-star" style="font-size: 20px;"></i>
+                        <span style="margin-top: 30px;">4.5</span></div>
                         <div class="progress">
                             <div class="progress-bar" style="width:100%; background-color:#8fbc8f;"></div>
                         </div>
@@ -180,86 +183,86 @@
         // ===========================
 
         // DATA PER TAHUN (contoh dummy)
-       const yearlyData = {
-    2025: {
-        income: [150000, 240000, 220000, 280000, 350000, 420000, 380000, 450000, 410000, 460000],
-        category: [25, 30, 15]
-    },
-    2024: {
-        income: [120000, 210000, 190000, 260000, 300000, 370000, 340000, 400000, 370000, 420000],
-        category: [20, 40, 10]
-    },
-    2023: {
-        income: [90000, 150000, 180000, 210000, 250000, 310000, 290000, 340000, 300000, 360000],
-        category: [30, 25, 20]
-    }
-};
-
-// Fungsi bantu untuk format angka jadi Rupiah
-function formatRupiah(value) {
-    return 'Rp. ' + value.toLocaleString('id-ID');
-}
-
-// GRAFIK LINE PENDAPATAN
-const ctx1 = document.getElementById('activityChart').getContext('2d');
-let activityChart = new Chart(ctx1, {
-    type: 'line',
-    data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt'],
-        datasets: [{
-            label: 'Pendapatan',
-            data: yearlyData[2025].income,
-            borderColor: '#0ea10eff',
-            backgroundColor: 'rgba(19, 153, 48, 0.2)',
-            borderWidth: 2,
-            tension: 0.4,
-            fill: true,
-            pointRadius: 4,
-            pointBackgroundColor: '#0ea10eff',
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'bottom'
+        const yearlyData = {
+            2025: {
+                income: [150000, 240000, 220000, 280000, 350000, 420000, 380000, 450000, 410000, 460000],
+                category: [25, 30, 15]
             },
-            tooltip: {
-                mode: 'index',
-                intersect: false,
-                callbacks: {
-                    label: function(context) {
-                        // Format tooltip jadi "Pendapatan: Rp. xxx"
-                        let label = context.dataset.label || '';
-                        if (label) label += ': ';
-                        if (context.parsed.y !== null) {
-                            label += formatRupiah(context.parsed.y);
+            2024: {
+                income: [120000, 210000, 190000, 260000, 300000, 370000, 340000, 400000, 370000, 420000],
+                category: [20, 40, 10]
+            },
+            2023: {
+                income: [90000, 150000, 180000, 210000, 250000, 310000, 290000, 340000, 300000, 360000],
+                category: [30, 25, 20]
+            }
+        };
+
+        // Fungsi bantu untuk format angka jadi Rupiah
+        function formatRupiah(value) {
+            return 'Rp. ' + value.toLocaleString('id-ID');
+        }
+
+        // GRAFIK LINE PENDAPATAN
+        const ctx1 = document.getElementById('activityChart').getContext('2d');
+        let activityChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt'],
+                datasets: [{
+                    label: 'Pendapatan',
+                    data: yearlyData[2025].income,
+                    borderColor: '#0ea10eff',
+                    backgroundColor: 'rgba(19, 153, 48, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#0ea10eff',
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                // Format tooltip jadi "Pendapatan: Rp. xxx"
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed.y !== null) {
+                                    label += formatRupiah(context.parsed.y);
+                                }
+                                return label;
+                            }
                         }
-                        return label;
-                    }
-                }
-            },
-        },
-        scales: {
-            x: {
-                grid: {
-                    color: '#f1f1f1'
-                }
-            },
-            y: {
-                beginAtZero: true,
-                grid: {
-                    color: '#f1f1f1'
+                    },
                 },
-                ticks: {
-                    callback: function(value) {
-                        return 'Rp. ' + value.toLocaleString('id-ID');
+                scales: {
+                    x: {
+                        grid: {
+                            color: '#f1f1f1'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f1f1f1'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return 'Rp. ' + value.toLocaleString('id-ID');
+                            }
+                        }
                     }
                 }
             }
-        }
-    }
-});
+        });
 
 
         // Pie Chart Distribusi Produk 

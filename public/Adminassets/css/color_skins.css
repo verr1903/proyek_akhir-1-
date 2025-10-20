@@ -583,7 +583,7 @@
 .theme-orange .profile-page .profile-sub-header .box-list ul li a:hover,
 .theme-orange .menu>ul>li>ul.normal-sub>li a:hover,
 .theme-orange .menu>ul>li>ul>li>ul>li a:hover {
-    background-color: #ffc100
+    background-color: #025305
 }
 
 .theme-orange .navbar-header {
@@ -624,11 +624,11 @@
 }
 
 .theme-orange .bars {
-    color: #ffc100
+    color: #025305
 }
 
 .theme-orange .sidebar .user-info {
-    background: linear-gradient(45deg, #ffc100, #ffe700)
+    background: linear-gradient(45deg, #025305, #ffe700)
 }
 
 .theme-orange .sidebar .user-info .info-container {
@@ -641,7 +641,7 @@
 
 .theme-orange .sidebar .menu .list li.active>:first-child i,
 .theme-orange .sidebar .menu .list li.active>:first-child span {
-    color: #ffc100
+    color: #025305
 }
 
 .theme-orange .sidebar .menu .list .toggled,
@@ -650,30 +650,30 @@
     border-left: 3px solid;
     border-bottom: none;
     border-top: none;
-    border-color: #ffc100
+    border-color: #025305
 }
 
 .theme-orange .inbox-widget .inbox-inner:hover .inbox-img img {
-    border: 2px solid #ffc100;
+    border: 2px solid #025305;
     transition: all 150ms linear
 }
 
 .theme-orange .nav-tabs .nav-link.active {
-    border-bottom: 1px solid #ffc100 !important;
-    color: #ffc100 !important;
+    border-bottom: 1px solid #025305 !important;
+    color: #025305 !important;
     font-weight: 700
 }
 
 .theme-orange .blog-page .single-blog-post .img-holder .date-box {
-    background-color: #ffc100
+    background-color: #025305
 }
 
 .theme-orange .notify .heartbit {
-    border-color: #ffc100
+    border-color: #025305
 }
 
 .theme-orange .notify .point {
-    background-color: #ffc100
+    background-color: #025305
 }
 
 .theme-orange .authentication {
@@ -681,7 +681,7 @@
 }
 
 .theme-orange .authentication .card .header {
-    background: linear-gradient(45deg, #ffc100, #ffe700)
+    background: linear-gradient(45deg, #025305, #ffe700)
 }
 
 .theme-blush .profile-page .profile-sub-header .box-list ul li a:hover,

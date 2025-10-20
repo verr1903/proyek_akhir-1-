@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\ProdukAdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Client\DashboardClientController;
@@ -23,6 +24,7 @@ Route::get('/riwayat', [RiwayatClientController::class, 'index'])->name('riwayat
 Route::get('/produk', [ProdukClientController::class, 'index'])->name('produk');
 
 Route::prefix('admin')->group(function () {
-   Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard');
+   Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboardAdmin');
+   Route::get('/produk', [ProdukAdminController::class, 'index'])->name('produkAdmin');
 
 });
