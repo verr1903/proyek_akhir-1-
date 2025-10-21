@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\IklanAdminController;
 use App\Http\Controllers\Admin\PesananAdminController;
 use App\Http\Controllers\Admin\ProdukAdminController;
 use App\Http\Controllers\Auth\LoginController;
@@ -32,9 +33,12 @@ Route::prefix('admin')->group(function () {
    Route::get('/produk', [ProdukAdminController::class, 'index'])
    ->name('produkAdmin');
    // Pesanan Online
-   Route::get('/admin/pesanan/online', [PesananAdminController::class, 'online'])
+   Route::get('/pesanan/online', [PesananAdminController::class, 'online'])
       ->name('pesananOnlineAdmin');
    // Pesanan Offline
-   Route::get('/admin/pesanan/offline', [PesananAdminController::class, 'offline'])
+   Route::get('/pesanan/offline', [PesananAdminController::class, 'offline'])
       ->name('pesananOfflineAdmin');
+   // Iklan
+   Route::get('/iklan', [IklanAdminController::class, 'index'])
+      ->name('iklanAdmin');
 });
