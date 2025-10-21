@@ -67,8 +67,8 @@
                  </a>
              </li>
 
-             <li>
-                 <a class="py-4 px-4" href=>
+             <li class="{{ Route::is('laporanAdmin') ? 'active' : '' }}">
+                 <a class="py-4 px-4 d-flex align-items-center" href="{{ route('laporanAdmin') }}">
                      <i class="zmdi zmdi-chart"></i>
                      <span>Laporan</span>
                  </a>

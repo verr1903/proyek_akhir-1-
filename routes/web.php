@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\DiskonAdminController;
 use App\Http\Controllers\Admin\IklanAdminController;
 use App\Http\Controllers\Admin\KaryawanAdminController;
+use App\Http\Controllers\Admin\LaporanAdminController;
 use App\Http\Controllers\Admin\PesananAdminController;
 use App\Http\Controllers\Admin\ProdukAdminController;
 use App\Http\Controllers\Auth\LoginController;
@@ -49,4 +50,7 @@ Route::prefix('admin')->group(function () {
    // Karyawan
    Route::get('/karyawan', [KaryawanAdminController::class, 'index'])
       ->name('karyawanAdmin');
+   // Laporan
+   Route::get('/laporan', [LaporanAdminController::class, 'index'])
+      ->name('laporanAdmin');
 });
