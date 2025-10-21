@@ -2,31 +2,29 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Kolom yang dapat diisi (mass assignable).
      */
     protected $fillable = [
-        'name',
+        'username',
         'email',
         'password',
+        'avatar',
+        'role',
+        'google_id',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Kolom yang disembunyikan saat model dikonversi ke array atau JSON.
      */
     protected $hidden = [
         'password',
@@ -34,15 +32,27 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Konversi tipe kolom tertentu secara otomatis.
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * Accessor untuk mendapatkan URL avatar (jika ada).
+     */
+    public function getAvatarUrlAttribute()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        if ($this->avatar) {
+            // Jika avatar sudah berupa URL langsung
+            if (filter_var($this->avatar, FILTER_VALIDATE_URL)) {
+                return $this->avatar;
+            }
+            // Jika avatar disimpan dalam folder storage
+            return asset('storage/' . $this->avatar);
+        }
+
+        // Default avatar (misalnya gambar placeholder)
+        return asset('images/default-avatar.png');
     }
 }

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id('id_order');
+            $table->id();
             $table->unsignedBigInteger('id_users');
             $table->unsignedBigInteger('id_product');
             $table->unsignedBigInteger('id_address');
@@ -30,17 +30,17 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             $table->foreign('id_product')
-                ->references('id_product')
+                ->references('id')
                 ->on('products')
                 ->onDelete('cascade');
 
             $table->foreign('id_address')
-                ->references('id_address')
+                ->references('id')
                 ->on('addresses')
                 ->onDelete('cascade');
 
             $table->foreign('id_discount')
-                ->references('id_discount')
+                ->references('id')
                 ->on('discounts')
                 ->onDelete('set null'); // Jika diskon dihapus, tetap simpan pesanan
         });
