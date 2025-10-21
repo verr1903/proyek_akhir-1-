@@ -13,7 +13,7 @@
                             class="btn btn-success btn-rounded waves-effect py-2 px-3 shadow-sm fw-semibold"
                             data-bs-toggle="modal" data-bs-target="#tambahProdukModal"
                             style="border-radius: 30px; transition: all 0.3s ease;">
-                            <i class="zmdi zmdi-plus me-1"></i> Tambah Produk
+                            <i class="zmdi zmdi-plus me-1"></i> Tambah Diskon
                         </button>
                     </div>
 
@@ -85,7 +85,7 @@
                                 <div class="modal-dialog modal-lg modal-dialog-centered">
                                     <div class="modal-content border-0 rounded-4 shadow-lg">
                                         <div class="modal-header bg-warning text-white rounded-top-4">
-                                            <h5 class="modal-title fw-bold" id="editProdukModalLabel">Edit Produk</h5>
+                                            <h5 class="modal-title fw-bold" id="editProdukModalLabel">Edit Diskon</h5>
                                             <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close">
                                                 <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
                                             </button>
@@ -135,7 +135,7 @@
                                 <div class="modal-dialog modal-lg modal-dialog-centered">
                                     <div class="modal-content border-0 rounded-4 shadow-lg">
                                         <div class="modal-header bg-success text-white rounded-top-4">
-                                            <h5 class="modal-title fw-bold" id="tambahProdukModalLabel">Tambah Produk</h5>
+                                            <h5 class="modal-title fw-bold" id="tambahProdukModalLabel">Tambah Diskon</h5>
                                             <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close">
                                                 <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
                                             </button>
@@ -187,20 +187,7 @@
 
     @push('scripts')
     <script>
-        document.getElementById('editGambar').addEventListener('change', function(event) {
-            const img = document.getElementById('previewGambarEdit');
-            const file = event.target.files[0];
-            if (file) {
-                img.src = URL.createObjectURL(file);
-            }
-        });
-        document.getElementById('tambahGambar').addEventListener('change', function(event) {
-            const img = document.getElementById('previewGambarTambah');
-            const file = event.target.files[0];
-            if (file) {
-                img.src = URL.createObjectURL(file);
-            }
-        });
+      
     </script>
     @endpush
 </x-layout-admin>
