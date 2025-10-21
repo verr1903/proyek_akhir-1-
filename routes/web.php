@@ -29,32 +29,34 @@ Route::get('/profile', [ProfileClientController::class, 'index'])->name('profile
 Route::get('/riwayat', [RiwayatClientController::class, 'index'])->name('riwayat');
 Route::get('/produk', [ProdukClientController::class, 'index'])->name('produk');
 
-Route::prefix('admin')->group(function () {
-   // dashboard admin
-   Route::get('/', [DashboardAdminController::class, 'index'])
-   ->name('dashboardAdmin');
-   // produk 
-   Route::get('/produk', [ProdukAdminController::class, 'index'])
-   ->name('produkAdmin');
-   // Pesanan Online
-   Route::get('/pesanan/online', [PesananAdminController::class, 'online'])
-      ->name('pesananOnlineAdmin');
-   // Pesanan Offline
-   Route::get('/pesanan/offline', [PesananAdminController::class, 'offline'])
-      ->name('pesananOfflineAdmin');
-   // Iklan
-   Route::get('/iklan', [IklanAdminController::class, 'index'])
-      ->name('iklanAdmin');
-   // Diskon
-   Route::get('/diskon', [DiskonAdminController::class, 'index'])
-      ->name('diskonAdmin');
-   // Karyawan
-   Route::get('/karyawan', [KaryawanAdminController::class, 'index'])
-      ->name('karyawanAdmin');
-   // Laporan
-   Route::get('/laporan', [LaporanAdminController::class, 'index'])
-      ->name('laporanAdmin');
-   // Profile
-   Route::get('/profile', [ProfileAdminController::class, 'index'])
-      ->name('profileAdmin');
-});
+Route::prefix('admin')->group(
+   function () {
+      // dashboard admin
+      Route::get('/', [DashboardAdminController::class, 'index'])
+         ->name('dashboardAdmin');
+      // produk 
+      Route::get('/produk', [ProdukAdminController::class, 'index'])
+         ->name('produkAdmin');
+      // Pesanan Online
+      Route::get('/pesanan/online', [PesananAdminController::class, 'online'])
+         ->name('pesananOnlineAdmin');
+      // Pesanan Offline
+      Route::get('/pesanan/offline', [PesananAdminController::class, 'offline'])
+         ->name('pesananOfflineAdmin');
+      // Iklan
+      Route::get('/iklan', [IklanAdminController::class, 'index'])
+         ->name('iklanAdmin');
+      // Diskon
+      Route::get('/diskon', [DiskonAdminController::class, 'index'])
+         ->name('diskonAdmin');
+      // Karyawan
+      Route::get('/karyawan', [KaryawanAdminController::class, 'index'])
+         ->name('karyawanAdmin');
+      // Laporan
+      Route::get('/laporan', [LaporanAdminController::class, 'index'])
+         ->name('laporanAdmin');
+      // Profile
+      Route::get('/profile', [ProfileAdminController::class, 'index'])
+         ->name('profileAdmin');
+   }
+);
