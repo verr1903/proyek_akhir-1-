@@ -53,8 +53,8 @@
              </li>
 
 
-             <li>
-                 <a class="py-4 px-4" href=>
+             <li class="{{ Route::is('diskonAdmin') ? 'active' : '' }}">
+                 <a class="py-4 px-4 d-flex align-items-center" href="{{ route('diskonAdmin') }}">
                      <i class="zmdi zmdi-label"></i>
                      <span>Diskon</span>
                  </a>

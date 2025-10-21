@@ -8754,7 +8754,7 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::after {
 }
 
 .navbar-header {
-    width: 250px;
+    width: 2500px;
     font-size: 0
 }
 

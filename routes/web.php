@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\DiskonAdminController;
 use App\Http\Controllers\Admin\IklanAdminController;
 use App\Http\Controllers\Admin\PesananAdminController;
 use App\Http\Controllers\Admin\ProdukAdminController;
@@ -41,4 +42,7 @@ Route::prefix('admin')->group(function () {
    // Iklan
    Route::get('/iklan', [IklanAdminController::class, 'index'])
       ->name('iklanAdmin');
+   // Diskon
+   Route::get('/diskon', [DiskonAdminController::class, 'index'])
+      ->name('diskonAdmin');
 });

@@ -257,6 +257,29 @@
             font-weight: 600;
             font-size: 14px;
         }
+
+         .custom-select-style {
+            height: 40px;
+            /* samakan tinggi dengan input bootstrap */
+            padding-left: 10px;
+            padding-bottom: 3px;
+            font-size: 1rem;
+            appearance: none;
+            /* hilangkan gaya bawaan browser */
+            border-color: #d8d2fdff;
+            border-radius: 3px;
+            box-shadow: 0 0 0 1rem rgba(22, 22, 22, 0.25);
+            margin-left: -5px;
+            width: 755px;
+            background-image: none;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .custom-select-style:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            outline: 0;
+        }
     </style>
 
 </head>
