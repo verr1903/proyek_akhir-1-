@@ -93,9 +93,9 @@
 
 
                 <ul class="dropdown-menu slideUp" style="margin-right: 20px;margin-top: -8px;">
-                    <li><a href="profile.html"><i class="material-icons">person</i>Profile</a></li>
+                    <li><a href="{{ route('profileAdmin') }}"><i class="material-icons">person</i>Profile</a></li>
                     <li class="divider"></li>
-                    <li><a href="sign-in.html"><i class="material-icons">input</i>Sign Out</a></li>
+                    <li><a href="{{ route('login') }}"><i class="material-icons">input</i>Sign Out</a></li>
                 </ul>
             </li>
 

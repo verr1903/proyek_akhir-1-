@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\KaryawanAdminController;
 use App\Http\Controllers\Admin\LaporanAdminController;
 use App\Http\Controllers\Admin\PesananAdminController;
 use App\Http\Controllers\Admin\ProdukAdminController;
+use App\Http\Controllers\Admin\ProfileAdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Client\DashboardClientController;
@@ -53,4 +54,7 @@ Route::prefix('admin')->group(function () {
    // Laporan
    Route::get('/laporan', [LaporanAdminController::class, 'index'])
       ->name('laporanAdmin');
+   // Profile
+   Route::get('/profile', [ProfileAdminController::class, 'index'])
+      ->name('profileAdmin');
 });

@@ -9,7 +9,7 @@
 
     <title>{{$title}} | Jaqyuu</title>
     <!-- Favicon-->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" type="image/x-icon" href="/clientAssets/images/logo/logo.jpg">
     <link rel="stylesheet" href="/AdminAssets/plugins/bootstrap/css/bootstrap.min.css">
 
     <link rel="stylesheet" href="/AdminAssets/plugins/jvectormap/jquery-jvectormap-2.0.3.css" />
