@@ -31,12 +31,23 @@ Route::get('/produk', [ProdukClientController::class, 'index'])->name('produk');
 
 Route::prefix('admin')->group(
    function () {
+
       // dashboard admin
       Route::get('/', [DashboardAdminController::class, 'index'])
          ->name('dashboardAdmin');
+
+
       // produk 
       Route::get('/produk', [ProdukAdminController::class, 'index'])
          ->name('produkAdmin');
+      Route::post('/produk', [ProdukAdminController::class, 'store'])
+         ->name('produkAdmin.store');
+      Route::post('/produk/update/{id}', [ProdukAdminController::class, 'update'])
+         ->name('produkAdmin.update');
+      Route::delete('/produk/{id}', [ProdukAdminController::class, 'destroy'])
+         ->name('produkAdmin.destroy');
+
+
       // Pesanan Online
       Route::get('/pesanan/online', [PesananAdminController::class, 'online'])
          ->name('pesananOnlineAdmin');

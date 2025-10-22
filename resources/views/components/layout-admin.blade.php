@@ -125,6 +125,15 @@
 
 
         /* produk */
+        .img-clickable {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .img-clickable:hover {
+            transform: scale(1.1);
+        }
+
         .btn-action {
             display: inline-flex;
             align-items: center;
@@ -258,7 +267,7 @@
             font-size: 14px;
         }
 
-         .custom-select-style {
+        .custom-select-style {
             height: 40px;
             /* samakan tinggi dengan input bootstrap */
             padding-left: 10px;
@@ -317,13 +326,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-KC6o7bL5Q12h5tWzP4D0g+6HL0DqF6AblFdvXJ7z9F3MUt1SCJQF6DBrZ6KPRsInH9ZBvJ07PrlxqUAWk+QZ3Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Bootstrap 5 Bundle (sudah termasuk Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- CKEditor 5 -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
     <script src="/AdminAssets/bundles/jvectormap.bundle.js"></script> <!-- JVectorMap Plugin Js -->
     <script src="/AdminAssets/bundles/morrisscripts.bundle.js"></script><!-- Morris Plugin Js -->
     <script src="/AdminAssets/bundles/sparkline.bundle.js"></script> <!-- Sparkline Plugin Js -->
     <script src="/AdminAssets/bundles/knob.bundle.js"></script> <!-- Jquery Knob Plugin Js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/AdminAssets/bundles/mainscripts.bundle.js"></script>
     <script src="/AdminAssets/js/pages/index.js"></script>
     <script src="/AdminAssets/js/pages/charts/jquery-knob.min.js"></script>

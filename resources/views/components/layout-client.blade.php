@@ -400,13 +400,6 @@
             color: #f7c600;
         }
 
-        /* Setengah bintang */
-        .star.half::before {
-            background: linear-gradient(90deg, #f7c600 50%, #ccc 50%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
         /* Hover efek */
         .star:hover {
             transform: scale(1.2);
