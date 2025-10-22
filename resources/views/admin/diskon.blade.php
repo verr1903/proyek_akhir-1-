@@ -30,54 +30,44 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @forelse($discounts as $index => $discount)
                                     <tr>
-                                        <td>1</td>
-                                        <td><span style="font-size: 13px;" class="badge bg-success-subtle text-success fw-semibold">45%</span></td>
-                                        <td><span style="font-size: 15px;" class="fw-semibold">72</span></td>
-                                        <td><span style="font-size: 15px;" class="text-muted">randomised words even slightly believable</span></td>
+                                        <td>{{ $index + 1 }}</td>
                                         <td>
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-yellow" title="Edit"
-                                                data-bs-toggle="modal" data-bs-target="#editProdukModal">
+                                            <span class="badge bg-success-subtle text-success fw-semibold">
+                                                {{ $discount->persentase }}%
+                                            </span>
+                                        </td>
+                                        <td><span class="fw-semibold">{{ $discount->durasi }}</span></td>
+                                        <td><span class="text-muted">{{ $discount->product->nama ?? '-' }}</span></td>
+                                        <td>
+                                            <!-- edit -->
+                                            <a href="javascript:void(0);"
+                                                class="btn-action waves-effect waves-yellow btn-edit"
+                                                title="Edit"
+                                                data-id="{{ $discount->id }}"
+                                                data-persentase="{{ $discount->persentase }}"
+                                                data-durasi="{{ $discount->durasi }}"
+                                                data-produk="{{ $discount->product->id ?? '' }}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editProdukModal">
                                                 <i class="zmdi zmdi-edit"></i>
                                             </a>
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-red" title="Hapus">
-                                                <i class="zmdi zmdi-delete"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">2</td>
-                                        <td><span style="font-size: 13px;" class="badge bg-success text-white fw-semibold">85%</span></td>
-                                        <td><span style="font-size: 15px;" class="fw-semibold">72</span></td>
-                                        <td><span style="font-size: 15px;" class="text-muted">It is a long established will be distracted</span></td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-yellow" title="Edit"
-                                                data-bs-toggle="modal" data-bs-target="#editProdukModal">
-                                                <i class="zmdi zmdi-edit"></i>
-                                            </a>
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-red" title="Hapus">
-                                                <i class="zmdi zmdi-delete"></i>
-                                            </a>
-                                        </td>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">3</td>
-                                        <td><span style="font-size: 13px;" class="badge bg-warning-subtle text-warning fw-semibold">45%</span></td>
-                                        <td><span style="font-size: 15px;" class="fw-semibold">72</span></td>
-                                        <td><span style="font-size: 15px;" class="text-muted">There passages of Lorem Ipsum available</span></td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-yellow" title="Edit"
-                                                data-bs-toggle="modal" data-bs-target="#editProdukModal">
-                                                <i class="zmdi zmdi-edit"></i>
-                                            </a>
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-red" title="Hapus">
+                                            <!-- hapus -->
+                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-red btn-hapus"
+                                                data-id="{{ $discount->id }}" data-nama="{{ $discount->product->nama }}">
                                                 <i class="zmdi zmdi-delete"></i>
                                             </a>
                                         </td>
                                     </tr>
-
+                                    @empty
+                                    <tr>
+                                        <td colspan="5">Tidak ada data diskon.</td>
+                                    </tr>
+                                    @endforelse
                                 </tbody>
+
                             </table>
 
                             <!-- Modal Edit Produk -->
@@ -91,30 +81,31 @@
                                             </button>
                                         </div>
                                         <div class="modal-body p-4">
-                                            <form id="formEditProduk">
+                                            <form id="formEditDiskon" method="POST">
+                                                @csrf
+                                                @method('PUT')
+
+                                                <input type="hidden" id="editId" name="id">
+
                                                 <div class="mb-3">
                                                     <label class="form-label fw-semibold">Persentase</label>
-                                                    <input type="text" id="editPersentase" class="form-control rounded-3 shadow-sm" value="50">
+                                                    <input type="number" id="editPersentase" name="persentase" class="form-control rounded-3 shadow-sm" required>
                                                 </div>
 
                                                 <div class="mb-3">
                                                     <label class="form-label fw-semibold">Durasi (Jam)</label>
-                                                    <input type="number" id="editDurasi" class="form-control rounded-3 shadow-sm" value="72">
+                                                    <input type="number" id="editDurasi" name="durasi" class="form-control rounded-3 shadow-sm" required>
                                                 </div>
 
                                                 <div class="mb-3">
                                                     <label class="form-label fw-semibold">Produk</label>
-                                                    <div class="">
-                                                        <select id="editProduk" class="form-select rounded-3 shadow-sm custom-select-style">
-                                                            <option value="" disabled selected>Pilih produk</option>
-                                                            <option value="Produk A">Produk A</option>
-                                                            <option value="Produk B">Produk B</option>
-                                                            <option value="Produk C">Produk C</option>
-                                                            <option value="Produk D">Produk D</option>
-                                                        </select>
-                                                    </div>
+                                                    <select id="editProduk" name="id_product" class="form-select rounded-3 shadow-sm custom-select-style" required>
+                                                        <option value="" disabled selected>Pilih produk</option>
+                                                        @foreach($products as $product)
+                                                        <option value="{{ $product->id }}">{{ $product->nama }} - {{ $product->kategori }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
-
 
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-dismiss="modal">
@@ -125,6 +116,7 @@
                                                     </button>
                                                 </div>
                                             </form>
+
                                         </div>
                                     </div>
                                 </div>
@@ -141,36 +133,38 @@
                                             </button>
                                         </div>
                                         <div class="modal-body p-4">
-                                            <form id="formTambahProduk">
+                                            <form action="{{ route('diskonAdmin.store') }}" method="POST">
+                                                @csrf
                                                 <div class="mb-3">
                                                     <label class="form-label fw-semibold">Persentase</label>
-                                                    <input type="text" id="tambahPersentase" class="form-control rounded-3 shadow-sm" placeholder="Contoh: 50">
+                                                    <input type="number" name="persentase" class="form-control rounded-3 shadow-sm" placeholder="Contoh: 50">
                                                 </div>
+
                                                 <div class="mb-3">
                                                     <label class="form-label fw-semibold">Durasi (Jam)</label>
-                                                    <input type="number" id="tambahDurasi" class="form-control rounded-3 shadow-sm" placeholder="Contoh: 72">
+                                                    <input type="number" name="durasi" class="form-control rounded-3 shadow-sm" placeholder="Contoh: 72">
                                                 </div>
-                                               <div class="mb-3">
+
+                                                <div class="mb-3">
                                                     <label class="form-label fw-semibold">Produk</label>
-                                                    <div class="">
-                                                        <select id="editProduk" class="form-select rounded-3 shadow-sm custom-select-style">
-                                                            <option value="" disabled selected>Pilih produk</option>
-                                                            <option value="Produk A">Produk A</option>
-                                                            <option value="Produk B">Produk B</option>
-                                                            <option value="Produk C">Produk C</option>
-                                                            <option value="Produk D">Produk D</option>
-                                                        </select>
-                                                    </div>
+                                                    <select id="editProduk" class="form-select rounded-3 shadow-sm custom-select-style">
+                                                        <option value="" disabled selected>Pilih produk</option>
+                                                        @foreach($products->whereNotIn('id', $discounts->pluck('id_product')) as $product)
+                                                        <option value="{{ $product->id }}">{{ $product->nama }} - {{ $product->kategori }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
+
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-dismiss="modal">
                                                         <i class="zmdi zmdi-close me-1"></i> Batal
                                                     </button>
                                                     <button type="submit" class="btn btn-success text-white rounded-3 fw-semibold">
-                                                        <i class="zmdi zmdi-check me-1"></i> Simpan Produk
+                                                        <i class="zmdi zmdi-check me-1"></i> Simpan Diskon
                                                     </button>
                                                 </div>
                                             </form>
+
                                         </div>
                                     </div>
                                 </div>
@@ -186,8 +180,64 @@
 
 
     @push('scripts')
+
+    <!-- sweatalert hapus -->
     <script>
-      
+        document.querySelectorAll('.btn-hapus').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const nama = this.dataset.nama;
+
+                Swal.fire({
+                    title: 'Yakin ingin menghapus?',
+                    html: `Iklan <strong>${nama}</strong> akan dihapus secara permanen.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e3342f',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/admin/diskon/${id}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                }
+                            }).then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire('Berhasil!', 'Diskon telah dihapus.', 'success')
+                                        .then(() => location.reload());
+                                }
+                            });
+                    }
+                });
+            });
+        });
     </script>
+
+    <!-- modal edit -->
+    <script>
+        document.querySelectorAll('.btn-edit').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const persentase = this.dataset.persentase;
+                const durasi = this.dataset.durasi;
+                const produk = this.dataset.produk;
+
+                // Isi form modal
+                document.getElementById('editId').value = id;
+                document.getElementById('editPersentase').value = persentase;
+                document.getElementById('editDurasi').value = durasi;
+                document.getElementById('editProduk').value = produk;
+
+                // Ubah action form sesuai ID
+                document.getElementById('formEditDiskon').action = `/admin/diskon/${id}`;
+            });
+        });
+    </script>
+
     @endpush
 </x-layout-admin>

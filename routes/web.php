@@ -42,7 +42,7 @@ Route::prefix('admin')->group(
          ->name('produkAdmin');
       Route::post('/produk', [ProdukAdminController::class, 'store'])
          ->name('produkAdmin.store');
-      Route::post('/produk/update/{id}', [ProdukAdminController::class, 'update'])
+      Route::put('/produk/update/{id}', [ProdukAdminController::class, 'update'])
          ->name('produkAdmin.update');
       Route::delete('/produk/{id}', [ProdukAdminController::class, 'destroy'])
          ->name('produkAdmin.destroy');
@@ -54,12 +54,31 @@ Route::prefix('admin')->group(
       // Pesanan Offline
       Route::get('/pesanan/offline', [PesananAdminController::class, 'offline'])
          ->name('pesananOfflineAdmin');
+
+
       // Iklan
       Route::get('/iklan', [IklanAdminController::class, 'index'])
          ->name('iklanAdmin');
+      Route::post('/iklan', [IklanAdminController::class, 'store'])
+         ->name('iklanAdmin.store');
+      Route::put('/iklan/{id}', [IklanAdminController::class, 'update'])
+         ->name('iklanAdmin.update');
+      Route::delete('/iklan/{id}', [IklanAdminController::class, 'destroy'])
+         ->name('iklanAdmin.destroy');
+
+
       // Diskon
       Route::get('/diskon', [DiskonAdminController::class, 'index'])
          ->name('diskonAdmin');
+      Route::post('/diskon/store', [DiskonAdminController::class, 'store'])
+         ->name('diskonAdmin.store');
+      Route::delete('/diskon/{id}', [DiskonAdminController::class, 'destroy'])
+         ->name('diskonAdmin.destroy');
+      Route::put('/diskon/{id}', [DiskonAdminController::class, 'update'])
+         ->name('diskonAdmin.update');
+
+
+
       // Karyawan
       Route::get('/karyawan', [KaryawanAdminController::class, 'index'])
          ->name('karyawanAdmin');

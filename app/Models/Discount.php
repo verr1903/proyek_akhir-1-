@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Discount extends Model
 {
@@ -15,13 +16,22 @@ class Discount extends Model
         'durasi',
     ];
 
+    protected $appends = ['end_date'];
+
     /**
      * Relasi ke model Product
      * Setiap discount milik satu produk
      */
     public function product()
     {
-        return $this->belongsTo(Product::class, 'id_product');
+        return $this->belongsTo(\App\Models\Product::class, 'id_product');
     }
 
+    public function getEndDateAttribute()
+    {
+        // Misalnya durasi dalam hari dan promo dimulai saat dibuat
+        return $this->created_at
+            ? Carbon::parse($this->created_at)->addDays($this->durasi)->toDateString()
+            : null;
+    }
 }

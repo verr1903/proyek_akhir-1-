@@ -3,46 +3,29 @@
     <div class="main-wrapper">
         <x-header-client></x-header-client>
 
-
-
-
         <!--Slider Start-->
         <div class="slider-area">
             <div class="swiper-container slider-active">
                 <div class="swiper-wrapper">
-                    <!--Single Slider Start-->
-                    <div class="single-slider swiper-slide animation-style-01" style="background-image: url(clientAssets/images/slider/gambar11.png);">
+                    @foreach ($iklan as $item)
+                    <div class="single-slider swiper-slide animation-style-01" style="background-image: url({{ asset('storage/' . $item->gambar) }}); background-size: cover; background-position: center;">
                         <div class="container">
-                            <div class="slider-content">
-                                <h5 class="sub-title">20% Off For <br> New Members</h5>
-                                <h2 class="main-title">NEW T-Shirt</h2>
-                                <p>List Monochrome Style</p>
-
+                            <div class="slider-content ms-3">
+                                <h2 class="main-title">{!! $item->judul !!}</h2>
+                                <p>{!! $item->sub_judul !!}</p>
                                 <ul class="slider-btn">
-                                    <li><a href="{{ route('detail') }}" class="btn btn-round" style="background-color: #485444;color: white;">Start Shopping</a></li>
+                                    <li>
+                                        <a href="{{ $item->link ?? route('detail') }}" class="btn btn-round"
+                                            style="background-color: #485444; color: white;">
+                                            Start Shopping
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <!--Single Slider End-->
-
-                    <!--Single Slider Start-->
-                    <div class="single-slider swiper-slide animation-style-01" style="background-image: url(/clientAssets/images/slider/slider-2.jpg);">
-                        <div class="container">
-                            <div class="slider-content">
-                                <h5 class="sub-title">20% Off For <br> New Members</h5>
-                                <h2 class="main-title">Happy Mother's Day!</h2>
-                                <p>Bouquets your mom will love!</p>
-
-                                <ul class="slider-btn">
-                                    <li><a href="{{ route('detail') }}" class="btn btn-round btn-primary">Start Shopping</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Single Slider End-->
+                    @endforeach
                 </div>
-                <!--Swiper Wrapper End-->
 
                 <!-- Add Arrows -->
                 <div class="swiper-next"><i class="fa fa-angle-right"></i></div>
@@ -50,10 +33,9 @@
 
                 <!-- Add Pagination -->
                 <div class="swiper-pagination"></div>
-
             </div>
-            <!--Swiper Container End-->
         </div>
+
         <!--Slider End-->
 
         <!--New Product Start-->
@@ -67,8 +49,9 @@
                     </div>
                 </div>
                 <div class="product-wrapper">
+
+                    <!-- Tab Menu -->
                     <div class="product-tab-menu d-flex flex-wrap justify-content-center align-items-center gap-3">
-                        <!-- Tab Menu -->
                         <ul class="nav nav-pills d-flex flex-row justify-content-center flex-nowrap" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link nav-link1 active" data-bs-toggle="tab" href="#tab1" role="tab">New</a>
@@ -140,504 +123,92 @@
 
 
                     <div class="tab-content product-items-tab">
+
                         <div class="tab-pane fade show active" id="tab1" role="tabpanel">
-                            <div class="swiper-container product-active">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
+                            <div class="row justify-content-center">
+                                @forelse($products as $product)
+                                <div class="col-lg-4 col-sm-6 mb-1">
+                                    <div class="single-product">
+                                        <div class="product-image position-relative">
+                                            <a href="{{ route('detail', $product->id) }}">
+                                                <img src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}">
+                                            </a>
+                                            @php
+                                            $totalStok = ($product->stok_s ?? 0) + ($product->stok_m ?? 0) + ($product->stok_l ?? 0) + ($product->stok_xl ?? 0);
+                                            @endphp
+                                            {{-- Jika stok habis --}}
 
-                                                <span class="sticker-new label-sale">-34%</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Lity Majesty Palm</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$19.00</span>
-                                                    <span class="old-price">$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Sweet Alyssum</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$50.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new label-sale">-10%</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Wild Roses</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$19.00</span>
-                                                    <span class="old-price">$21.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new label-sale">-18%</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Summer Savory</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$40.00</span>
-                                                    <span class="old-price">$85.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
+                                            @if($totalStok <= 0)
                                                 <span class="sticker-new soldout-title">Soldout</span>
+                                                @endif
+
+                                                {{-- Jika ada diskon --}}
+                                                @if($product->discount && $product->discount->persentase > 0)
+                                                <span class="sticker-new label-sale">
+                                                    -{{ $product->discount->persentase }}%
+                                                </span>
+                                                @endif
+
 
                                                 <div class="action-links">
                                                     <ul>
-                                                        <li><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Spring Snowflake</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$19.00</span>
-                                                    <span class="old-price">$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Rock Soapwort</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$50.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new label-sale">-27%</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Rock Soapwort</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$55.00</span>
-                                                    <span class="old-price">$75.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new soldout-title">Soldout</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Majesty Palm</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$19.00</span>
-                                                    <span class="old-price">$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new label-sale">-18%</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Summer Savory</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$40.00</span>
-                                                    <span class="old-price">$85.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Foxglove Flower</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$79.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new label-sale">-10%</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Wild Roses</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$19.00</span>
-                                                    <span class="old-price">$21.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new label-sale">-35%</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+                                                        @if($totalStok > 0)
+                                                        <li class="mt-3 me-3">
+                                                            <a href="" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart">
+                                                                <i class="icon-shopping-bag"></i>
+                                                            </a>
+                                                        </li>
+                                                        @endif
                                                     </ul>
                                                 </div>
 
+                                                {{-- Countdown (contoh jika ada event promo dengan tanggal akhir) --}}
+                                                @if($product->discount && $product->discount->end_date)
                                                 <div class="product-countdown">
-                                                    <div data-countdown="2020/12/31"></div>
+                                                    <div data-countdown="{{ $product->discount->end_date }}"></div>
                                                 </div>
-
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Scarlet Sage</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$39.00</span>
-                                                    <span class="old-price">$60.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Sweet Alyssum</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$50.00</span>
-                                                </div>
-                                            </div>
+                                                @endif
                                         </div>
 
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new soldout-title">Soldout</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
+                                        <div class="product-content text-center">
+                                            <div class="rating">
+                                                <div class="rating-on" style="width: {{ $product->rating_percent ?? 80 }}%;"></div>
                                             </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Majesty Palm</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$19.00</span>
-                                                    <span class="old-price">$29.00</span>
-                                                </div>
+
+                                            <h4 class="product-name">
+                                                <a href="{{ route('detail', $product->id) }}">{{ $product->nama }}</a>
+                                            </h4>
+
+                                            <div class="price-box">
+                                                @if($product->discount && $product->discount->persentase > 0)
+                                                @php
+                                                $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
+                                                @endphp
+                                                <span class="current-price">
+                                                    Rp{{ number_format($discountPrice, 0, ',', '.') }}
+                                                </span>
+                                                <span class="old-price text-decoration-line-through">
+                                                    Rp{{ number_format($product->harga, 0, ',', '.') }}
+                                                </span>
+                                                @else
+                                                <span class="current-price">
+                                                    Rp{{ number_format($product->harga, 0, ',', '.') }}
+                                                </span>
+                                                @endif
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
 
-                                                <span class="sticker-new label-sale">-34%</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Lity Majesty Palm</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$19.00</span>
-                                                    <span class="old-price">$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new soldout-title">Soldout</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Spring Snowflake</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$19.00</span>
-                                                    <span class="old-price">$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new soldout-title">Soldout</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Majesty Palm</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$19.00</span>
-                                                    <span class="old-price">$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="single-product">
-                                            <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
-                                                </a>
-
-                                                <span class="sticker-new label-sale">-34%</span>
-
-                                                <div class="action-links">
-                                                    <ul>
-                                                        <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product-content text-center">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Lity Majesty Palm</a></h4>
-                                                <div class="price-box">
-                                                    <span class="current-price">$19.00</span>
-                                                    <span class="old-price">$29.00</span>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Add Arrows -->
-                                <div class="swiper-next"><i class="fa fa-angle-right"></i></div>
-                                <div class="swiper-prev"><i class="fa fa-angle-left"></i></div>
+                                @empty
+                                <div class="text-center py-5">
+                                    <h5 class="text-muted">Belum ada produk tersedia.</h5>
+                                </div>
+                                @endforelse
                             </div>
                         </div>
+
+
                         <div class="tab-pane fade" id="tab2" role="tabpanel">
                             <div class="swiper-container product-active">
                                 <div class="swiper-wrapper">
@@ -653,7 +224,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -680,7 +251,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -708,7 +279,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -735,7 +306,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -763,7 +334,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -788,7 +359,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -815,7 +386,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -840,7 +411,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -865,7 +436,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -891,7 +462,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -919,7 +490,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -946,12 +517,12 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
 
                                                 <div class="product-countdown">
-                                                    <div data-countdown="2020/12/31"></div>
+                                                    <div data-countdown="2025/12/31"></div>
                                                 </div>
 
                                             </div>
@@ -979,7 +550,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1004,7 +575,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1031,7 +602,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1058,7 +629,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1086,7 +657,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1113,7 +684,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1151,7 +722,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1176,7 +747,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1203,7 +774,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1230,7 +801,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1258,7 +829,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1283,7 +854,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1310,7 +881,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1335,7 +906,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1362,7 +933,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1389,7 +960,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1417,7 +988,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1444,7 +1015,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1470,7 +1041,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1496,7 +1067,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1524,7 +1095,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1551,7 +1122,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1579,7 +1150,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1606,7 +1177,7 @@
                                                 <div class="action-links">
                                                     <ul>
                                                         <li class="mt-2 me-2"><a href="cart.html" data-bs-tooltip="tooltip" data-bs-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                                        
+
                                                     </ul>
                                                 </div>
 

@@ -37,4 +37,9 @@ class Product extends Model
     {
         return $query->where('kategori', $kategori);
     }
+
+    public function discount()
+    {
+        return $this->hasOne(\App\Models\Discount::class, 'id_product');
+    }
 }

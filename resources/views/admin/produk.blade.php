@@ -70,7 +70,7 @@
                                         <td>
                                             {{ $product->nama }}
                                         </td>
-                                       <td>{!! $product->detail !!}</td>
+                                        <td>{!! $product->detail !!}</td>
 
                                         <td>{{ $product->kategori }}</td>
                                         <td>Rp{{ number_format($product->harga, 0, ',', '.') }}</td>
@@ -203,6 +203,7 @@
                                         <div class="modal-body p-4">
                                             <form id="formEditProduk" action="" method="POST" enctype="multipart/form-data">
                                                 @csrf
+                                                @method('PUT')
                                                 <input type="hidden" id="editProductId" name="id">
                                                 <div class="container-fluid py-2">
                                                     <!-- Gambar Produk -->
@@ -597,7 +598,28 @@
     <!-- CK EDITOR -->
     <script>
         let editorEdit;
-
+        ClassicEditor
+            .create(document.querySelector('#tambahDetail'), {
+                toolbar: [
+                    'heading', '|',
+                    'bold', 'italic', '|',
+                    'fontSize', 'fontColor', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'undo', 'redo'
+                ],
+                placeholder: 'Tulis detail produk di sini...',
+                fontSize: {
+                    options: [10, 12, 14, 16, 18, 20, 24],
+                    supportAllValues: true
+                }
+            })
+            .then(editor => {
+                editorEdit = editor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+            
         ClassicEditor
             .create(document.querySelector('#editDetail'), {
                 toolbar: [

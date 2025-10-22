@@ -486,6 +486,14 @@
         .menu-overlay.show {
             display: block;
         }
+        .product-image img {
+        width: 100%;
+        height: 410px; /* kamu bisa ubah: 200px, 300px, dst */
+        object-fit: fill; /* menjaga proporsi, memotong sisi jika perlu */
+        border-radius: 10px; /* opsional, buat sudut agak melengkung */
+    }
+
+
     </style>
 
 </head>
