@@ -179,7 +179,7 @@
                                 <div class="col-lg-4 col-sm-6 mb-2">
                                     <div class="single-product">
                                         <div class="product-image position-relative">
-                                            <a href="{{ route('detail', ['id' => $product->id]) }}">
+                                           <a href="{{ route('detail', $product->encrypted_id) }}">
                                                 <img src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}">
                                             </a>
                                             @php
@@ -225,7 +225,7 @@
                                             </div>
 
                                             <h4 class="product-name">
-                                                <a href="{{ route('detail', ['id' => $product->id]) }}">
+                                              <a href="{{ route('detail', $product->encrypted_id) }}">
                                                     {{ $product->nama }}
                                                 </a>
                                             </h4>

@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardClientController::class, 'index'])->name('dashboard');
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
-Route::get('/detail/{id}', [DetailClientController::class, 'index'])->name('detail');
+Route::get('/detail/{encryptedId}', [DetailClientController::class, 'index'])
+   ->name('detail');
 Route::get('/keranjang', [KeranjangClientController::class, 'index'])->name('keranjang');
 Route::get('/lokasi', [LokasiClientController::class, 'index'])->name('lokasi');
 Route::get('/profile', [ProfileClientController::class, 'index'])->name('profile');

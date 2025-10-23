@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class Product extends Model
 {
@@ -41,5 +42,10 @@ class Product extends Model
     public function discount()
     {
         return $this->hasOne(\App\Models\Discount::class, 'id_product');
+    }
+
+    public function getEncryptedIdAttribute()
+    {
+        return Crypt::encryptString($this->id);
     }
 }

@@ -4,23 +4,32 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Illuminate\Support\Facades\Crypt;
 
 class DetailClientController extends Controller
 {
-    public function index($id)
-{
-    $product = Product::with('discount')->findOrFail($id);
+    public function index($encryptedId)
+    {
+        try {
+            // Dekripsi ID produk
+            $id = Crypt::decryptString($encryptedId);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            abort(404, 'Produk tidak ditemukan atau URL tidak valid.');
+        }
 
-    $discountPrice = null;
-    if ($product->discount) {
-        $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
+        // Ambil produk beserta relasi diskon
+        $product = Product::with('discount')->findOrFail($id);
+
+        // Hitung harga setelah diskon (jika ada)
+        $discountPrice = null;
+        if ($product->discount) {
+            $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
+        }
+
+        return view('client.detail', [
+            'title' => $product->nama,
+            'product' => $product,
+            'discountPrice' => $discountPrice,
+        ]);
     }
-
-    return view('client.detail', [
-        'title' => $product->nama,
-        'product' => $product,
-        'discountPrice' => $discountPrice,
-    ]);
-}
-
 }
