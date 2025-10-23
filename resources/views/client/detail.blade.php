@@ -8,7 +8,7 @@
         <x-header-client></x-header-client>
 
         <div class="page-banner" style="background-color: #445244; padding: 20px 0; text-align: center;">
-            <div class="container" >
+            <div class="container">
                 <img src="/clientAssets/images/logo/logoo.jpg" alt="Banner Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
             </div>
         </div>
@@ -24,11 +24,17 @@
                     <div class="col-lg-6 col-md-8">
                         <div class="shop-image">
                             <div class="shop-single-preview-image">
-                                <img class="product-zoom" src="clientAssets/images/product/image1.png" alt="">
+                                {{-- Gambar utama --}}
+                                <img class="product-zoom" src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}" style="width: 100%; height: auto;">
 
-                                <span class="sticker-new label-sale">-34%</span>
+                                @if ($product->discount)
+                                <span class="sticker-new label-sale">
+                                    -{{ $product->discount->persentase }}%
+                                </span>
+                                @endif
+
                             </div>
-                            <div id="gallery_01" class="shop-single-thumb-image shop-thumb-active swiper-container">
+                            <!-- <div id="gallery_01" class="shop-single-thumb-image shop-thumb-active swiper-container">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide single-product-thumb">
                                         <a class="active" href="#" data-image="clientAssets/images/product/image1.png">
@@ -46,17 +52,17 @@
                                         </a>
                                     </div>
 
-                                </div>
+                                </div> -->
 
-                                <!-- Add Arrows -->
-                                <div class="swiper-thumb-next"><i class="fa fa-angle-right"></i></div>
+                            <!-- Add Arrows -->
+                            <!-- <div class="swiper-thumb-next"><i class="fa fa-angle-right"></i></div>
                                 <div class="swiper-thumb-prev"><i class="fa fa-angle-left"></i></div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="shop-single-content">
-                            <h3 class="title">Lity Majesty Palm</h3>
+                            <h3 class="title">{{ $product->nama }}</h3>
                             <div class="product-rating">
                                 <div class="rating">
                                     <div class="rating-on" style="width: 80%;"></div>
@@ -64,52 +70,81 @@
                                 <span>No reviews</span>
                             </div>
                             <div class="thumb-price">
-                                <span class="current-price">Rp.19.00</span>
-                                <span class="old-price">Rp.29.00</span>
-                                <span class="discount">-34%</span>
+                                @if ($discountPrice)
+                                <span class="current-price">Rp {{ number_format($discountPrice, 0, ',', '.') }}</span>
+                                <span class="old-price text-decoration-line-through text-muted">Rp {{ number_format($product->harga, 0, ',', '.') }}</span>
+                                <span class="discount text-white px-2 rounded">-{{ $product->discount->persentase }}%</span>
+                                @else
+                                <span class="current-price">Rp {{ number_format($product->harga, 0, ',', '.') }}</span>
+                                @endif
                             </div>
-                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+                            <p>{!! $product->detail ?? 'Tidak ada deskripsi untuk produk ini.' !!}</p>
 
                             <ul style="margin-top: -20px;" class="product-additional-information">
+                                @php
+                                $defaultSize = null;
+                                if ($product->stok_s > 0) $defaultSize = 'S';
+                                elseif ($product->stok_m > 0) $defaultSize = 'M';
+                                elseif ($product->stok_l > 0) $defaultSize = 'L';
+                                elseif ($product->stok_xl > 0) $defaultSize = 'XL';
+                                @endphp
                                 <li>
                                     <div class="size-options">
                                         <span style="font-weight: 500; margin-right: 5px;">Size</span>
 
-                                        <input type="radio" id="sizeS" name="size" value="S">
-                                        <label for="sizeS">S</label>
+                                        {{-- Ukuran S --}}
+                                        <input type="radio" id="sizeS" name="size" value="S"
+                                            @if ($product->stok_s <= 0) class="out-of-stock" disabled @endif
+                                            @if ($defaultSize==='S' ) checked @endif>
+                                            <label for="sizeS" class="@if ($product->stok_s <= 0) text-muted text-decoration-line-through @endif">S</label>
 
-                                        <input type="radio" id="sizeM" name="size" value="M">
-                                        <label for="sizeM">M</label>
+                                            {{-- Ukuran M --}}
+                                            <input type="radio" id="sizeM" name="size" value="M"
+                                                @if ($product->stok_m <= 0) class="out-of-stock" disabled @endif
+                                                @if ($defaultSize==='M' ) checked @endif>
+                                                <label for="sizeM" class="@if ($product->stok_m <= 0) text-muted text-decoration-line-through @endif">M</label>
 
-                                        <input type="radio" id="sizeL" name="size" value="L" checked>
-                                        <label for="sizeL">L</label>
+                                                {{-- Ukuran L --}}
+                                                <input type="radio" id="sizeL" name="size" value="L"
+                                                    @if ($product->stok_l <= 0) class="out-of-stock" disabled @endif
+                                                    @if ($defaultSize==='L' ) checked @endif>
+                                                    <label for="sizeL" class="@if ($product->stok_l <= 0) text-muted text-decoration-line-through @endif">L</label>
 
-                                        <input type="radio" id="sizeXL" name="size" value="XL">
-                                        <label for="sizeXL">XL</label>
+                                                    {{-- Ukuran XL --}}
+                                                    <input type="radio" id="sizeXL" name="size" value="XL"
+                                                        @if ($product->stok_xl <= 0) class="out-of-stock" disabled @endif
+                                                        @if ($defaultSize==='XL' ) checked @endif>
+                                                        <label for="sizeXL" class="@if ($product->stok_xl <= 0) text-muted text-decoration-line-through @endif">XL</label>
                                     </div>
                                 </li>
+
+                                {{-- Toast Notification --}}
+                                <div id="toast" class="toast-message">Produk ukuran ini sedang tidak tersedia 😢</div>
+
                             </ul>
 
-                            <div class="product-quantity d-flex flex-wrap align-items-center">
-                                <span class="quantity-title">Quantity: </span>
+                            {{-- Quantity --}}
+                            <div class="product-quantity d-flex flex-wrap align-items-center mt-3">
+                                <span class="quantity-title me-2">Quantity:</span>
                                 <form action="#">
-                                    <div class="quantity d-flex">
-                                        <button type="button" class="sub"><i class="ti-minus"></i></button>
-                                        <input type="text" value="1" />
-                                        <button type="button" class="add"><i class="ti-plus"></i></button>
+                                    <div class="quantity d-flex align-items-center">
+                                        <button type="button" class="sub btn btn-light border" style="padding-bottom: 40px;padding-right: 50px;"><i class="ti-minus"></i></button>
+                                        <input type="text" class="form-control text-center mx-1" id="quantityInput" value="1" style="width:60px;" readonly>
+                                        <button type="button" class="add btn btn-light border" style="padding-bottom: 40px;padding-right: 50px;"><i class="ti-plus"></i></button>
                                     </div>
                                 </form>
                             </div>
+
+                            {{-- Toast Notification --}}
+                            <div id="toast" class="toast-message">Produk ukuran ini sedang tidak tersedia 😢</div>
+                            <div id="toastStock" class="toast-message">Jumlah sudah mencapai stok maksimum 😅</div>
 
                             <div class="product-action d-flex flex-wrap">
                                 <div class="action">
                                     <button class="btn btn-primary">Tambah KeKeranjang</button>
                                 </div>
-                               
+
                             </div>
-
-
-
 
                             <div class="social-share">
                                 <span class="share-title">Share:</span>
@@ -129,18 +164,12 @@
                 <div class="shop-single-info">
                     <div class="shop-info-tab">
                         <ul class="nav justify-content-center">
-                            <li class="nav-item"><a class="active" data-bs-toggle="tab" href="#tab1">Description</a></li>
-                            <li class="nav-item"><a data-bs-toggle="tab" href="#tab2">Reviews</a></li>
+                            <li class="nav-item"><a class="active" data-bs-toggle="tab" href="#tab2">Reviews</a></li>
                         </ul>
                     </div>
 
                     <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tab1" role="tabpanel">
-                            <div class="description">
-                                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. <br> In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.</p>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="tab2" role="tabpanel">
+                        <div class="tab-pane fade  show active" id="tab2" role="tabpanel">
                             <div class="reviews">
                                 <h3 class="review-title">Customer Reviews</h3>
 
@@ -240,7 +269,7 @@
 
 
         <!--New Product Start-->
-        
+
 
 
         <!--Brand Start-->
@@ -295,4 +324,121 @@
         });
     </script>
 
+    <!-- aktifkan pemberitahuan jika produk habis -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toast = document.getElementById('toast');
+
+            // Tangkap semua label ukuran
+            document.querySelectorAll('.size-options label').forEach(label => {
+                label.addEventListener('click', function(e) {
+                    const input = document.getElementById(label.getAttribute('for'));
+                    if (input.hasAttribute('disabled')) {
+                        e.preventDefault();
+                        showToast();
+                    }
+                });
+            });
+
+            function showToast() {
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2500);
+            }
+        });
+    </script>
+
+    <!-- aktifkan tombol tambah dan kurang sesuai stok -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toast = document.getElementById('toast');
+            const toastStock = document.getElementById('toastStock');
+            const quantityInput = document.getElementById('quantityInput');
+            const subBtn = document.querySelector('.sub');
+            const addBtn = document.querySelector('.add');
+
+            const stok = {
+                S: {
+                    {
+                        $product - > stok_s
+                    }
+                },
+                M: {
+                    {
+                        $product - > stok_m
+                    }
+                },
+                L: {
+                    {
+                        $product - > stok_l
+                    }
+                },
+                XL: {
+                    {
+                        $product - > stok_xl
+                    }
+                }
+            };
+
+            let selectedSize = document.querySelector('input[name="size"]:checked')?.value;
+            let maxStok = stok[selectedSize] || 0;
+
+            updateButtons();
+
+            // Ganti ukuran
+            document.querySelectorAll('input[name="size"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    selectedSize = this.value;
+                    maxStok = stok[selectedSize];
+                    quantityInput.value = 1;
+                    updateButtons();
+                });
+            });
+
+            // Tombol tambah
+            addBtn.addEventListener('click', function() {
+                let currentVal = parseInt(quantityInput.value);
+                if (currentVal < maxStok) {
+                    quantityInput.value = currentVal + 1;
+                    updateButtons();
+                } else {
+                    showToast(toastStock);
+                }
+            });
+
+            // Tombol kurang
+            subBtn.addEventListener('click', function() {
+                let currentVal = parseInt(quantityInput.value);
+                if (currentVal > 1) {
+                    quantityInput.value = currentVal - 1;
+                    updateButtons();
+                }
+            });
+
+            // Klik ukuran yang stoknya habis
+            document.querySelectorAll('.size-options label').forEach(label => {
+                label.addEventListener('click', function(e) {
+                    const input = document.getElementById(label.getAttribute('for'));
+                    if (input.hasAttribute('disabled')) {
+                        e.preventDefault();
+                        showToast(toast);
+                    }
+                });
+            });
+
+            function updateButtons() {
+                let currentVal = parseInt(quantityInput.value);
+                subBtn.classList.toggle('disabled', currentVal <= 1);
+                addBtn.classList.toggle('disabled', currentVal >= maxStok);
+            }
+
+            function showToast(element) {
+                element.classList.add('show');
+                setTimeout(() => {
+                    element.classList.remove('show');
+                }, 2000);
+            }
+        });
+    </script>
 </x-layout-client>

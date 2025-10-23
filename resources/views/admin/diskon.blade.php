@@ -102,9 +102,20 @@
                                                     <select id="editProduk" name="id_product" class="form-select rounded-3 shadow-sm custom-select-style" required>
                                                         <option value="" disabled selected>Pilih produk</option>
                                                         @foreach($products as $product)
-                                                        <option value="{{ $product->id }}">{{ $product->nama }} - {{ $product->kategori }}</option>
+                                                        @php
+                                                        // Ambil produk yang sedang diedit (nanti diganti via JS)
+                                                        $isInDiscount = $usedProductIds->contains($product->id);
+                                                        @endphp
+
+                                                        {{-- tampilkan jika produk belum punya diskon --}}
+                                                        <option
+                                                            value="{{ $product->id }}"
+                                                            {{ $isInDiscount ? 'data-has-discount=true' : '' }}>
+                                                            {{ $product->nama }} - {{ $product->kategori }}
+                                                        </option>
                                                         @endforeach
                                                     </select>
+
                                                 </div>
 
                                                 <div class="modal-footer">
@@ -147,11 +158,12 @@
 
                                                 <div class="mb-3">
                                                     <label class="form-label fw-semibold">Produk</label>
-                                                    <select id="editProduk" class="form-select rounded-3 shadow-sm custom-select-style">
+                                                    <select id="tambahProduk" name="id_product" class="form-select rounded-3 shadow-sm custom-select-style">
                                                         <option value="" disabled selected>Pilih produk</option>
                                                         @foreach($products->whereNotIn('id', $discounts->pluck('id_product')) as $product)
                                                         <option value="{{ $product->id }}">{{ $product->nama }} - {{ $product->kategori }}</option>
                                                         @endforeach
+
                                                     </select>
                                                 </div>
 
@@ -239,5 +251,37 @@
         });
     </script>
 
+    <!-- script modal edit agar tidk tampil produk yang sama  -->
+    <script>
+        document.querySelectorAll('.btn-edit').forEach(button=>
+        {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const persentase = this.dataset.persentase;
+                const durasi = this.dataset.durasi;
+                const produk = this.dataset.produk;
+
+                const select = document.getElementById('editProduk');
+
+                // Sembunyikan semua produk yang punya diskon kecuali yang sedang diedit
+                select.querySelectorAll('option').forEach(opt => {
+                    if (opt.dataset.hasDiscount === "true" && opt.value !== produk) {
+                        opt.style.display = "none";
+                    } else {
+                        opt.style.display = "block";
+                    }
+                });
+
+                // Isi form modal
+                document.getElementById('editId').value = id;
+                document.getElementById('editPersentase').value = persentase;
+                document.getElementById('editDurasi').value = durasi;
+                select.value = produk;
+
+                // Ubah action form sesuai ID
+                document.getElementById('formEditDiskon').action = `/admin/diskon/${id}`;
+            });
+        });
+    </script>
     @endpush
-</x-layout-admin>
+    </x-layout-admin>

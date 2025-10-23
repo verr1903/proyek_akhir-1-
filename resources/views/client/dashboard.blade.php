@@ -15,7 +15,7 @@
                                 <p>{!! $item->sub_judul !!}</p>
                                 <ul class="slider-btn">
                                     <li>
-                                        <a href="{{ $item->link ?? route('detail') }}" class="btn btn-round"
+                                        <a href="" class="btn btn-round"
                                             style="background-color: #485444; color: white;">
                                             Start Shopping
                                         </a>
@@ -37,6 +37,55 @@
         </div>
 
         <!--Slider End-->
+
+        <!--Shipping Start-->
+        <div class="shipping-area section-padding-3">
+            <div class="container">
+                <div class="row">
+                    <!-- Pengiriman -->
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="single-shipping">
+                            <div class="shipping-icon">
+                                <img src="/clientAssets/images/shipping-icon/Free-Delivery.png" alt="">
+                            </div>
+                            <div class="shipping-content">
+                                <h5 class="title">Pengiriman Cepat</h5>
+                                <p>Gratis pengiriman ke seluruh wilayah Pekanbaru untuk setiap pesanan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pemesanan Online -->
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="single-shipping">
+                            <div class="shipping-icon">
+                                <img src="/clientAssets/images/shipping-icon/Online-Order.png" alt="">
+                            </div>
+                            <div class="shipping-content">
+                                <h5 class="title">Pesan Online</h5>
+                                <p>Pesan bunga secara online dengan mudah melalui situs kami</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pemesanan Offline -->
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="single-shipping">
+                            <div class="shipping-icon">
+                                <img src="/clientAssets/images/shipping-icon/Freshness.png" alt="">
+                            </div>
+                            <div class="shipping-content">
+                                <h5 class="title">Pesan Offline</h5>
+                                <p>Kunjungi toko kami langsung untuk memilih dan membeli bunga secara offline</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Shipping End-->
+
+
 
         <!--New Product Start-->
         <div class="features-product-area section-padding-5">
@@ -127,10 +176,10 @@
                         <div class="tab-pane fade show active" id="tab1" role="tabpanel">
                             <div class="row justify-content-center">
                                 @forelse($products as $product)
-                                <div class="col-lg-4 col-sm-6 mb-1">
+                                <div class="col-lg-4 col-sm-6 mb-2">
                                     <div class="single-product">
                                         <div class="product-image position-relative">
-                                            <a href="{{ route('detail', $product->id) }}">
+                                            <a href="{{ route('detail', ['id' => $product->id]) }}">
                                                 <img src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}">
                                             </a>
                                             @php
@@ -176,7 +225,9 @@
                                             </div>
 
                                             <h4 class="product-name">
-                                                <a href="{{ route('detail', $product->id) }}">{{ $product->nama }}</a>
+                                                <a href="{{ route('detail', ['id' => $product->id]) }}">
+                                                    {{ $product->nama }}
+                                                </a>
                                             </h4>
 
                                             <div class="price-box">
@@ -215,8 +266,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-27%</span>
@@ -232,7 +283,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Rock Soapwort</a></h4>
+                                                <h4 class="product-name"><a href="">Rock Soapwort</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$55.00</span>
                                                     <span class="old-price">$75.00</span>
@@ -242,8 +293,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -259,7 +310,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -270,8 +321,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-10%</span>
@@ -287,7 +338,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Wild Roses</a></h4>
+                                                <h4 class="product-name"><a href="">Wild Roses</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$21.00</span>
@@ -297,8 +348,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-18%</span>
@@ -314,7 +365,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Summer Savory</a></h4>
+                                                <h4 class="product-name"><a href="">Summer Savory</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$40.00</span>
                                                     <span class="old-price">$85.00</span>
@@ -325,8 +376,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -342,7 +393,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Lity Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Lity Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -352,8 +403,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -367,7 +418,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Sweet Alyssum</a></h4>
+                                                <h4 class="product-name"><a href="">Sweet Alyssum</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$50.00</span>
                                                 </div>
@@ -377,8 +428,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -394,7 +445,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Spring Snowflake</a></h4>
+                                                <h4 class="product-name"><a href="">Spring Snowflake</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -404,8 +455,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -419,7 +470,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Rock Soapwort</a></h4>
+                                                <h4 class="product-name"><a href="">Rock Soapwort</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$50.00</span>
                                                 </div>
@@ -429,8 +480,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -444,7 +495,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Sweet Alyssum</a></h4>
+                                                <h4 class="product-name"><a href="">Sweet Alyssum</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$50.00</span>
                                                 </div>
@@ -453,8 +504,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -470,7 +521,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -481,8 +532,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-10%</span>
@@ -498,7 +549,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Wild Roses</a></h4>
+                                                <h4 class="product-name"><a href="">Wild Roses</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$21.00</span>
@@ -508,8 +559,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-35%</span>
@@ -530,7 +581,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Scarlet Sage</a></h4>
+                                                <h4 class="product-name"><a href="">Scarlet Sage</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$39.00</span>
                                                     <span class="old-price">$60.00</span>
@@ -541,8 +592,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-18%</span>
@@ -558,7 +609,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Summer Savory</a></h4>
+                                                <h4 class="product-name"><a href="">Summer Savory</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$40.00</span>
                                                     <span class="old-price">$85.00</span>
@@ -568,8 +619,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -583,7 +634,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Foxglove Flower</a></h4>
+                                                <h4 class="product-name"><a href="">Foxglove Flower</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$79.00</span>
                                                 </div>
@@ -593,8 +644,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -610,7 +661,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -620,8 +671,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -637,7 +688,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Lity Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Lity Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -648,8 +699,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -665,7 +716,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Lity Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Lity Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -675,8 +726,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -692,7 +743,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Spring Snowflake</a></h4>
+                                                <h4 class="product-name"><a href="">Spring Snowflake</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -713,8 +764,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -730,7 +781,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Lity Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Lity Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -740,8 +791,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -755,7 +806,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Sweet Alyssum</a></h4>
+                                                <h4 class="product-name"><a href="">Sweet Alyssum</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$50.00</span>
                                                 </div>
@@ -765,8 +816,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-27%</span>
@@ -782,7 +833,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Rock Soapwort</a></h4>
+                                                <h4 class="product-name"><a href="">Rock Soapwort</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$55.00</span>
                                                     <span class="old-price">$75.00</span>
@@ -792,8 +843,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -809,7 +860,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -820,8 +871,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -837,7 +888,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Spring Snowflake</a></h4>
+                                                <h4 class="product-name"><a href="">Spring Snowflake</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -847,8 +898,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -862,7 +913,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Rock Soapwort</a></h4>
+                                                <h4 class="product-name"><a href="">Rock Soapwort</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$50.00</span>
                                                 </div>
@@ -872,8 +923,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-18%</span>
@@ -889,7 +940,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Summer Savory</a></h4>
+                                                <h4 class="product-name"><a href="">Summer Savory</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$40.00</span>
                                                     <span class="old-price">$85.00</span>
@@ -899,8 +950,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -914,7 +965,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Foxglove Flower</a></h4>
+                                                <h4 class="product-name"><a href="">Foxglove Flower</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$79.00</span>
                                                 </div>
@@ -924,8 +975,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-10%</span>
@@ -941,7 +992,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Wild Roses</a></h4>
+                                                <h4 class="product-name"><a href="">Wild Roses</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$21.00</span>
@@ -951,8 +1002,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-18%</span>
@@ -968,7 +1019,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Summer Savory</a></h4>
+                                                <h4 class="product-name"><a href="">Summer Savory</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$40.00</span>
                                                     <span class="old-price">$85.00</span>
@@ -979,8 +1030,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -996,7 +1047,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -1006,8 +1057,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -1023,7 +1074,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Lity Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Lity Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -1034,8 +1085,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <div class="action-links">
@@ -1049,7 +1100,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Sweet Alyssum</a></h4>
+                                                <h4 class="product-name"><a href="">Sweet Alyssum</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$50.00</span>
                                                 </div>
@@ -1058,8 +1109,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -1075,7 +1126,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -1086,8 +1137,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-34%</span>
@@ -1103,7 +1154,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Lity Majesty Palm</a></h4>
+                                                <h4 class="product-name"><a href="">Lity Majesty Palm</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -1113,8 +1164,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new soldout-title">Soldout</span>
@@ -1130,7 +1181,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Spring Snowflake</a></h4>
+                                                <h4 class="product-name"><a href="">Spring Snowflake</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$29.00</span>
@@ -1141,8 +1192,8 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-10%</span>
@@ -1158,7 +1209,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Wild Roses</a></h4>
+                                                <h4 class="product-name"><a href="">Wild Roses</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$19.00</span>
                                                     <span class="old-price">$21.00</span>
@@ -1168,8 +1219,8 @@
 
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="{{ route('detail') }}">
-                                                    <img src="/clientAssets/images/product/image1.png" alt="">
+                                                <a href="">
+                                                    <img src="/client/clientAssets/images/product/image1.png" alt="">
                                                 </a>
 
                                                 <span class="sticker-new label-sale">-35%</span>
@@ -1190,7 +1241,7 @@
                                                 <div class="rating">
                                                     <div class="rating-on" style="width: 80%;"></div>
                                                 </div>
-                                                <h4 class="product-name"><a href="{{ route('detail') }}">Scarlet Sage</a></h4>
+                                                <h4 class="product-name"><a href="">Scarlet Sage</a></h4>
                                                 <div class="price-box">
                                                     <span class="current-price">$39.00</span>
                                                     <span class="old-price">$60.00</span>

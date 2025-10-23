@@ -13,18 +13,20 @@ class DiskonAdminController extends Controller
     {
         $discounts = Discount::with('product')->get();
 
-        // Ambil semua produk yang tidak punya diskon
-        // ATAU produk yang sedang dipakai dalam diskon yang sedang diedit (biar muncul di modal edit)
-        $products = Product::whereNotIn('id', Discount::pluck('id_product'))
-            ->orWhereIn('id', $discounts->pluck('id_product'))
-            ->get();
+        // Ambil semua ID produk yang sudah punya diskon
+        $usedProductIds = Discount::pluck('id_product');
+
+        // Ambil semua produk
+        $products = Product::all();
 
         return view('admin.diskon', [
             'title' => 'Diskon',
             'discounts' => $discounts,
-            'products' => $products
+            'products' => $products,
+            'usedProductIds' => $usedProductIds, // kirim ke view
         ]);
     }
+
 
 
     public function store(Request $request)

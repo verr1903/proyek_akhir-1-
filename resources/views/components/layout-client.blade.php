@@ -486,14 +486,41 @@
         .menu-overlay.show {
             display: block;
         }
+
         .product-image img {
-        width: 100%;
-        height: 410px; /* kamu bisa ubah: 200px, 300px, dst */
-        object-fit: fill; /* menjaga proporsi, memotong sisi jika perlu */
-        border-radius: 10px; /* opsional, buat sudut agak melengkung */
-    }
+            width: 100%;
+            height: 410px;
+            /* kamu bisa ubah: 200px, 300px, dst */
+            object-fit: fill;
+            /* menjaga proporsi, memotong sisi jika perlu */
+            border-radius: 10px;
+            /* opsional, buat sudut agak melengkung */
+        }
 
+        /* toast untuk halaman detail */
+        .toast-message {
+            visibility: hidden;
+            min-width: 280px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 9999;
+            left: 50%;
+            bottom: 40px;
+            transform: translateX(-50%);
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.4s, bottom 0.4s;
+        }
 
+        .toast-message.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 60px;
+        }
     </style>
 
 </head>
