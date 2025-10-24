@@ -9,15 +9,20 @@ use App\Models\Product;
 
 class DashboardClientController extends Controller
 {
-    public function index()
-    {
-        $iklan = Iklan::all(); // ambil semua data iklan
-        $products = Product::with('discount')->get(); // ✅ perbaikan di sini
+    public function index(Request $request)
+{
+    $iklan = Iklan::all();
+    $products = Product::with('discount')->paginate(9);
 
-        return view('client.dashboard', [
-            'title' => 'Dashboard',
-            'iklan' => $iklan,
-            'products' => $products
-        ]);
+    if ($request->ajax()) {
+        return view('client.product_list', compact('products'))->render();
     }
+
+    return view('client.dashboard', [
+        'title' => 'Dashboard',
+        'iklan' => $iklan,
+        'products' => $products,
+    ]);
+}
+
 }
