@@ -18,51 +18,84 @@
         <div class="register-page p-5 desktop-view">
             <div class="container">
 
+                <!-- Alert Success -->
+                @if(session('success'))
+                <div id="success-alert"
+                    class="alert alert-success alert-dismissible fade show mx-auto"
+                    role="alert"
+                    style="max-width: 850px; margin-bottom: 20px;">
+                    {{ session('success') }}
+                </div>
+                @endif
+
+                <!-- Alert Error -->
+                @if ($errors->any())
+                <div id="error-alert"
+                    class="alert alert-danger alert-dismissible fade show mx-auto"
+                    role="alert"
+                    style="max-width: 850px; margin-bottom: 20px;">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
+
                 <div class="card shadow-lg border-0 rounded-3 p-5 text-center"
                     style="max-width: 850px; margin: 0 auto;">
-                    <h3 class="fw-bold mb-4" style="color:#445244;font-size: 35px;">Register</h3>
+                    <h3 class="fw-bold mb-5" style="color:#445244;font-size: 35px;">Register</h3>
 
-                    <!-- Avatar -->
-                    <div class="mb-3">
-                        <div class="position-relative d-inline-block">
-                            <img src="/assets/images/profile/default.png" alt="Avatar"
-                                class="rounded-circle border"
-                                style="width:100px; height:100px; object-fit:cover;">
-                        </div>
-                        <div class="mt-2">
-                            <button type="button" class="btn rounded-4 btn-sm btn-outline-secondary">
-                                Ganti Avatar
-                            </button>
-                        </div>
-                    </div>
 
                     <!-- Form -->
-                    <form action="#" method="POST" class="text-start">
+                    <form action="{{ route('register.store') }}" method="POST" class="text-start">
                         @csrf
-                        <div class="row g-4">
+                        <div class="row g-4 ">
+                            <!-- Username -->
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Username: *</label>
-                                <input type="text" class="form-control" name="username" required>
+                                <input type="text" class="form-control" name="username"
+                                    value="{{ old('username') }}" required>
                             </div>
+
+                            <!-- Email -->
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Email: *</label>
-                                <input type="email" class="form-control" name="email" required>
+                                <input type="email" class="form-control" name="email"
+                                    value="{{ old('email') }}" required>
                             </div>
+
+                            <!-- Password -->
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Password: *</label>
-                                <input type="password" class="form-control" name="password" required>
+                                <div class="position-relative">
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                    <i class="fa fa-eye toggle-password"
+                                        data-target="password"
+                                        style="position:absolute; right:15px; top:50%; transform:translateY(-50%); cursor:pointer; color:#6c757d;"></i>
+                                </div>
                             </div>
+
+                            <!-- Konfirmasi Password -->
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Konfirmasi Password: *</label>
-                                <input type="password" class="form-control" name="password_confirmation" required>
+                                <div class="position-relative">
+                                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                                    <i class="fa fa-eye toggle-password"
+                                        data-target="password_confirmation"
+                                        style="position:absolute; right:15px; top:50%; transform:translateY(-50%); cursor:pointer; color:#6c757d;"></i>
+                                </div>
                             </div>
+
+
                         </div>
 
                         <!-- Tombol Register -->
                         <div class="mt-4 d-flex justify-content-center align-items-center gap-3 flex-wrap">
                             <button type="submit" class="btn rounded-4 btn-success px-4">Register</button>
                             <span class="fw-semibold text-muted">Or</span>
-                            <a href="#" class="btn rounded-4 d-flex align-items-center px-3 google-btn"
+                            <a href="{{ route('google.redirect') }}" class="btn rounded-4 d-flex align-items-center px-3 google-btn"
                                 style="background-color:#e6ebe7; border:1px solid #445244; color:#445244; transition:all 0.3s ease;">
                                 <img src="https://developers.google.com/identity/images/g-logo.png"
                                     style="width:20px; height:20px; margin-right:8px; transition:transform 0.3s ease;">
@@ -87,45 +120,55 @@
 
         <div class="register-page mobile-view p-3" style="background-color:#f8f9fa; ">
             <div class="">
-                <div class="card border-0 shadow-sm rounded-4 p-4">
-                    <h4 class="fw-bold mb-3 text-center" style="color:#445244;">Register</h4>
+                @if(session('success'))
+                <div id="success-alert"
+                    class="alert alert-success alert-dismissible fade show mx-auto"
+                    role="alert"
+                    style="max-width: 850px; margin-bottom: 20px;">
+                    {{ session('success') }}
+                </div>
+                @endif
 
-                    <!-- Avatar -->
-                    <div class="text-center mb-4">
-                        <div class="position-relative d-inline-block">
-                            <img id="avatar-preview-mobile"
-                                src="/assets/images/profile/default.png"
-                                alt="Avatar"
-                                class="rounded-circle border shadow-sm"
-                                style="width: 100px; height: 100px; object-fit: cover;">
-                            <label for="avatar-upload-mobile"
-                                class="position-absolute bottom-0 end-0 bg-success text-white rounded-circle p-2"
-                                style="cursor: pointer; transform: translate(25%, 25%);">
-                                <i class="fa fa-camera"></i>
-                            </label>
-                            <input type="file" id="avatar-upload-mobile" class="d-none" accept="image/*">
-                        </div>
-                        <p class="small text-muted mt-2 mb-0">Ketuk ikon kamera untuk ganti foto</p>
-                    </div>
+                <!-- Alert Error -->
+                @if ($errors->any())
+                <div id="error-alert"
+                    class="alert alert-danger alert-dismissible fade show mx-auto"
+                    role="alert"
+                    style="max-width: 850px; margin-bottom: 20px;">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                <div class="card border-0 shadow-sm rounded-4 p-4">
+                    <h4 class="fw-bold mb-5 text-center" style="color:#445244;">Register</h4>
 
                     <!-- Form -->
-                    <form action="#" method="POST">
+                    <form action="{{ route('register.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label fw-semibold small">Username:</label>
-                            <input type="text" class="form-control rounded-3" name="username" placeholder="Masukkan username" required>
+                            <input type="text" class="form-control rounded-3" name="username" placeholder="Masukkan username" value="{{ old('username') }}" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold small">Email:</label>
-                            <input type="email" class="form-control rounded-3" name="email" placeholder="Masukkan email" required>
+                            <input type="email" class="form-control rounded-3" name="email" placeholder="Masukkan email" value="{{ old('email') }}" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 position-relative">
                             <label class="form-label fw-semibold small">Password:</label>
-                            <input type="password" class="form-control rounded-3" name="password" placeholder="Masukkan password" required>
+                            <input type="password" class="form-control rounded-3" id="m_password" name="password" placeholder="Masukkan password" required>
+                            <i class="fa fa-eye toggle-password"
+                                data-target="m_password"
+                                style="position:absolute; right:15px; top:67%; transform:translateY(-50%); cursor:pointer; color:#6c757d;"></i>
                         </div>
-                        <div class="mb-4">
+                        <div class="mb-4 position-relative">
                             <label class="form-label fw-semibold small">Konfirmasi Password:</label>
-                            <input type="password" class="form-control rounded-3" name="password_confirmation" placeholder="Ulangi password" required>
+                            <input type="password" class="form-control rounded-3" id="m_password_confirmation" name="password_confirmation" placeholder="Ulangi password" required>
+                            <i class="fa fa-eye toggle-password"
+                                data-target="m_password_confirmation"
+                                style="position:absolute; right:15px; top:67%; transform:translateY(-50%); cursor:pointer; color:#6c757d;"></i>
                         </div>
 
                         <!-- Tombol Register -->
@@ -133,7 +176,7 @@
 
                         <div class="text-center fw-semibold text-muted mb-2">Or</div>
 
-                        <a href="#" class="btn w-100 rounded-4 d-flex justify-content-center align-items-center google-btn py-4"
+                        <a href="{{ route('google.redirect') }}" class="btn w-100 rounded-4 d-flex justify-content-center align-items-center google-btn py-4"
                             style="background-color:#e6ebe7; border:1px solid #445244; color:#445244; transition:all 0.3s ease;">
                             <img src="https://developers.google.com/identity/images/g-logo.png"
                                 style="width:20px; height:20px; margin-right:8px; transition:transform 0.3s ease;">
@@ -160,11 +203,49 @@
     </div>
     <style>
         /* Responsif hanya untuk halaman login */
-        @media (max-width: 991px) {
-            body {
-                padding-top: 0 !important;
-                padding-bottom: 0 !important;
+        @media (max-width: 768px) {
+
+            #success-alert,
+            #error-alert {
+                max-width: 100%;
+                margin: 0 15px 15px 15px;
+                /* sedikit jarak dari tepi layar */
             }
         }
     </style>
+
+    @push('scripts')
+    <script>
+        // Hilangkan alert setelah 5 detik
+        setTimeout(function() {
+            ['success-alert', 'error-alert'].forEach(id => {
+                const alertEl = document.getElementById(id);
+                if (alertEl) {
+                    alertEl.classList.remove('show');
+                    alertEl.classList.add('fade');
+                    setTimeout(() => alertEl.remove(), 500); // hapus setelah animasi selesai
+                }
+            });
+        }, 5000);
+
+        // 👁️ Toggle show/hide password
+        document.querySelectorAll('.toggle-password').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+
+                if (input.type === "password") {
+                    input.type = "text";
+                    this.classList.remove('fa-eye');
+                    this.classList.add('fa-eye-slash');
+                } else {
+                    input.type = "password";
+                    this.classList.remove('fa-eye-slash');
+                    this.classList.add('fa-eye');
+                }
+            });
+        });
+    </script>
+    @endpush
+
 </x-layout-client>

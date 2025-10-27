@@ -18,6 +18,29 @@
         <!-- DESKTOP VIEW -->
         <div class="login-page py-5 desktop-view" style="background-color:#f8f9fa; min-height:100vh;">
             <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
+                <!-- Alert Success -->
+                @if(session('success'))
+                <div id="success-alert"
+                    class="alert alert-success alert-dismissible fade show mx-auto"
+                    role="alert"
+                    style="max-width: 850px; margin-bottom: 20px;">
+                    {{ session('success') }}
+                </div>
+                @endif
+
+                <!-- Alert Error -->
+                @if ($errors->any())
+                <div id="error-alert"
+                    class="alert alert-danger alert-dismissible fade show mx-auto"
+                    role="alert"
+                    style="max-width: 850px; margin-bottom: 20px;">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 <div class="card shadow-lg border-0 rounded-4 p-5 text-center" style="max-width: 600px; width:100%;">
                     <h3 class="fw-bold mb-4" style="color:#445244; font-size: 35px;">Login</h3>
 
