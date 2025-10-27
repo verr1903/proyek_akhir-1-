@@ -29,6 +29,9 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
 
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
 Route::get('/detail/{encryptedId}', [DetailClientController::class, 'index'])
    ->name('detail');
 Route::get('/keranjang', [KeranjangClientController::class, 'index'])->name('keranjang');

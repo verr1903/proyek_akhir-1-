@@ -22,12 +22,12 @@
 
                         <!-- Tombol logout di kanan -->
                         <!-- <form action="" method="POST" class="position-absolute end-0 top-50 translate-middle-y me-2 mb-0"> -->
-                        <a href="{{ route('login') }}">
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                             @csrf
                             <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">
                                 <i class="fa fa-sign-out-alt me-1"></i> Logout
                             </button>
-                        </a>
+                        </form>
 
                     </div>
 
@@ -152,52 +152,52 @@
                                 <button type="submit" class="btn btn-success rounded-3 fw-semibold pb-3">
                                     <i class="fa fa-save me-1"></i> Simpan Perubahan
                                 </button>
-
-                                <!-- Logout -->
-                                <!-- <form action="" method="POST" class="mb-0"> -->
-                                <a href="{{ route('login') }}">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger rounded-3 fw-semibold pb-3 w-100">
-                                        <i class="fa fa-sign-out-alt me-1"></i> Logout
-                                    </button>
-                                </a>
-
-                                <!-- Kembali -->
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-secondary rounded-3 fw-semibold pb-3"
-                                    onclick="window.history.back();">
-                                    <i class="fa fa-arrow-left me-1"></i> Kembali
-                                </button>
-                            </div>
-
-
-                        </div>
+                    </form>
+                    <!-- Logout -->
+                    <!-- <form action="" method="POST" class="mb-0"> -->
+                    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-danger rounded-3 fw-semibold pb-3 w-100">
+                            <i class="fa fa-sign-out-alt me-1"></i> Logout
+                        </button>
                     </form>
 
+                    <!-- Kembali -->
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary rounded-3 fw-semibold pb-3"
+                        onclick="window.history.back();">
+                        <i class="fa fa-arrow-left me-1"></i> Kembali
+                    </button>
                 </div>
+
+
             </div>
 
+
         </div>
-        <!-- end mobile view -->
+    </div>
 
-        <script>
-            // Preview avatar untuk mobile
-            document.getElementById('avatar-upload-mobile').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        document.getElementById('avatar-preview-mobile').src = event.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        </script>
+    </div>
+    <!-- end mobile view -->
+
+    <script>
+        // Preview avatar untuk mobile
+        document.getElementById('avatar-upload-mobile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('avatar-preview-mobile').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 
 
 
-        <x-footer-client></x-footer-client>
+    <x-footer-client></x-footer-client>
     </div>
 
     <script>
