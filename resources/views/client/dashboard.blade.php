@@ -179,16 +179,16 @@
 
 
                                 @if ($products->hasMorePages())
-    <div id="load-more-wrapper" class="text-center mt-3">
-    <button id="load-more"
-            class="btn btn-sm rounded-3" style="background-color: #485444;color: white;"
-            data-next-page="{{ $products->nextPageUrl() ?? '' }}"
-            @if(!$products->hasMorePages()) disabled @endif>
-        {{ $products->hasMorePages() ? 'Lihat Lebih Banyak' : 'Semua produk sudah dimuat' }}
-    </button>
-</div>
+                                <div id="load-more-wrapper" class="text-center mt-3">
+                                    <button id="load-more"
+                                        class="btn btn-sm rounded-3" style="background-color: #485444;color: white;"
+                                        data-next-page="{{ $products->nextPageUrl() ?? '' }}"
+                                        @if(!$products->hasMorePages()) disabled @endif>
+                                        {{ $products->hasMorePages() ? 'Lihat Lebih Banyak' : 'Semua produk sudah dimuat' }}
+                                    </button>
+                                </div>
 
-@endif
+                                @endif
 
                             </div>
                         </div>
@@ -204,76 +204,98 @@
         <x-footer-client></x-footer-client>
 
     </div>
- <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const container = document.getElementById("product-list");
-    const loadMoreBtn = document.getElementById("load-more");
-    const wrapper = document.getElementById("load-more-wrapper");
 
-    if (!loadMoreBtn) return;
+       @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    loadMoreBtn.addEventListener("click", function() {
-        const url = loadMoreBtn.dataset.nextPage;
-        if (!url) {
-            loadMoreBtn.innerText = "Semua produk sudah dimuat";
-            loadMoreBtn.disabled = true;
-            showNoMoreProductsMessage();
-            return;
-        }
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.getElementById("product-list");
+            const loadMoreBtn = document.getElementById("load-more");
+            const wrapper = document.getElementById("load-more-wrapper");
 
-        loadMoreBtn.innerText = "Memuat...";
+            if (!loadMoreBtn) return;
 
-        fetch(url, {
-            headers: { "X-Requested-With": "XMLHttpRequest" }
-        })
-        .then(res => res.text())
-        .then(html => {
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = html;
+            loadMoreBtn.addEventListener("click", function() {
+                const url = loadMoreBtn.dataset.nextPage;
+                if (!url) {
+                    loadMoreBtn.innerText = "Semua produk sudah dimuat";
+                    loadMoreBtn.disabled = true;
+                    showNoMoreProductsMessage();
+                    return;
+                }
 
-            // Tambahkan produk baru
-            const newProducts = tempDiv.querySelectorAll(".col-lg-4, .col-sm-6");
-            newProducts.forEach(p => container.appendChild(p));
+                loadMoreBtn.innerText = "Memuat...";
 
-            // Pindahkan tombol agar tetap di bawah
-            container.parentNode.appendChild(wrapper);
+                fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                    .then(res => res.text())
+                    .then(html => {
+                        const tempDiv = document.createElement("div");
+                        tempDiv.innerHTML = html;
 
-            // Cek apakah masih ada halaman berikutnya
-            const paginationUrl = new URL(url);
-            const currentPage = parseInt(paginationUrl.searchParams.get("page"));
-            const nextUrl = url.replace(`page=${currentPage}`, `page=${currentPage + 1}`);
+                        const newProducts = tempDiv.querySelectorAll(".col-lg-4, .col-sm-6");
+                        newProducts.forEach(p => container.appendChild(p));
 
-            fetch(nextUrl, { headers: { "X-Requested-With": "XMLHttpRequest" } })
-                .then(res => {
-                    if (res.status === 404 || res.redirected) {
-                        loadMoreBtn.innerText = "Semua produk sudah dimuat";
-                        loadMoreBtn.disabled = true;
-                        showNoMoreProductsMessage();
-                    } else {
-                        loadMoreBtn.dataset.nextPage = nextUrl;
-                        loadMoreBtn.innerText = "Lihat Lebih Banyak";
-                    }
-                });
-        })
-        .catch(() => {
-            loadMoreBtn.innerText = "Gagal memuat data";
+                        container.parentNode.appendChild(wrapper);
+
+                        const paginationUrl = new URL(url);
+                        const currentPage = parseInt(paginationUrl.searchParams.get("page"));
+                        const nextUrl = url.replace(`page=${currentPage}`, `page=${currentPage + 1}`);
+
+                        fetch(nextUrl, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                            .then(res => {
+                                if (res.status === 404 || res.redirected) {
+                                    loadMoreBtn.innerText = "Semua produk sudah dimuat";
+                                    loadMoreBtn.disabled = true;
+                                    showNoMoreProductsMessage();
+                                } else {
+                                    loadMoreBtn.dataset.nextPage = nextUrl;
+                                    loadMoreBtn.innerText = "Lihat Lebih Banyak";
+                                }
+                            });
+                    })
+                    .catch(() => {
+                        loadMoreBtn.innerText = "Gagal memuat data";
+                    });
+            });
+
+            function showNoMoreProductsMessage() {
+                let info = document.getElementById("no-more-products");
+                if (!info) {
+                    info = document.createElement("p");
+                    info.id = "no-more-products";
+                    info.className = "text-muted mt-2";
+                    info.innerHTML = "✅ Semua produk sudah dimuat.";
+                    wrapper.appendChild(info);
+                }
+            }
         });
+    </script>
+
+    @if (session('success'))
+    <script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        showConfirmButton: false,
+        timer: 2000
     });
+    </script>
+    @endif
 
-    // Fungsi untuk menampilkan keterangan saat data habis
-    function showNoMoreProductsMessage() {
-        let info = document.getElementById("no-more-products");
-        if (!info) {
-            info = document.createElement("p");
-            info.id = "no-more-products";
-            info.className = "text-muted mt-2";
-            info.innerHTML = "✅ Semua produk sudah dimuat.";
-            wrapper.appendChild(info);
-        }
-    }
-});
-</script>
+    @if (session('error'))
+    <script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: '{{ session('error') }}',
+        showConfirmButton: true
+    });
+    </script>
+    @endif
 
+    @endpush
 
 
 

@@ -38,7 +38,7 @@ class RegisterController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'avatar' => '/assets/images/profile/default.png', // default
+            'avatar' => 'default.png', // default
             'role' => 'user',
         ]);
         // Login otomatis setelah register (opsional)
@@ -46,6 +46,6 @@ class RegisterController extends Controller
 
         // Redirect
         // Redirect
-        return redirect()->route('login')->with('success', 'Registrasi berhasil! Selamat datang, ' . $user->username);
+        return redirect()->route('login')->with('success', 'Registrasi dengan akun ' . $user->username. ' berhasil!' );
     }
 }

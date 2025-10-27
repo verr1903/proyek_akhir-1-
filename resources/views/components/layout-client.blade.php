@@ -553,6 +553,7 @@
     <script src="/clientAssets/js/plugins/select2.min.js"></script>
     <script src="/clientAssets/js/plugins/ajax-contact.js"></script> -->
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!--====== Use the minified version files listed below for better performance and remove the files listed above ======-->
     <script src="/clientAssets/js/plugins.min.js"></script>

@@ -20,25 +20,40 @@ use App\Http\Controllers\Client\RiwayatClientController;
 use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [DashboardClientController::class, 'index'])->name('dashboard');
-Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::get('/', [DashboardClientController::class, 'index'])
+   ->name('dashboard');
+Route::get('/login', [LoginController::class, 'index'])
+   ->name('login');
+Route::post('/login', [LoginController::class, 'login'])
+   ->name('login.post');
 
-Route::get('/register', [RegisterController::class, 'index'])->name('register');
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+Route::get('/register', [RegisterController::class, 'index'])
+   ->name('register');
+Route::post('/register', [RegisterController::class, 'store'])
+   ->name('register.store');
 
-Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.redirect');
-Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
+Route::get('/auth/google', [GoogleController::class, 'redirect'])
+   ->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])
+   ->name('google.callback');
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [LoginController::class, 'logout'])
+   ->name('logout');
 
+Route::middleware('auth')->group(function () {
+   Route::get('/detail/{encryptedId}', [DetailClientController::class, 'index'])
+      ->name('detail');
+   Route::get('/keranjang', [KeranjangClientController::class, 'index'])->name('keranjang');
+   Route::get('/lokasi', [LokasiClientController::class, 'index'])->name('lokasi');
 
-Route::get('/detail/{encryptedId}', [DetailClientController::class, 'index'])
-   ->name('detail');
-Route::get('/keranjang', [KeranjangClientController::class, 'index'])->name('keranjang');
-Route::get('/lokasi', [LokasiClientController::class, 'index'])->name('lokasi');
-Route::get('/profile', [ProfileClientController::class, 'index'])->name('profile');
-Route::get('/riwayat', [RiwayatClientController::class, 'index'])->name('riwayat');
-Route::get('/produk', [ProdukClientController::class, 'index'])->name('produk');
+   Route::get('/profile', [ProfileClientController::class, 'index'])
+      ->name('profile');
+   Route::post('/profile/update', [ProfileClientController::class, 'update'])
+      ->name('profile.update');
+
+   Route::get('/riwayat', [RiwayatClientController::class, 'index'])->name('riwayat');
+   Route::get('/produk', [ProdukClientController::class, 'index'])->name('produk');
+});
 
 Route::prefix('admin')->group(
    function () {

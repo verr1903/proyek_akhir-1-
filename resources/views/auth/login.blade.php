@@ -17,40 +17,43 @@
 
         <!-- DESKTOP VIEW -->
         <div class="login-page py-5 desktop-view" style="background-color:#f8f9fa; min-height:100vh;">
-            <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
-                <!-- Alert Success -->
-                @if(session('success'))
-                <div id="success-alert"
-                    class="alert alert-success alert-dismissible fade show mx-auto"
-                    role="alert"
-                    style="max-width: 850px; margin-bottom: 20px;">
-                    {{ session('success') }}
-                </div>
-                @endif
 
-                <!-- Alert Error -->
-                @if ($errors->any())
-                <div id="error-alert"
-                    class="alert alert-danger alert-dismissible fade show mx-auto"
-                    role="alert"
-                    style="max-width: 850px; margin-bottom: 20px;">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
+            <!-- Alert Success -->
+            @if(session('success'))
+            <div id="success-alert"
+                class="alert alert-success alert-dismissible fade show mx-auto"
+                role="alert"
+                style="max-width: 850px; margin-bottom: -40px;">
+                {{ session('success') }}
+            </div>
+            @endif
+
+            <!-- Alert Error -->
+            @if ($errors->any())
+            <div id="error-alert"
+                class="alert alert-danger alert-dismissible fade show mx-auto"
+                role="alert"
+                style="max-width: 850px; margin-bottom: -40px;">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
+
+
                 <div class="card shadow-lg border-0 rounded-4 p-5 text-center" style="max-width: 600px; width:100%;">
                     <h3 class="fw-bold mb-4" style="color:#445244; font-size: 35px;">Login</h3>
 
                     <!-- Form -->
-                    <form action="#" method="POST" class="text-start">
+                    <form action="{{ route('login.post') }}" method="POST" class="text-start">
                         @csrf
 
                         <div class="mb-4">
                             <label class="form-label fw-semibold">Email: *</label>
-                            <input type="email" class="form-control form-control-lg rounded-3" name="email" placeholder="Masukkan email" required>
+                            <input type="email" class="form-control form-control-lg rounded-3" name="email" placeholder="Masukkan email" value="{{ old('email') }}" required>
                         </div>
 
                         <div class="mb-3">
@@ -71,7 +74,7 @@
                         <div class="mt-3 d-flex justify-content-center align-items-center gap-3 flex-wrap">
                             <button type="submit" class="btn btn-success rounded-4 px-4 fw-semibold shadow-sm" style="min-width:120px;">Login</button>
                             <span class="fw-semibold text-muted">Or</span>
-                            <a href="#" class="btn rounded-4 d-flex align-items-center px-3 google-btn"
+                            <a href="{{ route('google.redirect') }}" class="btn rounded-4 d-flex align-items-center px-3 google-btn"
                                 style="background-color:#e6ebe7; border:1px solid #445244; color:#445244; transition:all 0.3s ease;">
                                 <img src="https://developers.google.com/identity/images/g-logo.png"
                                     style="width:20px; height:20px; margin-right:8px; transition:transform 0.3s ease;">
@@ -93,16 +96,39 @@
 
         <!-- MOBILE VIEW -->
         <div class="login-page mobile-view p-3" style="background-color:#f8f9fa;">
+            <!-- Alert Success -->
+            @if(session('success'))
+            <div id="success-alert"
+                class="alert alert-success alert-dismissible fade show mx-auto"
+                role="alert"
+                style="max-width: 850px; margin-bottom: 10px;">
+                {{ session('success') }}
+            </div>
+            @endif
+
+            <!-- Alert Error -->
+            @if ($errors->any())
+            <div id="error-alert"
+                class="alert alert-danger alert-dismissible fade show mx-auto"
+                role="alert"
+                style="max-width: 850px; margin-bottom: 10px;">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
             <div class="">
                 <div class="card border-0 shadow-sm rounded-4 p-4">
                     <h4 class="fw-bold mb-3 text-center" style="color:#445244;">Login</h4>
 
-                    <form action="#" method="POST">
+                    <form action="{{ route('login.post') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold small">Email:</label>
-                            <input type="email" class="form-control rounded-3" name="email" placeholder="Masukkan email" required>
+                            <input type="email" class="form-control rounded-3" name="email" placeholder="Masukkan email" value="{{ old('email') }}" required>
                         </div>
 
                         <div class="mb-3">
@@ -122,7 +148,7 @@
 
                         <div class="text-center fw-semibold text-muted mb-2">Or</div>
 
-                        <a href="#" class="btn w-100 rounded-4 d-flex justify-content-center align-items-center google-btn py-4"
+                        <a href="{{ route('google.redirect') }}" class="btn w-100 rounded-4 d-flex justify-content-center align-items-center google-btn py-4"
                             style="background-color:#e6ebe7; border:1px solid #445244; color:#445244; transition:all 0.3s ease;">
                             <img src="https://developers.google.com/identity/images/g-logo.png"
                                 style="width:20px; height:20px; margin-right:8px; transition:transform 0.3s ease;">

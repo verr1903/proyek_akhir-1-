@@ -26,4 +26,30 @@ class LoginController extends Controller
         // redirect ke halaman login (atau home)
         return redirect()->route('login')->with('success', 'Anda berhasil logout.');
     }
+
+    public function login(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
+        // Data login
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember'); // jika remember me dicentang
+
+        // Coba autentikasi
+        if (Auth::attempt($credentials, $remember)) {
+            // regenerasi session untuk keamanan
+            $request->session()->regenerate();
+
+            return redirect()->intended('/')->with('success', 'Login berhasil!');
+        }
+
+        // Gagal login
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->onlyInput('email');
+    }
 }
