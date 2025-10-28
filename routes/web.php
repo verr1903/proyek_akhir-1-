@@ -45,7 +45,12 @@ Route::middleware('auth')->group(function () {
    Route::get('/detail/{encryptedId}', [DetailClientController::class, 'index'])
       ->name('detail');
 
+
+
    Route::post('/keranjang/tambah', [CartController::class, 'store'])->name('cart.add');
+   Route::post('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
+
+
 
    Route::get('/keranjang', [KeranjangClientController::class, 'index'])->name('keranjang');
    Route::get('/lokasi', [LokasiClientController::class, 'index'])->name('lokasi');

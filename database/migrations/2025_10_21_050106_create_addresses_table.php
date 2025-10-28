@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('kelurahan');
             $table->string('nomor_hp');
             $table->string('jalan');
+            $table->string('status');
             $table->timestamps();
 
             // Foreign Key relasi ke users

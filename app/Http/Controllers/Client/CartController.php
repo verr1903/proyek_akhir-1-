@@ -44,4 +44,28 @@ class CartController extends Controller
 
         return back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
+
+    public function updateQuantity(Request $request)
+    {
+        $request->validate([
+            'cart_id' => 'required|exists:carts,id',
+            'action' => 'required|in:plus,minus',
+        ]);
+
+        $cart = \App\Models\Cart::with('product')->find($request->cart_id);
+
+        if ($request->action === 'plus') {
+            $cart->quantity++;
+        } elseif ($request->action === 'minus' && $cart->quantity > 1) {
+            $cart->quantity--;
+        }
+
+        $cart->save();
+
+        return response()->json([
+            'success' => true,
+            'quantity' => $cart->quantity,
+            'total' => $cart->quantity * $cart->product->harga,
+        ]);
+    }
 }

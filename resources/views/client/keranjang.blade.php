@@ -33,77 +33,67 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="py-4"><img src="/clientAssets/images/product/image1.png" alt="Produk" class="img-thumbnail" style="width:70px; height:80px; object-fit:cover;"></td>
+                                @forelse($carts as $cart)
+                                <tr data-cart-id="{{ $cart->id }}">
+                                    <td class="py-4">
+                                        <a href="{{ route('detail', $cart->product->encrypted_id) }}">
+                                            <img src="{{ asset('storage/' . $cart->product->gambar) }}"
+                                                alt="{{ $cart->product->nama }}"
+                                                class="img-thumbnail"
+                                                style="width:70px; height:80px; object-fit:cover;">
+                                        </a>
+                                    </td>
+
                                     <td class="py-4 text-start">
-                                        <strong>Tshirt Oversize Series “WHOA”</strong><br>
-                                        <small class="text-muted">Kode: TS-01</small>
+                                        <a href="{{ route('detail', $cart->product->encrypted_id) }}">
+                                            <strong>{{ $cart->product->nama }}</strong><br>
+                                            <small class="text-muted">Kategori: {{ $cart->product->kategori }}</small>
+                                        </a>
                                     </td>
-                                    <td class="py-4">Rp 80.000,00</td>
-                                    <td class="py-4 text-center" style="font-size: 20px; font-weight: 400;">
-                                        <select class="form-select no-arrow form-select-sm w-auto d-inline-block text-center" style="font-size: 18px;">
-                                            <option value="S">S</option>
-                                            <option value="M">M</option>
-                                            <option value="L" selected>L</option>
-                                            <option value="XL">XL</option>
-                                        </select>
+
+                                    <td class="py-4">
+                                        Rp {{ number_format($cart->product->harga, 0, ',', '.') }}
                                     </td>
+
+                                    <td class="py-4 text-center">
+                                        <text style="font-size: 16px;">{{ $cart->size }}</text><br>
+                                    </td>
+
                                     <td class="py-4">
                                         <div class="d-flex justify-content-center align-items-center">
                                             <button class="btn btn-outline-secondary btn-sm btn-minus">-</button>
-                                            <input type="text" class="form-control form-control-sm text-center mx-1 qty-input" style="width:50px;" value="2" readonly>
+                                            <input type="text" class="form-control form-control-sm text-center mx-1 qty-input"
+                                                style="width:50px;" value="{{ $cart->quantity }}" readonly>
                                             <button class="btn btn-outline-secondary btn-sm btn-plus">+</button>
                                         </div>
                                     </td>
 
+                                    <td class="py-4  total-price">
+                                        Rp {{ number_format($cart->quantity * $cart->product->harga, 0, ',', '.') }}
+                                    </td>
 
-
-                                    <td class="py-4">Rp 20.000,00</td>
                                     <td class="py-4 text-center">
                                         <button class="btn btn-soft-success rounded-4 me-2 pb-5 px-3 shadow-sm toggle-check">
                                             <i class="fa fa-check"></i>
                                         </button>
-                                        <button class="btn btn-soft-danger rounded-4 shadow-sm pb-5 px-3">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
+                                        <form action="" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-soft-danger rounded-4 shadow-sm pb-5 px-3" type="submit">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
+                                @empty
                                 <tr>
-                                    <td class="py-4"><img src="/clientAssets/images/product/image1.png" alt="Produk" class="img-thumbnail" style="width:70px; height:80px; object-fit:cover;"></td>
-                                    <td class="py-4 text-start">
-                                        <strong>Tshirt Oversize Series “WHOA”</strong><br>
-                                        <small class="text-muted">Kode: TS-01</small>
-                                    </td>
-                                    <td class="py-4">Rp 80.000,00</td>
-                                    <td class="py-4 text-center" style="font-size: 20px; font-weight: 400;">
-                                        <select class="form-select no-arrow form-select-sm w-auto d-inline-block text-center" style="font-size: 18px;">
-                                            <option value="S">S</option>
-                                            <option value="M">M</option>
-                                            <option value="L" selected>L</option>
-                                            <option value="XL">XL</option>
-                                        </select>
-                                    </td>
-                                    <td class="py-4">
-                                        <div class="d-flex justify-content-center align-items-center">
-                                            <button class="btn btn-outline-secondary btn-sm btn-minus">-</button>
-                                            <input type="text" class="form-control form-control-sm text-center mx-1 qty-input" style="width:50px;" value="2" readonly>
-                                            <button class="btn btn-outline-secondary btn-sm btn-plus">+</button>
-                                        </div>
-                                    </td>
-
-
-
-                                    <td class="py-4">Rp 20.000,00</td>
-                                    <td class="py-4 text-center">
-                                        <button class="btn btn-soft-success rounded-4 me-2 pb-5 px-3 shadow-sm toggle-check">
-                                            <i class="fa fa-check"></i>
-                                        </button>
-                                        <button class="btn btn-soft-danger rounded-4 shadow-sm pb-5 px-3">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
+                                    <td colspan="7" class="py-5 text-center text-muted">
+                                        Keranjangmu masih kosong 😢
                                     </td>
                                 </tr>
+                                @endforelse
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -129,16 +119,20 @@
                             <div class="card-body">
                                 <h5 class="card-title">Rincian Pembayaran</h5>
                                 <p class="d-flex justify-content-between mb-1">
-                                    <span>Subtotal Produk</span> <span>Rp 20.000,00</span>
+                                    <span>Subtotal Produk</span>
+                                    <span class="subtotal">Rp 0</span>
                                 </p>
                                 <p class="d-flex justify-content-between mb-1">
-                                    <span>Subtotal Pengiriman</span> <span>Rp 5.000,00</span>
+                                    <span>Subtotal Pengiriman</span>
+                                    <span class="pengiriman">Rp 0</span>
                                 </p>
                                 <hr>
                                 <p class="d-flex justify-content-between fw-bold mb-0">
-                                    <span>Total Pembayaran</span> <span>Rp 25.000,00</span>
+                                    <span>Total Pembayaran</span>
+                                    <span class="total">Rp 0</span>
                                 </p>
                             </div>
+
                         </div>
                     </div>
 
@@ -362,6 +356,8 @@
 
     </div>
 
+    @push('scripts')
+
     <script>
         // ambil semua tombol tambah & kurang pada jumlah produk
         document.querySelectorAll('.btn-plus').forEach(btn => {
@@ -380,14 +376,95 @@
             });
         });
     </script>
+
     <script>
-        // Toggle aktif/nonaktif pada tombol checkout
-        document.querySelectorAll(".toggle-check").forEach(btn => {
-            btn.addEventListener("click", () => {
-                btn.classList.toggle("active"); // aktifkan/ nonaktifkan
+        document.addEventListener("DOMContentLoaded", () => {
+            const shippingCost = 5000; // biaya pengiriman tetap 5 ribu
+
+            const subtotalEl = document.querySelector(".subtotal");
+            const pengirimanEl = document.querySelector(".pengiriman");
+            const totalEl = document.querySelector(".total");
+
+            // Format angka ke Rupiah
+            function formatRupiah(value) {
+                return "Rp " + value.toLocaleString("id-ID");
+            }
+
+            // Fungsi untuk hitung ulang total
+            function updateSummary() {
+                let subtotal = 0;
+
+                // Ambil semua produk yang dicentang (tombol check aktif)
+                document.querySelectorAll(".toggle-check.active").forEach(btn => {
+                    const row = btn.closest("tr");
+                    const totalText = row.querySelector(".total-price").textContent;
+                    const totalValue = parseInt(totalText.replace(/[^\d]/g, "")) || 0;
+                    subtotal += totalValue;
+                });
+
+                const pengiriman = subtotal > 0 ? shippingCost : 0;
+                const total = subtotal + pengiriman;
+
+                subtotalEl.textContent = formatRupiah(subtotal);
+                pengirimanEl.textContent = formatRupiah(pengiriman);
+                totalEl.textContent = formatRupiah(total);
+            }
+
+            // Klik tombol ✅ untuk pilih/deselect produk
+            document.querySelectorAll(".toggle-check").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    btn.classList.toggle("active");
+                    updateSummary();
+                });
+            });
+
+            // Perbarui juga ketika jumlah produk berubah
+            document.querySelectorAll(".btn-plus, .btn-minus").forEach(button => {
+                button.addEventListener("click", () => {
+                    setTimeout(updateSummary, 300);
+                });
             });
         });
     </script>
 
+
+
+    <!-- update quantity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            document.querySelectorAll('.btn-plus, .btn-minus').forEach(button => {
+                button.addEventListener('click', async function() {
+                    const row = this.closest('tr');
+                    const cartId = row.getAttribute('data-cart-id');
+                    const action = this.classList.contains('btn-plus') ? 'plus' : 'minus';
+
+                    const response = await fetch("{{ route('cart.updateQuantity') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": csrfToken
+                        },
+                        body: JSON.stringify({
+                            cart_id: cartId,
+                            action
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Update tampilan quantity dan total
+                        row.querySelector('.qty-input').value = data.quantity;
+                        row.querySelector('.total-price').textContent =
+                            'Rp ' + new Intl.NumberFormat('id-ID').format(data.total);
+                    }
+                });
+            });
+        });
+    </script>
+
+    @endpush
 
 </x-layout-client>

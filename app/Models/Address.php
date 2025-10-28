@@ -16,6 +16,7 @@ class Address extends Model
         'kelurahan',
         'nomor_hp',
         'jalan',
+        'status',
     ];
 
     /**
