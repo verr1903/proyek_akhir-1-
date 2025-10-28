@@ -272,7 +272,7 @@
         });
     </script>
 
-    @if (session('success'))
+    <!-- @if (session('success'))
     <script>
     Swal.fire({
         icon: 'success',
@@ -293,7 +293,7 @@
         showConfirmButton: true
     });
     </script>
-    @endif
+    @endif -->
 
     @endpush
 

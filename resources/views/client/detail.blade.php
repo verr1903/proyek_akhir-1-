@@ -140,8 +140,8 @@
                             <div id="toastStock" class="toast-message">Jumlah sudah mencapai stok maksimum 😅</div>
 
                             <div class="product-action d-flex flex-wrap">
-                                <div class="action">
-                                    <button class="btn btn-primary">Tambah KeKeranjang</button>
+                                <div class="">
+                                    <button id="addToCartBtn" class="btn btn-primary addToCartBtn">Tambah KeKeranjang</button>
                                 </div>
 
                             </div>
@@ -287,6 +287,7 @@
 
     </div>
 
+    @push('scripts')
     <script>
         // Tombol Share WhatsApp
         document.getElementById('shareWA').addEventListener('click', (e) => {
@@ -441,4 +442,85 @@
             }
         });
     </script>
+
+   <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            const quantityInput = document.getElementById('quantityInput');
+
+            addToCartBtn.addEventListener('click', function() {
+                const selectedSize = document.querySelector('input[name="size"]:checked')?.value;
+                const quantity = quantityInput.value;
+
+                if (!selectedSize) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Ukuran belum dipilih!',
+                        text: 'Silakan pilih ukuran produk terlebih dahulu 👕',
+                        confirmButtonColor: '#445244'
+                    });
+                    return;
+                }
+
+                // 🔹 Tampilkan konfirmasi sebelum tambah ke keranjang
+                Swal.fire({
+                    title: 'Tambahkan ke keranjang?',
+                    text: 'Apakah kamu yakin ingin menambahkan produk ini ke keranjang?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, tambahkan!',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#445244',
+                    cancelButtonColor: '#d33'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // 🔹 Kirim request ke server
+                        fetch('/keranjang/tambah', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                product_id: {{ $product->id }},
+                                size: selectedSize,
+                                quantity: quantity
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: 'Produk berhasil ditambahkan ke keranjang',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: data.message || 'Terjadi kesalahan saat menambahkan produk',
+                                    confirmButtonColor: '#d33'
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Terjadi kesalahan pada server!',
+                                confirmButtonColor: '#d33'
+                            });
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+    @endpush
 </x-layout-client>

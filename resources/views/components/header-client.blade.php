@@ -79,8 +79,11 @@
                                     <div class="header-account-list dropdown mini-cart">
                                         <a href="{{ route('keranjang') }}" role="button">
                                             <i class="icon-shopping-bag"></i>
-                                            <span class="item-count ">2</span>
+                                            @if(!empty($cartCount) && $cartCount > 0)
+                                            <span class="item-count">{{ $cartCount }}</span>
+                                            @endif
                                         </a>
+
 
 
                                     </div>
@@ -190,5 +193,3 @@
 
         </div>
         <!--Header Mobile Menu End -->
-
-        

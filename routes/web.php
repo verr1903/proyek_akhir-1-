@@ -18,6 +18,7 @@ use App\Http\Controllers\Client\ProdukClientController;
 use App\Http\Controllers\Client\ProfileClientController;
 use App\Http\Controllers\Client\RiwayatClientController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Client\CartController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardClientController::class, 'index'])
@@ -43,6 +44,9 @@ Route::post('/logout', [LoginController::class, 'logout'])
 Route::middleware('auth')->group(function () {
    Route::get('/detail/{encryptedId}', [DetailClientController::class, 'index'])
       ->name('detail');
+
+   Route::post('/keranjang/tambah', [CartController::class, 'store'])->name('cart.add');
+
    Route::get('/keranjang', [KeranjangClientController::class, 'index'])->name('keranjang');
    Route::get('/lokasi', [LokasiClientController::class, 'index'])->name('lokasi');
 

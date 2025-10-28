@@ -537,7 +537,7 @@
 
     <!-- JS
     ============================================ -->
-    @stack('scripts')
+
     <!-- Modernizer JS -->
     <script src="/clientAssets/js/vendor/modernizr-3.6.0.min.js"></script>
     <!-- jQuery JS -->
@@ -560,7 +560,7 @@
 
     <!-- Main JS -->
     <script src="/clientAssets/js/main.js"></script>
-
+    @stack('scripts')
 </body>
 
 </html>
