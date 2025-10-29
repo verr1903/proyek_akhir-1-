@@ -43,8 +43,13 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             // regenerasi session untuk keamanan
             $request->session()->regenerate();
-
-            return redirect()->intended('/')->with('success', 'Login berhasil!');
+            $user = Auth::user();
+            // Cek role dan redirect sesuai peran
+            if ($user->role === 'karyawan') {
+                return redirect()->intended('/admin')->with('success', 'Login berhasil sebagai Karyawan!');
+            } else {
+                return redirect()->intended('/')->with('success', 'Login berhasil!');
+            }
         }
 
         // Gagal login

@@ -43,9 +43,15 @@ class GoogleController extends Controller
                 ]);
             }
 
+            // Login user
             Auth::login($user);
 
-            return redirect()->route('dashboard')->with('success', 'Berhasil login dengan Google!');
+            // Redirect berdasarkan role
+            if ($user->role === 'karyawan') {
+                return redirect()->intended('/admin')->with('success', 'Login berhasil sebagai Karyawan!');
+            } else {
+                return redirect()->intended('/')->with('success', 'Login berhasil!');
+            }
         } catch (\Exception $e) {
             return redirect()->route('login')->with('error', 'Gagal login dengan Google.');
         }
