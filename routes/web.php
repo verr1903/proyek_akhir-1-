@@ -46,14 +46,25 @@ Route::middleware('auth')->group(function () {
       ->name('detail');
 
 
-
    Route::post('/keranjang/tambah', [CartController::class, 'store'])->name('cart.add');
    Route::post('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
 
 
-
    Route::get('/keranjang', [KeranjangClientController::class, 'index'])->name('keranjang');
-   Route::get('/lokasi', [LokasiClientController::class, 'index'])->name('lokasi');
+
+   // lokasi routes
+   Route::get('/lokasi', [LokasiClientController::class, 'index'])
+      ->name('lokasi');
+   Route::post('/lokasi', [LokasiClientController::class, 'store'])
+      ->name('lokasi.store');
+   Route::post('/alamat/aktifkan/{id}', [App\Http\Controllers\Client\LokasiClientController::class, 'aktifkan'])
+      ->name('alamat.aktifkan');
+   Route::delete('/alamat/hapus/{id}', [LokasiClientController::class, 'destroy'])
+      ->name('alamat.destroy');
+   Route::put('/alamat/update/{id}', [LokasiClientController::class, 'update'])
+      ->name('alamat.update');
+
+
 
    Route::get('/profile', [ProfileClientController::class, 'index'])
       ->name('profile');

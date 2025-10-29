@@ -529,7 +529,7 @@
             bottom: 60px;
         }
     </style>
-
+    @stack('styles')
 </head>
 
 <body>
