@@ -18,6 +18,7 @@ class Order extends Model
         'action_by',
         'action_by_2',
         'tempat_pesanan',
+        'metode_pembayaran',
     ];
 
     /**

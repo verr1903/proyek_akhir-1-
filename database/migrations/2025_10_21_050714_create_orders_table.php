@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('action_by')->nullable();
             $table->string('action_by_2')->nullable();
             $table->string('tempat_pesanan');
+            $table->string('metode_pembayaran');
             $table->timestamps();
 
             // Relasi foreign key

@@ -99,18 +99,27 @@
                 </div>
 
                 <div class="card mb-4 rounded-3">
-                    <a href="{{ route('lokasi')}}" class="text-decoration-none text-dark">
+                    <a href="{{ route('lokasi') }}" class="text-decoration-none text-dark">
                         <div class="card-body">
                             <div class="d-flex align-items-start">
                                 <i class="fa fa-map-marker-alt fa-lg text-danger me-2 mt-1"></i>
                                 <div>
-                                    <strong>Budi</strong> <span class="text-muted">( +62 8590850174 )</span><br>
-                                    Jalan Tegal Sari Ujung, Villamas Permai Blok C No 24, Kelurahan Sri Meranti, Kecamatan Rumbai.
+                                    @if ($alamatAktif)
+                                    <strong>{{ $alamatAktif->nama_penerima }}</strong>
+                                    <span class="text-muted">( +62 {{ ltrim($alamatAktif->nomor_hp, '0') }} )</span><br>
+                                    {{ $alamatAktif->jalan }},
+                                    Kelurahan {{ $alamatAktif->kelurahan }},
+                                    Kecamatan {{ $alamatAktif->kecamatan }}.
+                                    @else
+                                    <span class="text-muted">Belum ada alamat aktif</span><br>
+                                    <small>Klik untuk menambahkan alamat pengiriman</small>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </a>
                 </div>
+
 
                 <div class="row g-3 ">
                     <!-- Rincian Pembayaran -->
@@ -124,7 +133,7 @@
                                 </p>
                                 <p class="d-flex justify-content-between mb-1">
                                     <span>Subtotal Pengiriman</span>
-                                    <span class="pengiriman">Rp 0</span>
+                                    <span class="pengiriman">Rp  {{ number_format($shippingCost, 0, ',', '.') }}</span>
                                 </p>
                                 <hr>
                                 <p class="d-flex justify-content-between fw-bold mb-0">
@@ -144,7 +153,14 @@
                                 <div class="card rounded-3" style="min-height: 110px;">
                                     <div class="card-body">
                                         <h5 class="card-title pb-1" style="font-weight: 200;">Pilih Metode Pembayaran</h5>
-                                        <p class="ps-2">&gt; Virtual Account (BCA)</p>
+                                        <select id="metode-pembayaran" class="form-select mt-2">
+                                            <option selected disabled>Pilih Metode</option>
+                                            <option value="bca">Virtual Account (BCA)</option>
+                                            <option value="bni">Virtual Account (BNI)</option>
+                                            <option value="mandiri">Virtual Account (Mandiri)</option>
+                                            <option value="cod">Bayar di Tempat (COD)</option>
+                                            <option value="qris">QRIS</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -377,9 +393,10 @@
         });
     </script>
 
+    <!-- atur rincian pembayaran disudut kiri bawah -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const shippingCost = 5000; // biaya pengiriman tetap 5 ribu
+            const shippingCost = {{ $shippingCost ?? 0 }};
 
             const subtotalEl = document.querySelector(".subtotal");
             const pengirimanEl = document.querySelector(".pengiriman");
@@ -394,7 +411,7 @@
             function updateSummary() {
                 let subtotal = 0;
 
-                // Ambil semua produk yang dicentang (tombol check aktif)
+                // Hitung subtotal dari produk yang dicentang
                 document.querySelectorAll(".toggle-check.active").forEach(btn => {
                     const row = btn.closest("tr");
                     const totalText = row.querySelector(".total-price").textContent;
@@ -402,7 +419,9 @@
                     subtotal += totalValue;
                 });
 
-                const pengiriman = subtotal > 0 ? shippingCost : 0;
+                // 🚀 Selalu gunakan ongkir tetap, walaupun tidak ada produk dipilih
+                const pengiriman = shippingCost;
+
                 const total = subtotal + pengiriman;
 
                 subtotalEl.textContent = formatRupiah(subtotal);
