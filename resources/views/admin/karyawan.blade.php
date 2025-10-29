@@ -17,6 +17,22 @@
                         </button>
                     </div>
 
+                    @if(session('success'))
+                    <div id="success-alert" class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                        {{ session('success') }}
+                    </div>
+                    @endif
+
+                    @if ($errors->any())
+                    <div id="error-alert" class="alert alert-danger alert-dismissible fade show mt-2">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
                     <div class="card product_item_list">
                         <div class="body table-responsive">
                             <table class="table table-hover m-b-0 text-center">
@@ -29,138 +45,116 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($karyawans as $index => $karyawan)
                                     <tr>
-                                        <td>1</td>
-                                        <td>Retro</td>
-                                        <td>There passages of Lorem Ipsum available</td>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $karyawan->username }}</td>
+                                        <td>{{ $karyawan->email }}</td>
                                         <td>
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-yellow" title="Edit"
-                                                data-bs-toggle="modal" data-bs-target="#editProdukModal">
+                                            <button
+                                                class="btn-action waves-effect waves-yellow btn-edit-karyawan"
+                                                title="Edit"
+                                                data-id="{{ $karyawan->id }}"
+                                                data-username="{{ $karyawan->username }}"
+                                                data-email="{{ $karyawan->email }}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editKaryawanModal">
                                                 <i class="zmdi zmdi-edit"></i>
-                                            </a>
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-red" title="Hapus">
-                                                <i class="zmdi zmdi-delete"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Retro</td>
-                                        <td>There passages of Lorem Ipsum available</td>
-                                        <td>
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-yellow" title="Edit"
-                                                data-bs-toggle="modal" data-bs-target="#editProdukModal">
-                                                <i class="zmdi zmdi-edit"></i>
-                                            </a>
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-red" title="Hapus">
-                                                <i class="zmdi zmdi-delete"></i>
-                                            </a>
-                                        </td>
+                                            </button>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">3</td>
-                                        <td>Retro</td>
-                                        <td>There passages of Lorem Ipsum available</td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-yellow" title="Edit"
-                                                data-bs-toggle="modal" data-bs-target="#editProdukModal">
-                                                <i class="zmdi zmdi-edit"></i>
-                                            </a>
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-red" title="Hapus">
-                                                <i class="zmdi zmdi-delete"></i>
-                                            </a>
+                                            <form action="{{ route('karyawanAdmin.destroy', $karyawan->id) }}" method="POST" class="form-delete d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn-action waves-effect waves-red btn-delete-karyawan" title="Hapus">
+                                                    <i class="zmdi zmdi-delete"></i>
+                                                </button>
+                                            </form>
+
                                         </td>
                                     </tr>
-
+                                    @endforeach
                                 </tbody>
+
                             </table>
 
                             <!-- Modal Edit Karyawan -->
-                            <div class="modal fade" id="editProdukModal" tabindex="-1" aria-labelledby="editProdukModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="editKaryawanModal" tabindex="-1" aria-labelledby="editKaryawanModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg modal-dialog-centered">
                                     <div class="modal-content border-0 rounded-4 shadow-lg">
                                         <div class="modal-header bg-warning text-white rounded-top-4">
-                                            <h5 class="modal-title fw-bold" id="editProdukModalLabel">
-                                                Edit Karyawan
-                                            </h5>
-                                            <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white; font-size: 22px;">
+                                            <h5 class="modal-title fw-bold" id="editKaryawanModalLabel">Edit Karyawan</h5>
+                                            <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white;">
                                                 <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
                                             </button>
                                         </div>
 
-                                        <div class="modal-body p-4">
-                                            <form id="formEditProduk">
-                                                <div class="container-fluid py-2">
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-semibold">Nama Karyawan</label>
-                                                        <input type="text" id="editKaryawan" class="form-control rounded-3 shadow-sm" value="budi">
-                                                    </div>
+                                        <form id="formEditKaryawan" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="modal-body p-4">
+                                                <input type="hidden" id="edit_id" name="id">
 
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-semibold">Email</label>
-                                                        <input type="email" id="editKaryawan" class="form-control rounded-3 shadow-sm" value="budi@gmail.com">
-                                                    </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Nama Karyawan</label>
+                                                    <input type="text" id="edit_username" name="username" class="form-control rounded-3 shadow-sm" required>
                                                 </div>
 
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn close-footer btn-outline-secondary rounded-3 btn-close-red" data-bs-dismiss="modal">
-                                                        <i class="zmdi zmdi-close me-1"></i> Batal
-                                                    </button>
-                                                    <button type="submit" class="btn btn-warning text-white rounded-3 fw-semibold">
-                                                        <i class="zmdi zmdi-save me-1"></i> Simpan Perubahan
-                                                    </button>
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Email</label>
+                                                    <input type="email" id="edit_email" name="email" class="form-control rounded-3 shadow-sm" required>
                                                 </div>
-                                            </form>
-                                        </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-dismiss="modal">
+                                                    <i class="zmdi zmdi-close me-1"></i> Batal
+                                                </button>
+                                                <button type="submit" class="btn btn-warning text-white rounded-3 fw-semibold">
+                                                    <i class="zmdi zmdi-save me-1"></i> Simpan Perubahan
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Modal Tambah Karyawan -->
-                            <div class="modal fade" id="tambahProdukModal" tabindex="-1" aria-labelledby="tambahProdukModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="tambahProdukModal" tabindex="-1">
                                 <div class="modal-dialog modal-lg modal-dialog-centered">
                                     <div class="modal-content border-0 rounded-4 shadow-lg">
-                                        <!-- Header -->
                                         <div class="modal-header bg-success text-white rounded-top-4">
-                                            <h5 class="modal-title fw-bold" id="tambahProdukModalLabel">
-                                                Tambah Karyawan
-                                            </h5>
-                                            <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white; font-size: 22px;">
-                                                <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
+                                            <h5 class="modal-title fw-bold">Tambah Karyawan</h5>
+                                            <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" style="color: white;">
+                                                <i class="zmdi zmdi-close-circle"></i>
                                             </button>
                                         </div>
 
-                                        <!-- Body -->
-                                        <div class="modal-body p-4">
-                                            <form id="formTambahProduk">
-                                                <div class="container-fluid py-2">
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-semibold">Nama Karyawan</label>
-                                                        <input type="text" id="tambahKaryawan" class="form-control rounded-3 shadow-sm" placeholder="budi">
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-semibold">Email</label>
-                                                        <input type="email" id="tambahKaryawan" class="form-control rounded-3 shadow-sm" placeholder="budi@gmail.com">
-                                                    </div>
+                                        <form action="{{ route('karyawanAdmin.store') }}" method="POST">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Nama Karyawan</label>
+                                                    <input type="text" name="username" class="form-control" required>
                                                 </div>
-
-                                                <!-- Footer -->
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn close-footer btn-outline-secondary rounded-3 btn-close-red" data-bs-dismiss="modal">
-                                                        <i class="zmdi zmdi-close me-1"></i> Batal
-                                                    </button>
-                                                    <button type="submit" class="btn btn-success text-white rounded-3 fw-semibold">
-                                                        <i class="zmdi zmdi-check me-1"></i> Simpan Produk
-                                                    </button>
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Email</label>
+                                                    <input type="email" name="email" class="form-control" required>
                                                 </div>
-                                            </form>
-                                        </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Password</label>
+                                                    <input type="password" name="password" class="form-control" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-success text-white">Simpan</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -170,8 +164,80 @@
 
     </section>
     @push('scripts')
-    <script>
 
+    <!-- script modal edit -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Saat tombol edit diklik
+            document.querySelectorAll('.btn-edit-karyawan').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const username = this.dataset.username;
+                    const email = this.dataset.email;
+
+                    // Masukkan data ke modal
+                    document.getElementById('edit_id').value = id;
+                    document.getElementById('edit_username').value = username;
+                    document.getElementById('edit_email').value = email;
+
+                    // Ubah action form sesuai ID
+                    const form = document.getElementById('formEditKaryawan');
+                    form.action = `/admin/karyawan/update/${id}`;
+                });
+            });
+        });
     </script>
+
+    <!-- menghilangkan alert -->
+    <script>
+        // Hilangkan alert success setelah 3 detik
+        setTimeout(function() {
+            const successAlert = document.getElementById('success-alert');
+            if (successAlert) {
+                successAlert.classList.remove('show');
+                successAlert.classList.add('fade');
+                setTimeout(() => successAlert.remove(), 500); // hapus elemen dari DOM
+            }
+
+            const errorAlert = document.getElementById('error-alert');
+            if (errorAlert) {
+                errorAlert.classList.remove('show');
+                errorAlert.classList.add('fade');
+                setTimeout(() => errorAlert.remove(), 500);
+            }
+        }, 3000);
+    </script>
+
+    <!-- SweetAlert Delete Confirmation -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ambil semua tombol delete
+            document.querySelectorAll('.btn-delete-karyawan').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const form = this.closest('form');
+
+                    Swal.fire({
+                        title: 'Yakin ingin menghapus?',
+                        text: "Data karyawan ini akan dihapus secara permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+
     @endpush
 </x-layout-admin>

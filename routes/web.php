@@ -128,6 +128,13 @@ Route::prefix('admin')->group(
       // Karyawan
       Route::get('/karyawan', [KaryawanAdminController::class, 'index'])
          ->name('karyawanAdmin');
+      Route::post('/karyawan/store', [KaryawanAdminController::class, 'store'])
+         ->name('karyawanAdmin.store');
+      Route::put('/karyawan/update/{id}', [KaryawanAdminController::class, 'update'])
+         ->name('karyawanAdmin.update');
+      Route::delete('/karyawan/delete/{id}', [KaryawanAdminController::class, 'destroy'])
+         ->name('karyawanAdmin.destroy');
+
       // Laporan
       Route::get('/laporan', [LaporanAdminController::class, 'index'])
          ->name('laporanAdmin');
