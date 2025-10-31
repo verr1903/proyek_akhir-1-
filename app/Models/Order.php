@@ -11,9 +11,10 @@ class Order extends Model
 
     protected $fillable = [
         'id_users',
-        'id_product',
         'id_address',
         'id_discount',
+        'no_pesanan',
+        'total_harga',
         'status',
         'action_by',
         'action_by_2',
@@ -55,5 +56,10 @@ class Order extends Model
     public function discount()
     {
         return $this->belongsTo(Discount::class, 'id_discount');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

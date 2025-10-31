@@ -62,14 +62,26 @@
             </h4>
 
             <div class="price-box">
-                @if($product->discount && $product->discount->persentase > 0)
-                    @php
-                        $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
-                    @endphp
-                    <span class="current-price">Rp{{ number_format($discountPrice, 0, ',', '.') }}</span>
-                    <span class="old-price text-decoration-line-through">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
-                @else
-                    <span class="current-price" style="opacity: 0.6; cursor: not-allowed;">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
+                 @if($totalStok > 0)
+                    @if($product->discount && $product->discount->persentase > 0)
+                        @php
+                            $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
+                        @endphp
+                        <span class="current-price">Rp{{ number_format($discountPrice, 0, ',', '.') }}</span>
+                        <span class="old-price text-decoration-line-through">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
+                    @else
+                        <span class="current-price">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
+                    @endif
+                 @else
+                  @if($product->discount && $product->discount->persentase > 0)
+                        @php
+                            $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
+                        @endphp
+                        <span style="opacity: 0.6; cursor: not-allowed;" class="current-price">Rp{{ number_format($discountPrice, 0, ',', '.') }}</span>
+                        <span style="opacity: 0.6; cursor: not-allowed;" class="old-price text-decoration-line-through">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
+                    @else
+                        <span style="opacity: 0.6; cursor: not-allowed;" class="current-price">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
+                    @endif
                 @endif
             </div>
         </div>

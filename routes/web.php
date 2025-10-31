@@ -18,7 +18,7 @@ use App\Http\Controllers\Client\ProdukClientController;
 use App\Http\Controllers\Client\ProfileClientController;
 use App\Http\Controllers\Client\RiwayatClientController;
 use App\Http\Controllers\Auth\GoogleController;
-use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardClientController::class, 'index'])
@@ -46,11 +46,18 @@ Route::middleware('auth')->group(function () {
       ->name('detail');
 
 
-   Route::post('/keranjang/tambah', [CartController::class, 'store'])->name('cart.add');
-   Route::post('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
+   // keranjang routes
+   Route::post('/keranjang/tambah', [KeranjangClientController::class, 'store'])
+      ->name('cart.add');
+   Route::post('/cart/update-quantity', [KeranjangClientController::class, 'updateQuantity'])
+      ->name('cart.updateQuantity');
+   Route::get('/keranjang', [KeranjangClientController::class, 'index'])
+      ->name('keranjang');
+   Route::delete('/cart/{id}', [KeranjangClientController::class, 'destroy'])
+      ->name('cart.destroy');
+   Route::post('/checkout', [KeranjangClientController::class, 'co'])
+      ->name('checkout.store');
 
-
-   Route::get('/keranjang', [KeranjangClientController::class, 'index'])->name('keranjang');
 
    // lokasi routes
    Route::get('/lokasi', [LokasiClientController::class, 'index'])
@@ -97,6 +104,8 @@ Route::prefix('admin')->group(
       // Pesanan Online
       Route::get('/pesanan/online', [PesananAdminController::class, 'online'])
          ->name('pesananOnlineAdmin');
+      Route::get('/orders/{id}/items', [PesananAdminController::class, 'getItems']);
+
       // Pesanan Offline
       Route::get('/pesanan/offline', [PesananAdminController::class, 'offline'])
          ->name('pesananOfflineAdmin');

@@ -14,80 +14,84 @@
         <div class="shop-single-page section-padding-4 mb-5 desktop-view">
             <div class="container mb-5">
 
-                <!-- Filter & Pencarian -->
-                <div class="filter-section mb-4">
-                    <!-- Baris Pencarian & Tanggal -->
-                    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
-                        <!-- Kolom Pencarian -->
-                        <div class="input-group flex-grow-1" style="max-width: 400px;">
-                            <input type="text" class="form-control rounded-3 border-start-0" placeholder="Cari Pesananmu Disini">
-                        </div>
-
-                        <!-- Kolom Tanggal -->
-                        <div class="flex-shrink-0" style="width: 220px;">
-                            <input type="date" class="form-control rounded-3">
-                        </div>
-                    </div>
-
-                    <!-- Baris Status -->
-                    <div class="d-flex align-items-center flex-wrap gap-2">
-                        <span class="fw-semibold text-secondary">Status:</span>
-                        <div class="d-flex flex-wrap gap-1">
-                            <div class="d-flex flex-wrap gap-2">
-                                <button class="btn rounded-3 px-3 pb-2 btn-sm btn-outline-custom active">Semua</button>
-                                <button class="btn rounded-3 px-3 pb-2 btn-sm btn-outline-custom">Diproses</button>
-                                <button class="btn rounded-3 px-3 pb-2 btn-sm btn-outline-custom">Dikirim</button>
-                                <button class="btn rounded-3 px-3 pb-2 btn-sm btn-outline-custom">Selesai</button>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Kartu Pesanan -->
+                <!-- Loop Semua Pesanan -->
+                @forelse ($orders as $order)
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
                     <div class="card-body p-3">
 
                         <!-- Header Pesanan -->
                         <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
                             <div class="text-muted small">
-                                <span class="me-3">Tanggal: <strong>18 April 2025</strong></span>
-                                <span>No. Pesanan: <strong>MX-COD-250418-001</strong></span>
+                                <span class="me-3">Tanggal:
+                                    <strong>{{ $order->created_at->format('d M Y') }}</strong>
+                                </span>
+                                <span>No. Pesanan: <strong>{{ $order->no_pesanan }}</strong></span>
                             </div>
-                            <span class="badge bg-success px-4 py-3 rounded-pill fs-6">PESANAN SELESAI</span>
+
+                            @php
+                            $statusClass = match($order->status) {
+                            'diproses' => 'bg-warning text-dark',
+                            'diantar' => 'bg-primary',
+                            'menunggu pembayaran' => 'bg-secondary',
+                            'selesai' => 'bg-success',
+                            default => 'bg-light text-dark'
+                            };
+                            @endphp
+
+                            <span class="badge {{ $statusClass }} px-4 py-3 rounded-pill fs-6 text-uppercase">
+                                PESANAN {{ strtoupper($order->status) }}
+                            </span>
                         </div>
 
                         <!-- Isi Pesanan -->
                         <div class="d-flex align-items-start justify-content-between flex-wrap">
-                            <!-- Gambar dan Info Produk -->
                             <div class="d-flex align-items-start flex-grow-1">
-                                <img src="/clientAssets/images/product/image.png"
+                                @php
+                                $firstItem = $order->items->first();
+                                $totalItem = $order->items->count();
+                                @endphp
+
+                                <img src="{{ asset('storage/' . $firstItem->product->gambar) }}"
                                     alt="Produk"
                                     class="rounded border me-3"
                                     style="width: 100px; height: 120px; object-fit: cover;">
 
                                 <div>
-                                    <h6 class="fw-bold mb-1">TSHIRT OVERSIZE SERIES 'WHON'</h6>
-                                    <p class="text-muted mb-1 small">Size: L</p>
-                                    <p class="text-dark mb-1 small">Rp. 81.000,00</p>
-                                    <p class="text-muted mb-0 small">Jumlah Produk: 2</p>
-                                    <p class="text-muted mb-0 small">+1 Produk Lainnya</p>
+                                    <h6 class="fw-bold mb-1">{{ strtoupper($firstItem->product->nama) }}</h6>
+                                    <p class="text-muted mb-1 small">Size: {{ $firstItem->size }}</p>
+                                    <p class="text-dark mb-1 small">
+                                        Rp. {{ number_format($firstItem->harga_saat_ini, 0, ',', '.') }}
+                                    </p>
+                                    <p class="text-muted mb-0 small">Jumlah Produk: {{ $firstItem->quantity }}</p>
+                                    @if ($totalItem > 1)
+                                    <p class="text-muted mb-0 small">+{{ $totalItem - 1 }} Produk Lainnya</p>
+                                    @endif
                                 </div>
                             </div>
 
                             <!-- Total & Tombol -->
                             <div class="text-end mt-3 me-2 mt-md-0">
-                                <p class="fw-semibold mb-1 text-secondary small" style="font-size: 15px;">Total Belanja</p>
-                                <h5 class="fw-bold text-dark mb-3 text-danger" style="font-size: 20px;">Rp. 210.000,00</h5>
+                                <p class="fw-semibold mb-1 text-secondary small" style="font-size: 15px;">
+                                    Total Belanja
+                                </p>
+                                <h5 class="fw-bold text-dark mb-3 text-danger" style="font-size: 20px;">
+                                    Rp. {{ number_format($order->total_harga, 0, ',', '.') }}
+                                </h5>
 
                                 <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-dark btn-sm rounded-3" data-bs-toggle="modal" data-bs-target="#detailTransaksiModal">
+                                    <button class="btn btn-outline-dark btn-sm rounded-3"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#detailTransaksiModal-{{ $order->id }}">
                                         <i class="fa fa-file-text me-1"></i> Lihat Detail Transaksi
                                     </button>
 
-                                    <button class="btn btn-warning btn-sm rounded-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#ulasanModal">
+                                    @if ($order->status === 'selesai')
+                                    <button class="btn btn-warning btn-sm rounded-3 fw-semibold"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#ulasanModal-{{ $order->id }}">
                                         <i class="fa fa-star me-1"></i> Berikan Ulasan
                                     </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -95,57 +99,54 @@
                     </div>
                 </div>
 
-                <!-- Kartu Pesanan -->
-                <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
-                    <div class="card-body p-3">
-
-                        <!-- Header Pesanan -->
-                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                            <div class="text-muted small">
-                                <span class="me-3">Tanggal: <strong>18 April 2025</strong></span>
-                                <span>No. Pesanan: <strong>MX-COD-250418-001</strong></span>
+                <!-- Modal Detail Pesanan -->
+                <div class="modal fade" id="detailTransaksiModal-{{ $order->id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content rounded-4 border-0 shadow-lg p-3">
+                            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                                <h5 class="fw-bold text-dark mb-0">Detail Transaksi</h5>
+                                <button type="button" class="btn btn-link text-danger fs-4 p-0 m-0" data-bs-dismiss="modal">
+                                    <i class="fa fa-times-circle"></i>
+                                </button>
                             </div>
-                            <span class="badge bg-warning text-dark px-4 py-3 rounded-pill fs-6">PESANAN DIPROSES</span>
 
-                        </div>
-
-                        <!-- Isi Pesanan -->
-                        <div class="d-flex align-items-start justify-content-between flex-wrap">
-                            <!-- Gambar dan Info Produk -->
-                            <div class="d-flex align-items-start flex-grow-1">
-                                <img src="/clientAssets/images/product/image.png"
-                                    alt="Produk"
-                                    class="rounded border me-3"
-                                    style="width: 100px; height: 120px; object-fit: cover;">
-
+                            <!-- Detail Produk -->
+                            @foreach ($order->items as $item)
+                            <div class="d-flex align-items-start mb-2">
+                                <img src="{{ asset('storage/' . $item->product->gambar) }}"
+                                    class="rounded me-2 border"
+                                    style="width:60px;height:70px;object-fit:cover;">
                                 <div>
-                                    <h6 class="fw-bold mb-1">TSHIRT OVERSIZE SERIES 'WHON'</h6>
-                                    <p class="text-muted mb-1 small">Size: L</p>
-                                    <p class="text-dark mb-1 small">Rp. 81.000,00</p>
-                                    <p class="text-muted mb-0 small">Jumlah Produk: 2</p>
-                                    <p class="text-muted mb-0 small">+1 Produk Lainnya</p>
+                                    <p class="fw-semibold mb-1 small">{{ $item->product->nama }}</p>
+                                    <p class="text-muted mb-1 small">Size: {{ $item->size }}</p>
+                                    <p class="text-dark small">
+                                        {{ $item->quantity }} x Rp. {{ number_format($item->harga_saat_ini, 0, ',', '.') }}
+                                    </p>
                                 </div>
                             </div>
+                            <hr class="my-2">
+                            @endforeach
 
-                            <!-- Total & Tombol -->
-                            <div class="text-end mt-3 me-2 mt-md-0">
-                                <p class="fw-semibold mb-1 text-secondary small" style="font-size: 15px;">Total Belanja</p>
-                                <h5 class="fw-bold text-dark mb-3 text-danger" style="font-size: 20px;">Rp. 210.000,00</h5>
-
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-dark btn-sm rounded-3" data-bs-toggle="modal" data-bs-target="#detailTransaksiModal">
-                                        <i class="fa fa-file-text me-1"></i> Lihat Detail Transaksi
-                                    </button>
-
-
-                                </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span class="fw-semibold small text-secondary">Metode Pembayaran:</span>
+                                <span class="fw-bold">{{ strtoupper($order->metode_pembayaran) }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-semibold small text-secondary">Total Belanja:</span>
+                                <span class="fw-bold text-danger">Rp. {{ number_format($order->total_harga, 0, ',', '.') }}</span>
                             </div>
                         </div>
-
                     </div>
                 </div>
+                @empty
+                <div class="text-center text-muted my-5">
+                    <i class="fa fa-box-open fa-3x mb-3"></i>
+                    <p>Belum ada pesanan.</p>
+                </div>
+                @endforelse
 
             </div>
+
 
             <!-- Modal ulasan -->
             <div class="modal fade" id="ulasanModal" tabindex="-1" aria-labelledby="ulasanModalLabel" aria-hidden="true">

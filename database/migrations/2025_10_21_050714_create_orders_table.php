@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_users');
-            $table->unsignedBigInteger('id_product');
             $table->unsignedBigInteger('id_address');
             $table->unsignedBigInteger('id_discount')->nullable(); // Diskon opsional
+            $table->string('no_pesanan')->unique();
+            $table->integer('total_harga');
             $table->string('status')->default('diproses');
             $table->string('action_by')->nullable();
             $table->string('action_by_2')->nullable();
@@ -28,11 +29,6 @@ return new class extends Migration
             $table->foreign('id_users')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');
-
-            $table->foreign('id_product')
-                ->references('id')
-                ->on('products')
                 ->onDelete('cascade');
 
             $table->foreign('id_address')

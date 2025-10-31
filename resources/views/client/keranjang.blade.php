@@ -76,13 +76,12 @@
                                         <button class="btn btn-soft-success rounded-4 me-2 pb-5 px-3 shadow-sm toggle-check">
                                             <i class="fa fa-check"></i>
                                         </button>
-                                        <form action="" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-soft-danger rounded-4 shadow-sm pb-5 px-3" type="submit">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button"
+                                            class="btn btn-soft-danger rounded-4 shadow-sm pb-5 px-3 btn-delete"
+                                            data-id="{{ $cart->id }}">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+
                                     </td>
                                 </tr>
                                 @empty
@@ -133,7 +132,7 @@
                                 </p>
                                 <p class="d-flex justify-content-between mb-1">
                                     <span>Subtotal Pengiriman</span>
-                                    <span class="pengiriman">Rp  {{ number_format($shippingCost, 0, ',', '.') }}</span>
+                                    <span class="pengiriman">Rp {{ number_format($shippingCost, 0, ',', '.') }}</span>
                                 </p>
                                 <hr>
                                 <p class="d-flex justify-content-between fw-bold mb-0">
@@ -483,6 +482,186 @@
             });
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            document.querySelectorAll('.btn-delete').forEach(button => {
+                button.addEventListener('click', async function() {
+                    const cartId = this.getAttribute('data-id');
+                    const row = this.closest('tr');
+
+                    Swal.fire({
+                        title: 'Hapus Produk?',
+                        text: 'Produk ini akan dihapus dari keranjangmu.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus',
+                        cancelButtonText: 'Batal'
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                const response = await fetch(`/cart/${cartId}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'X-CSRF-TOKEN': csrfToken
+                                    }
+                                });
+
+                                const data = await response.json();
+
+                                if (data.success) {
+                                    // Hapus baris dari tabel
+                                    row.remove();
+
+                                    // Update total (jika kamu sudah punya fungsi updateSummary)
+                                    if (typeof updateSummary === 'function') updateSummary();
+
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Dihapus!',
+                                        text: data.message,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal',
+                                        text: data.message || 'Terjadi kesalahan saat menghapus.'
+                                    });
+                                }
+                            } catch (error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Terjadi kesalahan koneksi.'
+                                });
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+   <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkoutBtn = document.querySelector('.btn-soft-success.btn-lg'); // tombol Buat Pesanan
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            // alamat aktif dari server (blade) — null jika belum ada
+            const alamatAktifId = @json($alamatAktif ? $alamatAktif->id : null);
+            const shippingCost = {{ $shippingCost ?? 0 }};
+
+            function parseRpToNumber(rpString) {
+                return parseInt(String(rpString).replace(/[^\d]/g, '')) || 0;
+            }
+
+            // ambil total tampil di UI (sudah ada fungsi updateSummary di halaman; tetap ambil dari DOM)
+            function getDisplayedTotal() {
+                const totalText = document.querySelector('.total').textContent || '';
+                return parseRpToNumber(totalText);
+            }
+
+            checkoutBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                // daftar cart id yang dipilih (toggle-check.active)
+                const selected = [...document.querySelectorAll('.toggle-check.active')]
+                    .map(btn => btn.closest('tr').getAttribute('data-cart-id'))
+                    .filter(Boolean);
+
+                if (selected.length === 0) {
+                    return Swal.fire('Pilih Produk', 'Pilih setidaknya satu produk untuk melakukan checkout.', 'warning');
+                }
+
+                if (!alamatAktifId) {
+                    return Swal.fire('Belum ada alamat', 'Silakan pilih atau tambahkan alamat pengiriman terlebih dahulu.', 'warning');
+                }
+
+                const metode = document.getElementById('metode-pembayaran').value;
+                if (!metode || metode === '' || metode === null) {
+                    return Swal.fire('Pilih Metode', 'Silakan pilih metode pembayaran.', 'warning');
+                }
+
+                // ambil total dari tampilan (subtotal + ongkir)
+                const totalHarga = getDisplayedTotal();
+
+                if (totalHarga <= 0) {
+                    return Swal.fire('Total Tidak Valid', 'Total pembayaran tidak valid.', 'error');
+                }
+
+                // Jika metode bukan COD — tampilkan informasi (karena belum di-handle)
+                if (metode.toLowerCase() !== 'cod') {
+                    return Swal.fire({
+                        icon: 'info',
+                        title: 'Metode Pembayaran',
+                        text: 'Metode pembayaran selain COD belum diaktifkan. Untuk sementara gunakan COD.',
+                    });
+                }
+
+                // Konfirmasi akhir sebelum submit
+                const confirm = await Swal.fire({
+                    title: 'Konfirmasi Pesanan',
+                    html: `Kamu akan membuat pesanan dengan <b>${selected.length}</b> produk.<br>Total: <b>Rp ${new Intl.NumberFormat('id-ID').format(totalHarga)}</b><br>Metode: <b>${metode.toUpperCase()}</b>`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, buat pesanan',
+                    cancelButtonText: 'Batal'
+                });
+
+                if (!confirm.isConfirmed) return;
+
+                // Kirim request ke server
+                try {
+                    const res = await fetch("{{ route('checkout.store') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            cart_ids: selected,
+                            address_id: alamatAktifId,
+                            metode_pembayaran: metode,
+                            total_harga: totalHarga
+                        })
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok && data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pesanan Dibuat',
+                            text: data.message || 'Pesanan berhasil dibuat.',
+                            showConfirmButton: false,
+                            timer: 1600
+                        }).then(() => {
+                            // arahkan ke halaman pesanan (ubah sesuai route di aplikasimu)
+                            window.location.href = '/riwayat';
+                        });
+                    } else {
+                        // jika server mengembalikan not_implemented untuk non-COD, tunjukkan pesannya
+                        if (data.not_implemented) {
+                            Swal.fire('Info', data.message || 'Fitur belum diaktifkan.', 'info');
+                        } else {
+                            Swal.fire('Gagal', data.message || 'Terjadi kesalahan saat membuat pesanan.', 'error');
+                        }
+                    }
+                } catch (err) {
+                    Swal.fire('Error', 'Terjadi kesalahan koneksi. Coba lagi.', 'error');
+                    console.error(err);
+                }
+            });
+        });
+    </script>
+
+
 
     @endpush
 
