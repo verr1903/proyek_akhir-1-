@@ -59,9 +59,31 @@
                                 <div>
                                     <h6 class="fw-bold mb-1">{{ strtoupper($firstItem->product->nama) }}</h6>
                                     <p class="text-muted mb-1 small">Size: {{ $firstItem->size }}</p>
+
+                                    @php
+                                    $harga = $firstItem->harga_saat_ini;
+                                    $product = $firstItem->product;
+
+                                    if ($product->discount) {
+                                    $hargaDiskon = $product->harga - ($product->harga * $product->discount->persentase / 100);
+                                    } else {
+                                    $hargaDiskon = $product->harga;
+                                    }
+                                    @endphp
+
                                     <p class="text-dark mb-1 small">
-                                        Rp. {{ number_format($firstItem->harga_saat_ini, 0, ',', '.') }}
+                                        @if ($product->discount)
+                                        <span class="text-danger fw-bold">
+                                            Rp {{ number_format($hargaDiskon, 0, ',', '.') }}
+                                        </span><br>
+                                        <span class="text-muted text-decoration-line-through small">
+                                            Rp {{ number_format($product->harga, 0, ',', '.') }}
+                                        </span>
+                                        @else
+                                        Rp {{ number_format($hargaDiskon, 0, ',', '.') }}
+                                        @endif
                                     </p>
+
                                     <p class="text-muted mb-0 small">Jumlah Produk: {{ $firstItem->quantity }}</p>
                                     @if ($totalItem > 1)
                                     <p class="text-muted mb-0 small">+{{ $totalItem - 1 }} Produk Lainnya</p>
@@ -86,12 +108,25 @@
                                     </button>
 
                                     @if ($order->status === 'selesai')
-                                    <button class="btn btn-warning btn-sm rounded-3 fw-semibold"
+                                    @php
+                                    $sudahUlas = $firstItem->product->ulasan->isNotEmpty();
+                                    @endphp
+
+                                    @if ($sudahUlas)
+                                    <button class="btn btn-secondary btn-sm rounded-3 fw-semibold disabled btnSudahUlasan"
+                                        data-id="{{ $firstItem->product->id }}">
+                                        <i class="fa fa-check me-1"></i> Sudah Diulas
+                                    </button>
+                                    @else
+                                    <button class="btn btn-warning btn-sm rounded-3 fw-semibold btnUlasan"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#ulasanModal-{{ $order->id }}">
+                                        data-id="{{ $firstItem->product->id }}"
+                                        data-bs-target="#ulasanModal">
                                         <i class="fa fa-star me-1"></i> Berikan Ulasan
                                     </button>
                                     @endif
+                                    @endif
+
                                 </div>
                             </div>
                         </div>
@@ -112,29 +147,57 @@
 
                             <!-- Detail Produk -->
                             @foreach ($order->items as $item)
+
                             <div class="d-flex align-items-start mb-2">
-                                <img src="{{ asset('storage/' . $item->product->gambar) }}"
+                                <img src="{{ asset('storage/' . $product->gambar) }}"
                                     class="rounded me-2 border"
                                     style="width:60px;height:70px;object-fit:cover;">
                                 <div>
-                                    <p class="fw-semibold mb-1 small">{{ $item->product->nama }}</p>
+                                    <p class="fw-semibold mb-1 small">{{ $product->nama }}</p>
                                     <p class="text-muted mb-1 small">Size: {{ $item->size }}</p>
                                     <p class="text-dark small">
-                                        {{ $item->quantity }} x Rp. {{ number_format($item->harga_saat_ini, 0, ',', '.') }}
+                                      @if ($item->diskon_presentase != 0.00)
+                                            <span class="text-danger fw-bold">
+                                                {{ $item->quantity }} x Rp. {{ number_format($item->harga_setelah_diskon, 0, ',', '.') }}
+                                            </span><br>
+                                            <span class="text-muted text-decoration-line-through small">
+                                                {{ $item->quantity }} x Rp. {{ number_format($item->harga_awal, 0, ',', '.') }}
+                                            </span>
+                                        @else
+                                            {{ $item->quantity }} x Rp. {{ number_format($item->harga_awal, 0, ',', '.') }}
+                                        @endif
                                     </p>
                                 </div>
                             </div>
                             <hr class="my-2">
                             @endforeach
 
+                            @php
+                                $ongkir = $order->address ? app('\App\Http\Controllers\Client\KeranjangClientController')
+                                    ->calculateShippingCost($order->address->kecamatan) : 0;
+                                $totalProduk = $order->total_harga - $ongkir;
+                            @endphp
+
                             <div class="d-flex justify-content-between mt-2">
                                 <span class="fw-semibold small text-secondary">Metode Pembayaran:</span>
                                 <span class="fw-bold">{{ strtoupper($order->metode_pembayaran) }}</span>
                             </div>
+
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-semibold small text-secondary">Total Produk:</span>
+                                <span class="fw-bold">Rp. {{ number_format($totalProduk, 0, ',', '.') }}</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-semibold small text-secondary">Ongkos Kirim:</span>
+                                <span class="fw-bold">Rp. {{ number_format($ongkir, 0, ',', '.') }}</span>
+                            </div>
+
                             <div class="d-flex justify-content-between mt-1">
                                 <span class="fw-semibold small text-secondary">Total Belanja:</span>
                                 <span class="fw-bold text-danger">Rp. {{ number_format($order->total_harga, 0, ',', '.') }}</span>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -160,6 +223,7 @@
                         </div>
 
                         <div class="modal-body">
+                            <input type="hidden" id="idProductReview">
                             <!-- Rating -->
                             <div class="text-center mb-4">
                                 <h6 class="text-secondary mb-2">Beri Rating Produk Ini:</h6>
@@ -513,110 +577,152 @@
         </div>
         <!-- End Mobile View -->
 
-        <!-- js rating untuk desktop -->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const stars = document.querySelectorAll('.star');
-                const ratingValue = document.getElementById('ratingValue');
-                let rating = 0;
+        <x-footer-client></x-footer-client>
 
-                stars.forEach(star => {
-                    star.addEventListener('mouseover', () => {
-                        resetStars();
-                        highlightStars(star.dataset.value);
-                    });
+    </div>
 
-                    star.addEventListener('mouseout', () => {
-                        resetStars();
-                        highlightStars(rating);
-                    });
+    @push('scripts')
 
-                    star.addEventListener('click', () => {
-                        rating = parseFloat(star.dataset.value);
-                        ratingValue.textContent = rating + ' / 5';
-                        resetStars();
-                        highlightStars(rating);
-                    });
-                });
 
-                function highlightStars(value) {
-                    stars.forEach(s => {
-                        const val = parseFloat(s.dataset.value);
-                        s.classList.remove('half', 'active');
+    <!-- js rating untuk mobile -->
+    <script>
+        // Auto resize textarea
+        function mobileAutoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
 
-                        if (val <= value) {
-                            s.classList.add('active');
-                        } else if (val - 0.5 === value) {
-                            s.classList.add('half');
-                        }
-                    });
-                }
+        // Rating logic
+        const mobileStars = document.querySelectorAll('#mobileRatingStars .mobile-star');
+        const mobileRatingValue = document.getElementById('mobileRatingValue');
+        let mobileCurrentRating = 0;
 
-                function resetStars() {
-                    stars.forEach(s => s.classList.remove('active', 'half', 'hover'));
-                }
+        mobileStars.forEach(star => {
+            star.addEventListener('mousemove', () => {
+                resetMobileHover();
+                const val = parseFloat(star.dataset.value);
+                highlightMobileStars(val);
+            });
 
-                document.getElementById('submitUlasanBtn').addEventListener('click', () => {
-                    const ulasan = document.getElementById('ulasanText').value.trim();
-                    if (!rating || !ulasan) {
-                        alert('Mohon isi rating dan ulasan terlebih dahulu.');
-                        return;
-                    }
+            star.addEventListener('mouseleave', resetMobileHover);
 
-                    alert(`Terima kasih! Rating: ${rating} / 5\nUlasan: ${ulasan}`);
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('ulasanModal'));
-                    modal.hide();
+            star.addEventListener('click', () => {
+                mobileCurrentRating = parseFloat(star.dataset.value);
+                highlightMobileStars(mobileCurrentRating);
+                mobileRatingValue.textContent = `${mobileCurrentRating} / 5`;
+            });
+        });
 
-                    resetStars();
-                    rating = 0;
-                    ratingValue.textContent = '0 / 5';
-                    document.getElementById('ulasanText').value = '';
+        function highlightMobileStars(value) {
+            mobileStars.forEach(s => {
+                const val = parseFloat(s.dataset.value);
+                s.classList.toggle('active', val <= value);
+            });
+        }
+
+        function resetMobileHover() {
+            highlightMobileStars(mobileCurrentRating);
+        }
+    </script>
+
+    <!-- rating untuk dekstop -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const stars = document.querySelectorAll('.star');
+            const ratingValue = document.getElementById('ratingValue');
+            let rating = 0;
+
+            // tangkap id product dari tombol
+            document.querySelectorAll('.btnUlasan').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.getElementById('idProductReview').value = btn.dataset.id;
                 });
             });
-        </script>
 
-        <!-- js rating untuk mobile -->
-        <script>
-            // Auto resize textarea
-            function mobileAutoResize(textarea) {
-                textarea.style.height = 'auto';
-                textarea.style.height = textarea.scrollHeight + 'px';
-            }
-
-            // Rating logic
-            const mobileStars = document.querySelectorAll('#mobileRatingStars .mobile-star');
-            const mobileRatingValue = document.getElementById('mobileRatingValue');
-            let mobileCurrentRating = 0;
-
-            mobileStars.forEach(star => {
-                star.addEventListener('mousemove', () => {
-                    resetMobileHover();
-                    const val = parseFloat(star.dataset.value);
-                    highlightMobileStars(val);
+            stars.forEach(star => {
+                star.addEventListener('mouseover', () => {
+                    resetStars();
+                    highlightStars(star.dataset.value);
                 });
 
-                star.addEventListener('mouseleave', resetMobileHover);
+                star.addEventListener('mouseout', () => {
+                    resetStars();
+                    highlightStars(rating);
+                });
 
                 star.addEventListener('click', () => {
-                    mobileCurrentRating = parseFloat(star.dataset.value);
-                    highlightMobileStars(mobileCurrentRating);
-                    mobileRatingValue.textContent = `${mobileCurrentRating} / 5`;
+                    rating = parseFloat(star.dataset.value);
+                    ratingValue.textContent = rating + ' / 5';
+                    resetStars();
+                    highlightStars(rating);
                 });
             });
 
-            function highlightMobileStars(value) {
-                mobileStars.forEach(s => {
+            function highlightStars(value) {
+                stars.forEach(s => {
                     const val = parseFloat(s.dataset.value);
                     s.classList.toggle('active', val <= value);
                 });
             }
 
-            function resetMobileHover() {
-                highlightMobileStars(mobileCurrentRating);
+            function resetStars() {
+                stars.forEach(s => s.classList.remove('active'));
             }
-        </script>
 
-        <x-footer-client></x-footer-client>
+            document.getElementById('submitUlasanBtn').addEventListener('click', () => {
+                const komentar = document.getElementById('ulasanText').value.trim();
+                const idProduct = document.getElementById('idProductReview').value;
 
-    </div>
+                if (!rating || !komentar) {
+                    Swal.fire('Oops!', 'Isi rating dan ulasan terlebih dahulu.', 'warning');
+                    return;
+                }
+
+                fetch("{{ route('ulasan.store') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                        body: JSON.stringify({
+                            id_product: idProduct,
+                            bintang: rating,
+                            komentar: komentar
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Berhasil!', data.message, 'success');
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('ulasanModal'));
+                            modal.hide();
+                            resetStars();
+                            ratingValue.textContent = '0 / 5';
+                            document.getElementById('ulasanText').value = '';
+                        } else {
+                            Swal.fire('Gagal!', data.message || 'Terjadi kesalahan.', 'error');
+                        }
+                    })
+                    .catch(() => Swal.fire('Error!', 'Gagal mengirim ulasan.', 'error'));
+            });
+        });
+    </script>
+
+    <!-- Konfirmasi tombol ulasan jika sudah pernah ngulas -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Jika user klik tombol "Sudah Diulas"
+            document.querySelectorAll('.btnSudahUlasan').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Sudah Memberikan Ulasan',
+                        text: 'Kamu sudah memberikan ulasan untuk produk ini.',
+                        confirmButtonText: 'Oke'
+                    });
+                });
+            });
+        });
+    </script>
+    @endpush
 </x-layout-client>

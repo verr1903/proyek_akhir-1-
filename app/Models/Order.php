@@ -12,7 +12,6 @@ class Order extends Model
     protected $fillable = [
         'id_users',
         'id_address',
-        'id_discount',
         'no_pesanan',
         'total_harga',
         'status',
@@ -47,15 +46,6 @@ class Order extends Model
     public function address()
     {
         return $this->belongsTo(Address::class, 'id_address');
-    }
-
-    /**
-     * Relasi ke model Discount (opsional)
-     * Diskon yang digunakan pada pesanan
-     */
-    public function discount()
-    {
-        return $this->belongsTo(Discount::class, 'id_discount');
     }
 
     public function items()

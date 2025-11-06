@@ -52,8 +52,18 @@
                                     </td>
 
                                     <td class="py-4">
-                                        Rp {{ number_format($cart->product->harga, 0, ',', '.') }}
-                                    </td>
+    @if ($cart->product->discount)
+        <span class="text-danger fw-bold">
+            Rp {{ number_format($cart->harga_diskon, 0, ',', '.') }}
+        </span><br>
+        <span class="text-muted text-decoration-line-through small">
+            Rp {{ number_format($cart->product->harga, 0, ',', '.') }}
+        </span>
+    @else
+        Rp {{ number_format($cart->harga_diskon, 0, ',', '.') }}
+    @endif
+</td>
+
 
                                     <td class="py-4 text-center">
                                         <text style="font-size: 16px;">{{ $cart->size }}</text><br>
@@ -69,7 +79,7 @@
                                     </td>
 
                                     <td class="py-4  total-price">
-                                        Rp {{ number_format($cart->quantity * $cart->product->harga, 0, ',', '.') }}
+                                        Rp {{ number_format($cart->quantity * $cart->harga_diskon, 0, ',', '.') }}
                                     </td>
 
                                     <td class="py-4 text-center">

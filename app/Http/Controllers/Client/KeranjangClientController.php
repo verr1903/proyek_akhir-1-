@@ -28,20 +28,33 @@ class KeranjangClientController extends Controller
             $shippingCost = $this->calculateShippingCost($alamatAktif->kecamatan);
         }
 
-        // Ambil semua data cart milik user yang sedang login + relasi produk
-        $carts = Cart::with('product')
+        // Ambil semua data cart milik user + relasi produk & diskon
+        $carts = Cart::with(['product.discount'])
             ->where('user_id', $userId)
-            ->get();
+            ->get()
+            ->map(function ($cart) {
+                // Hitung harga setelah diskon (jika ada)
+                $harga = $cart->product->harga;
+                if ($cart->product->discount) {
+                    $harga -= $harga * $cart->product->discount->persentase / 100;
+                }
+
+                // Simpan ke property tambahan agar mudah diakses di view
+                $cart->harga_diskon = $harga;
+                $cart->total = $harga * $cart->quantity;
+                return $cart;
+            });
 
         return view('client.keranjang', [
             'title' => 'Keranjang',
             'carts' => $carts,
             'alamatAktif' => $alamatAktif,
-            'shippingCost' => $shippingCost
+            'shippingCost' => $shippingCost,
         ]);
     }
 
-    private function calculateShippingCost($kecamatan, $kelurahan = null)
+
+    public function calculateShippingCost($kecamatan, $kelurahan = null)
     {
         // Zona Gratis (sekitar Panam dan Rumbai)
         $zonaGratis = [
@@ -147,10 +160,16 @@ class KeranjangClientController extends Controller
 
         $cart->save();
 
+        $harga = $cart->product->harga;
+        if ($cart->product->discount) {
+            $harga -= $harga * $cart->product->discount->persentase / 100;
+        }
+
+        // Kembalikan respon JSON
         return response()->json([
             'success' => true,
             'quantity' => $cart->quantity,
-            'total' => $cart->quantity * $cart->product->harga,
+            'total' => $cart->quantity * $harga,
         ]);
     }
 
@@ -257,7 +276,6 @@ class KeranjangClientController extends Controller
                 'no_pesanan' => $noPesanan,
                 'id_users' => $userId,
                 'id_address' => $alamat->id,
-                'id_discount' => null,
                 'total_harga' => $totalHarga,
                 'status' => 'diproses',
                 'action_by' => null,
@@ -267,16 +285,32 @@ class KeranjangClientController extends Controller
             ]);
 
             // Buat item-item order
+            // Buat item-item order dengan data harga & diskon
             foreach ($carts as $cart) {
+                $product = $cart->product;
+
+                // Ambil harga awal produk
+                $hargaAwal = $product->harga;
+
+                // Jika produk punya relasi diskon (misal $product->discount->persentase)
+                // Sesuaikan ini dengan struktur modelmu
+                $diskonPersentase = $product->discount->persentase ?? 0;
+
+                // Hitung harga setelah diskon
+                $hargaSetelahDiskon = $hargaAwal - ($hargaAwal * $diskonPersentase / 100);
+
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $cart->product_id,
                     'size' => $cart->size,
                     'quantity' => $cart->quantity,
-                    'harga_saat_ini' => $cart->product->harga,
-                    'subtotal' => $cart->quantity * $cart->product->harga,
+                    'harga_awal' => $hargaAwal,
+                    'diskon_presentase' => $diskonPersentase,
+                    'harga_setelah_diskon' => $hargaSetelahDiskon,
+                    'subtotal' => $cart->quantity * $hargaSetelahDiskon,
                 ]);
             }
+
 
             // Hapus keranjang
             Cart::whereIn('id', $request->cart_ids)

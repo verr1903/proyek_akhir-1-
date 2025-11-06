@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_users');
             $table->unsignedBigInteger('id_address');
-            $table->unsignedBigInteger('id_discount')->nullable(); // Diskon opsional
             $table->string('no_pesanan')->unique();
             $table->integer('total_harga');
             $table->string('status')->default('diproses');
@@ -35,11 +34,6 @@ return new class extends Migration
                 ->references('id')
                 ->on('addresses')
                 ->onDelete('cascade');
-
-            $table->foreign('id_discount')
-                ->references('id')
-                ->on('discounts')
-                ->onDelete('set null'); // Jika diskon dihapus, tetap simpan pesanan
         });
     }
 

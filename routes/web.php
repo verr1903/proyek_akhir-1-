@@ -79,6 +79,9 @@ Route::middleware('auth')->group(function () {
       ->name('profile.update');
 
    Route::get('/riwayat', [RiwayatClientController::class, 'index'])->name('riwayat');
+   Route::post('/ulasan', [RiwayatClientController::class, 'store'])->name('ulasan.store');
+
+
    Route::get('/produk', [ProdukClientController::class, 'index'])->name('produk');
 });
 
@@ -105,6 +108,7 @@ Route::prefix('admin')->group(
       Route::get('/pesanan/online', [PesananAdminController::class, 'online'])
          ->name('pesananOnlineAdmin');
       Route::get('/orders/{id}/items', [PesananAdminController::class, 'getItems']);
+      Route::put('/orders/{id}/status', [PesananAdminController::class, 'updateStatus']);
 
       // Pesanan Offline
       Route::get('/pesanan/offline', [PesananAdminController::class, 'offline'])

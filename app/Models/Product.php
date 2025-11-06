@@ -48,4 +48,9 @@ class Product extends Model
     {
         return Crypt::encryptString($this->id);
     }
+
+    public function ulasan()
+    {
+        return $this->hasMany(Review::class, 'id_product');
+    }
 }

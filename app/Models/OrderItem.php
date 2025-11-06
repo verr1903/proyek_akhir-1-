@@ -11,7 +11,9 @@ class OrderItem extends Model
         'product_id',
         'quantity',
         'size',
-        'harga_saat_ini',
+        'harga_awal',
+        'diskon_presentase',
+        'harga_setelah_diskon',
         'subtotal',
     ];
 

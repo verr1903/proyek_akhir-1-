@@ -168,6 +168,7 @@
 
     </section>
     @push('scripts')
+    <!-- menampilkan detail -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.btn-detail').forEach(button => {
@@ -200,32 +201,143 @@
 
                     // Ambil detail produk via AJAX
                     fetch(`/admin/orders/${id}/items`)
-    .then(res => res.json())
-    .then(data => {
-        const tbody = document.getElementById('detail-produk-body');
-        tbody.innerHTML = '';
+                    .then(res => res.json())
+                    .then(data => {
+                        const tbody = document.getElementById('detail-produk-body');
+                        tbody.innerHTML = '';
 
-        data.items.forEach(item => {
-            tbody.innerHTML += `
-                <tr>
-                    <td class="text-center">
-                        <img src="${item.gambar}" alt="${item.nama}" class="img-thumbnail rounded-3" style="width: 60px;">
-                    </td>
-                    <td>${item.nama}</td>
-                    <td class="text-center">${item.size}</td>
-                    <td class="text-center">${item.jumlah}</td>
-                    <td>Rp${parseInt(item.harga).toLocaleString('id-ID')}</td>
-                    <td>Rp${parseInt(item.subtotal).toLocaleString('id-ID')}</td>
-                </tr>
-            `;
-        });
-    })
-    .catch(err => {
-        console.error('Gagal mengambil data produk:', err);
-    });
+                        data.items.forEach(item => {
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td class="text-center">
+                                        <img src="${item.gambar}" alt="${item.nama}" class="img-thumbnail rounded-3" style="width: 60px;">
+                                    </td>
+                                    <td>${item.nama}</td>
+                                    <td class="text-center">${item.size}</td>
+                                    <td class="text-center">${item.jumlah}</td>
+                                    <td>Rp${parseInt(item.harga).toLocaleString('id-ID')}</td>
+                                    <td>Rp${parseInt(item.subtotal).toLocaleString('id-ID')}</td>
+                                </tr>
+                            `;
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Gagal mengambil data produk:', err);
+                    });
                 });
             });
         });
+    </script>
+
+    <!-- tombol antar -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // Tombol "Antar"
+    document.querySelectorAll('.btn-antar').forEach(button => {
+        button.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const orderId = row.dataset.id;
+
+            Swal.fire({
+                title: 'Konfirmasi Pengantaran',
+                text: 'Apakah pesanan ini akan diantar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Antar Sekarang',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/orders/${orderId}/status`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        },
+                        body: JSON.stringify({ status: 'diantar' })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Berhasil!', 'Pesanan telah diantar.', 'success');
+                            // Update tampilan status langsung di tabel
+                            const statusCell = row.querySelector('.status-cell span');
+                            statusCell.textContent = 'Diantar';
+                            statusCell.className = 'badge status-badge bg-primary text-white';
+                            // Ganti tombol aksi jadi "Diterima"
+                            row.querySelector('.action-cell').innerHTML = `
+                                <button class="btn btn-outline-success btn-sm rounded-pill px-3 py-1 fw-semibold shadow-sm btn-diterima" data-id="${orderId}">
+                                    <i class="zmdi zmdi-check-circle me-1"></i> Diterima
+                                </button>
+                            `;
+                            attachDiterimaHandler(); // pasang ulang listener tombol baru
+                        } else {
+                            Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        Swal.fire('Error', 'Tidak dapat memperbarui status.', 'error');
+                    });
+                }
+            });
+        });
+    });
+
+    // Fungsi untuk pasang event listener ke tombol "Diterima"
+    function attachDiterimaHandler() {
+        document.querySelectorAll('.btn-diterima').forEach(button => {
+            button.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const orderId = row.dataset.id;
+
+                Swal.fire({
+                    title: 'Konfirmasi Pesanan',
+                    text: 'Apakah pesanan ini sudah diterima oleh pelanggan?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Sudah Diterima',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#198754',
+                    cancelButtonColor: '#d33',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/admin/orders/${orderId}/status`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            },
+                            body: JSON.stringify({ status: 'selesai' })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Selesai!', 'Pesanan telah selesai.', 'success');
+                                // Update tampilan status langsung
+                                const statusCell = row.querySelector('.status-cell span');
+                                statusCell.textContent = 'Selesai';
+                                statusCell.className = 'badge status-badge bg-success text-white';
+                                // Hapus tombol, ganti teks
+                                row.querySelector('.action-cell').innerHTML = '<span class="text-success fw-semibold">Pesanan Selesai</span>';
+                            } else {
+                                Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire('Error', 'Tidak dapat memperbarui status.', 'error');
+                        });
+                    }
+                });
+            });
+        });
+    }
+
+    // Panggil untuk pertama kali
+    attachDiterimaHandler();
+});
     </script>
     @endpush
 

@@ -17,7 +17,9 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->integer('quantity')->default(1);
             $table->string('size')->nullable();
-            $table->decimal('harga_saat_ini', 12, 2);
+            $table->decimal('harga_awal', 12, 2);
+            $table->decimal('diskon_presentase', 12, 2);
+            $table->decimal('harga_setelah_diskon', 12, 2);
             $table->decimal('subtotal', 12, 2);
             $table->timestamps();
         });

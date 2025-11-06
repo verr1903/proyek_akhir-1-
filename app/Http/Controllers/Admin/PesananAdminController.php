@@ -28,12 +28,12 @@ class PesananAdminController extends Controller
 
         return response()->json([
             'items' => $order->items->map(function ($item) {
-                 $gambar = $item->product->gambar ?? $item->product->image ?? null;
+                $gambar = $item->product->gambar ?? $item->product->image ?? null;
                 return [
-                    'gambar' => $gambar 
-                    ? asset('storage/' . $gambar)
-                    : asset('Adminassets/images/noimage.png'),
-                    
+                    'gambar' => $gambar
+                        ? asset('storage/' . $gambar)
+                        : asset('Adminassets/images/noimage.png'),
+
                     'nama' => $item->product->nama ?? '-',
                     'size' => $item->size ?? '-',
                     'jumlah' => $item->quantity,
@@ -43,6 +43,28 @@ class PesananAdminController extends Controller
             }),
         ]);
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::find($id);
+
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Pesanan tidak ditemukan.'], 404);
+        }
+
+        $newStatus = $request->input('status');
+        $allowed = ['diproses', 'diantar', 'selesai'];
+
+        if (!in_array($newStatus, $allowed)) {
+            return response()->json(['success' => false, 'message' => 'Status tidak valid.'], 400);
+        }
+
+        $order->status = $newStatus;
+        $order->save();
+
+        return response()->json(['success' => true]);
+    }
+
 
 
 
