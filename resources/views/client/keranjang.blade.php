@@ -52,18 +52,17 @@
                                     </td>
 
                                     <td class="py-4">
-    @if ($cart->product->discount)
-        <span class="text-danger fw-bold">
-            Rp {{ number_format($cart->harga_diskon, 0, ',', '.') }}
-        </span><br>
-        <span class="text-muted text-decoration-line-through small">
-            Rp {{ number_format($cart->product->harga, 0, ',', '.') }}
-        </span>
-    @else
-        Rp {{ number_format($cart->harga_diskon, 0, ',', '.') }}
-    @endif
-</td>
-
+                                        @if ($cart->product->discount)
+                                            <span class="text-danger fw-bold">
+                                                Rp {{ number_format($cart->harga_diskon, 0, ',', '.') }}
+                                            </span><br>
+                                            <span class="text-muted text-decoration-line-through small">
+                                                Rp {{ number_format($cart->product->harga, 0, ',', '.') }}
+                                            </span>
+                                        @else
+                                            Rp {{ number_format($cart->harga_diskon, 0, ',', '.') }}
+                                        @endif
+                                    </td>
 
                                     <td class="py-4 text-center">
                                         <text style="font-size: 16px;">{{ $cart->size }}</text><br>
@@ -164,11 +163,8 @@
                                         <h5 class="card-title pb-1" style="font-weight: 200;">Pilih Metode Pembayaran</h5>
                                         <select id="metode-pembayaran" class="form-select mt-2">
                                             <option selected disabled>Pilih Metode</option>
-                                            <option value="bca">Virtual Account (BCA)</option>
-                                            <option value="bni">Virtual Account (BNI)</option>
-                                            <option value="mandiri">Virtual Account (Mandiri)</option>
                                             <option value="cod">Bayar di Tempat (COD)</option>
-                                            <option value="qris">QRIS</option>
+                                            <option value="online">Bayar Online</option>
                                         </select>
                                     </div>
                                 </div>
@@ -558,11 +554,10 @@
         });
     </script>
 
-   <script>
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const checkoutBtn = document.querySelector('.btn-soft-success.btn-lg'); // tombol Buat Pesanan
+            const checkoutBtn = document.querySelector('.btn-soft-success.btn-lg');
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            // alamat aktif dari server (blade) — null jika belum ada
             const alamatAktifId = @json($alamatAktif ? $alamatAktif->id : null);
             const shippingCost = {{ $shippingCost ?? 0 }};
 
@@ -570,7 +565,6 @@
                 return parseInt(String(rpString).replace(/[^\d]/g, '')) || 0;
             }
 
-            // ambil total tampil di UI (sudah ada fungsi updateSummary di halaman; tetap ambil dari DOM)
             function getDisplayedTotal() {
                 const totalText = document.querySelector('.total').textContent || '';
                 return parseRpToNumber(totalText);
@@ -579,97 +573,175 @@
             checkoutBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
 
-                // daftar cart id yang dipilih (toggle-check.active)
                 const selected = [...document.querySelectorAll('.toggle-check.active')]
                     .map(btn => btn.closest('tr').getAttribute('data-cart-id'))
                     .filter(Boolean);
 
-                if (selected.length === 0) {
+                if (selected.length === 0)
                     return Swal.fire('Pilih Produk', 'Pilih setidaknya satu produk untuk melakukan checkout.', 'warning');
-                }
 
-                if (!alamatAktifId) {
+                if (!alamatAktifId)
                     return Swal.fire('Belum ada alamat', 'Silakan pilih atau tambahkan alamat pengiriman terlebih dahulu.', 'warning');
-                }
 
                 const metode = document.getElementById('metode-pembayaran').value;
-                if (!metode || metode === '' || metode === null) {
+                if (!metode)
                     return Swal.fire('Pilih Metode', 'Silakan pilih metode pembayaran.', 'warning');
-                }
 
-                // ambil total dari tampilan (subtotal + ongkir)
                 const totalHarga = getDisplayedTotal();
-
-                if (totalHarga <= 0) {
+                if (totalHarga <= 0)
                     return Swal.fire('Total Tidak Valid', 'Total pembayaran tidak valid.', 'error');
-                }
 
-                // Jika metode bukan COD — tampilkan informasi (karena belum di-handle)
-                if (metode.toLowerCase() !== 'cod') {
-                    return Swal.fire({
-                        icon: 'info',
-                        title: 'Metode Pembayaran',
-                        text: 'Metode pembayaran selain COD belum diaktifkan. Untuk sementara gunakan COD.',
+                // 🔹 Pembayaran Online (Midtrans)
+                if (metode.toLowerCase() === 'online') {
+                    const confirm = await Swal.fire({
+                        title: 'Konfirmasi Pembayaran',
+                        html: `
+                            Kamu akan melakukan pembayaran dengan <b>${selected.length}</b> produk.<br>
+                            Total: <b>Rp ${new Intl.NumberFormat('id-ID').format(totalHarga)}</b><br>
+                            Metode: <b>${metode.toUpperCase()}</b>
+                        `,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, lanjutkan pembayaran',
+                        cancelButtonText: 'Batal'
                     });
-                }
+                    if (!confirm.isConfirmed) return;
 
-                // Konfirmasi akhir sebelum submit
-                const confirm = await Swal.fire({
-                    title: 'Konfirmasi Pesanan',
-                    html: `Kamu akan membuat pesanan dengan <b>${selected.length}</b> produk.<br>Total: <b>Rp ${new Intl.NumberFormat('id-ID').format(totalHarga)}</b><br>Metode: <b>${metode.toUpperCase()}</b>`,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, buat pesanan',
-                    cancelButtonText: 'Batal'
-                });
-
-                if (!confirm.isConfirmed) return;
-
-                // Kirim request ke server
-                try {
-                    const res = await fetch("{{ route('checkout.store') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            cart_ids: selected,
-                            address_id: alamatAktifId,
-                            metode_pembayaran: metode,
-                            total_harga: totalHarga
-                        })
-                    });
-
-                    const data = await res.json();
-
-                    if (res.ok && data.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Pesanan Dibuat',
-                            text: data.message || 'Pesanan berhasil dibuat.',
-                            showConfirmButton: false,
-                            timer: 1600
-                        }).then(() => {
-                            // arahkan ke halaman pesanan (ubah sesuai route di aplikasimu)
-                            window.location.href = '/riwayat';
+                    try {
+                        // 🔹 Minta token ke server
+                        const res = await fetch("{{ route('midtrans.token') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                cart_ids: selected,
+                                address_id: alamatAktifId,
+                                metode_pembayaran: metode,
+                                total_harga: totalHarga
+                            })
                         });
-                    } else {
-                        // jika server mengembalikan not_implemented untuk non-COD, tunjukkan pesannya
-                        if (data.not_implemented) {
-                            Swal.fire('Info', data.message || 'Fitur belum diaktifkan.', 'info');
+
+                        const data = await res.json();
+
+                        if (res.ok && data.success && data.token) {
+                            // 🔹 Jalankan popup pembayaran Midtrans
+                            window.snap.pay(data.token, {
+                                onSuccess: async function (result) {
+                                    console.log('✅ Pembayaran sukses:', result);
+                                    Swal.fire('Berhasil!', 'Pembayaran berhasil diproses.', 'success');
+
+                                    // Kirim ke route checkout.store untuk simpan pesanan
+                                    const res2 = await fetch("{{ route('checkout.store') }}", {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': csrfToken,
+                                            'Accept': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            cart_ids: selected,
+                                            address_id: alamatAktifId,
+                                            metode_pembayaran: metode,
+                                            total_harga: totalHarga
+                                        })
+                                    });
+
+                                    const data2 = await res2.json();
+                                    if (res2.ok && data2.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Pesanan Dibuat',
+                                            text: data2.message || 'Pesanan berhasil dibuat.',
+                                            showConfirmButton: false,
+                                            timer: 1600
+                                        }).then(() => window.location.href = '/riwayat');
+                                    } else {
+                                        Swal.fire('Gagal', data2.message || 'Terjadi kesalahan saat membuat pesanan.', 'error');
+                                    }
+                                },
+                                onPending: function (result) {
+                                    console.log('⌛ Pending:', result);
+                                    Swal.fire('Menunggu Pembayaran', 'Silakan selesaikan pembayaranmu.', 'info');
+                                },
+                                onError: function (result) {
+                                    console.error('❌ Error pembayaran:', result);
+                                    Swal.fire('Gagal', 'Terjadi kesalahan saat pembayaran.', 'error');
+                                },
+                                onClose: function () {
+                                    Swal.fire('Dibatalkan', 'Kamu menutup pembayaran sebelum selesai.', 'warning');
+                                }
+                            });
+                        } else {
+                            Swal.fire('Error', data.message || 'Gagal mendapatkan token Midtrans.', 'error');
+                        }
+                    } catch (err) {
+                        console.error('❌ Gagal menghubungi server Midtrans:', err);
+                        Swal.fire('Error', 'Gagal menghubungi server Midtrans.', 'error');
+                    }
+
+                    return; // stop lanjut ke bawah
+                }
+
+                // 🔹 Pembayaran COD
+                if (metode.toLowerCase() === 'cod') {
+                    const confirm = await Swal.fire({
+                        title: 'Konfirmasi Pesanan',
+                        html: `
+                            Kamu akan membuat pesanan dengan <b>${selected.length}</b> produk.<br>
+                            Total: <b>Rp ${new Intl.NumberFormat('id-ID').format(totalHarga)}</b><br>
+                            Metode: <b>${metode.toUpperCase()}</b>
+                        `,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, buat pesanan',
+                        cancelButtonText: 'Batal'
+                    });
+                    if (!confirm.isConfirmed) return;
+
+                    try {
+                        const res = await fetch("{{ route('checkout.store') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                cart_ids: selected,
+                                address_id: alamatAktifId,
+                                metode_pembayaran: metode,
+                                total_harga: totalHarga
+                            })
+                        });
+
+                        const data = await res.json();
+                        if (res.ok && data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Pesanan Dibuat',
+                                text: data.message || 'Pesanan berhasil dibuat.',
+                                showConfirmButton: false,
+                                timer: 1600
+                            }).then(() => window.location.href = '/riwayat');
                         } else {
                             Swal.fire('Gagal', data.message || 'Terjadi kesalahan saat membuat pesanan.', 'error');
                         }
+                    } catch (err) {
+                        console.error(err);
+                        Swal.fire('Error', 'Terjadi kesalahan koneksi. Coba lagi.', 'error');
                     }
-                } catch (err) {
-                    Swal.fire('Error', 'Terjadi kesalahan koneksi. Coba lagi.', 'error');
-                    console.error(err);
                 }
             });
         });
     </script>
+
+
+   <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+
+
 
 
 

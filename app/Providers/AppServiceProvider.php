@@ -32,4 +32,6 @@ class AppServiceProvider extends ServiceProvider
             $view->with('cartCount', $cartCount);
         });
     }
+
+    
 }

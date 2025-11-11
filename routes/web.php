@@ -19,6 +19,7 @@ use App\Http\Controllers\Client\ProfileClientController;
 use App\Http\Controllers\Client\RiwayatClientController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardClientController::class, 'index'])
@@ -57,6 +58,9 @@ Route::middleware('auth')->group(function () {
       ->name('cart.destroy');
    Route::post('/checkout', [KeranjangClientController::class, 'co'])
       ->name('checkout.store');
+   Route::post('/midtrans/token', [KeranjangClientController::class, 'getSnapToken'])
+      ->name('midtrans.token');
+
 
 
    // lokasi routes

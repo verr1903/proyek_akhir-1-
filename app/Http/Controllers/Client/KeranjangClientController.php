@@ -10,6 +10,11 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Address;
+use Midtrans\Snap;
+use Midtrans\Config;
+use Midtrans\Notification;
+use Illuminate\Support\Facades\Log;
+
 
 class KeranjangClientController extends Controller
 {
@@ -223,14 +228,6 @@ class KeranjangClientController extends Controller
             ], 422);
         }
 
-        // Sementara hanya COD
-        if (strtolower($request->metode_pembayaran) !== 'cod') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Pembayaran non-COD belum diaktifkan.',
-                'not_implemented' => true
-            ], 200);
-        }
 
         DB::beginTransaction();
 
@@ -254,7 +251,13 @@ class KeranjangClientController extends Controller
             }
 
 
-            $kodePembayaran = strtoupper($request->metode_pembayaran);
+            $metode = strtolower($request->metode_pembayaran);
+
+            if ($metode === 'online') {
+                $kodePembayaran = 'ONL';
+            } else {
+                $kodePembayaran = strtoupper($metode);
+            }
             $kodeTanggal = now()->format('dmy');
 
             // 🔹 Ambil jumlah order hari ini untuk kategori tertentu
@@ -332,6 +335,94 @@ class KeranjangClientController extends Controller
                 'message' => 'Gagal membuat pesanan. Silakan coba lagi.',
                 'error' => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    public function getSnapToken(Request $request)
+    {
+        $request->validate([
+            'cart_ids' => 'required|array|min:1',
+            'total_harga' => 'required|numeric|min:1000',
+        ]);
+
+        $user = Auth::user();
+        $address = $user->address;
+        $cartItems = \App\Models\Cart::with('product')
+            ->whereIn('id', $request->cart_ids)
+            ->where('user_id', $user->id)
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'Keranjang kosong atau tidak valid.']);
+        }
+
+        // Buat daftar item untuk Midtrans
+        $items = [];
+        foreach ($cartItems as $cart) {
+            $price = $cart->product->harga;
+            if ($cart->product->discount) {
+                $price -= $price * $cart->product->discount->persentase / 100;
+            }
+
+            $items[] = [
+                'id' => $cart->id,
+                'price' => $price,
+                'quantity' => $cart->quantity,
+                'name' => $cart->product->nama,
+            ];
+        }
+
+        // Tambahkan ongkir (opsional)
+        $shippingCost = $request->input('shipping_cost', 0);
+        if ($shippingCost > 0) {
+            $items[] = [
+                'id' => 'SHIPPING',
+                'price' => $shippingCost,
+                'quantity' => 1,
+                'name' => 'Ongkos Kirim'
+            ];
+        }
+
+        // Data transaksi untuk Midtrans
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'ORDER-' . uniqid(),
+                'gross_amount' => $request->total_harga,
+            ],
+            'item_details' => $items,
+            'customer_details' => [
+                'first_name' => $address->nama_penerima,
+                'email' => $user->email,
+                'phone' => $address->nomor_hp ?? '0810000000',
+
+                // 💡 ini bagian penting: tambahkan struktur alamat lengkap
+                'billing_address' => [
+                    'first_name'   => $address->nama_penerima,
+                    'phone'        => $address->nomor_hp ?? '0810000000',
+                    'address'      => "{$address->jalan}, Kel. {$address->kelurahan}, Kec. {$address->kecamatan}",
+                    'city'         => $address->kecamatan ?? '',
+                    'postal_code'  => $address->kode_pos ?? '',
+                    'country_code' => 'IDN'
+                ],
+                'shipping_address' => [
+                    'first_name'   => $address->nama_penerima,
+                    'phone'        => $address->nomor_hp ?? '0810000000',
+                    'address'      => "{$address->jalan}, Kel. {$address->kelurahan}, Kec. {$address->kecamatan}",
+                    'city'         => $address->kecamatan ?? '',
+                    'postal_code'  => $address->kode_pos ?? '',
+                    'country_code' => 'IDN'
+                ],
+            ],
+        ];
+
+        try {
+            $snapToken = Snap::getSnapToken($params);
+            return response()->json(['success' => true, 'token' => $snapToken]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membuat token: ' . $e->getMessage()
+            ]);
         }
     }
 }

@@ -55,4 +55,9 @@ class User extends Authenticatable
         // Default avatar (misalnya gambar placeholder)
         return asset('images/default-avatar.png');
     }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class, 'id_users');
+    }
 }
