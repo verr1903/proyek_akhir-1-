@@ -491,13 +491,15 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil!',
-                                    text: 'Produk berhasil ditambahkan ke keranjang',
-                                    showConfirmButton: false,
-                                    timer: 2000
-                                });
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Produk berhasil ditambahkan ke keranjang',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                window.location.reload(); // 🔄 reload halaman setelah notifikasi hilang
+                            });
                             } else {
                                 Swal.fire({
                                     icon: 'error',
