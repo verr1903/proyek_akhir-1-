@@ -63,7 +63,7 @@
                             </div>
                             <div class="shipping-content">
                                 <h5 class="title">Pesan Online</h5>
-                                <p>Pesan bunga secara online dengan mudah melalui situs kami</p>
+                                <p>Pesan pakaian pria secara online dengan mudah melalui situs kami</p>
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="shipping-content">
                                 <h5 class="title">Pesan Offline</h5>
-                                <p>Kunjungi toko kami langsung untuk memilih dan membeli bunga secara offline</p>
+                                <p>Kunjungi toko kami langsung untuk memilih dan membeli pakaian pria secara offline</p>
                             </div>
                         </div>
                     </div>

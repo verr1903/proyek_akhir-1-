@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 
 class PesananAdminController extends Controller
@@ -59,7 +60,18 @@ class PesananAdminController extends Controller
             return response()->json(['success' => false, 'message' => 'Status tidak valid.'], 400);
         }
 
+        // Update status
         $order->status = $newStatus;
+
+        // Tambahkan pencatatan siapa yang melakukan aksi
+        if ($newStatus === 'diantar' && !$order->action_by) {
+            $order->action_by = Auth::id(); // user yang mengantar
+        }
+
+        if ($newStatus === 'selesai' && !$order->action_by_2) {
+            $order->action_by_2 = Auth::id(); // user yang menandai selesai
+        }
+
         $order->save();
 
         return response()->json(['success' => true]);
