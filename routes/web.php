@@ -41,6 +41,7 @@ Route::get('/auth/google/callback', [GoogleController::class, 'callback'])
 
 Route::post('/logout', [LoginController::class, 'logout'])
    ->name('logout');
+Route::get('/logoutt', [LoginController::class, 'logout'])->name('logoutt');
 
 Route::middleware('auth')->group(function () {
    Route::get('/detail/{encryptedId}', [DetailClientController::class, 'index'])
@@ -89,74 +90,76 @@ Route::middleware('auth')->group(function () {
    Route::get('/produk', [ProdukClientController::class, 'index'])->name('produk');
 });
 
-Route::prefix('admin')->group(
-   function () {
+Route::prefix('admin')
+   ->middleware(['auth', 'role:karyawan,owner'])
+   ->group(
+      function () {
 
-      // dashboard admin
-      Route::get('/', [DashboardAdminController::class, 'index'])
-         ->name('dashboardAdmin');
-
-
-      // produk 
-      Route::get('/produk', [ProdukAdminController::class, 'index'])
-         ->name('produkAdmin');
-      Route::post('/produk', [ProdukAdminController::class, 'store'])
-         ->name('produkAdmin.store');
-      Route::put('/produk/update/{id}', [ProdukAdminController::class, 'update'])
-         ->name('produkAdmin.update');
-      Route::delete('/produk/{id}', [ProdukAdminController::class, 'destroy'])
-         ->name('produkAdmin.destroy');
+         // dashboard admin
+         Route::get('/', [DashboardAdminController::class, 'index'])
+            ->name('dashboardAdmin');
 
 
-      // Pesanan Online
-      Route::get('/pesanan/online', [PesananAdminController::class, 'online'])
-         ->name('pesananOnlineAdmin');
-      Route::get('/orders/{id}/items', [PesananAdminController::class, 'getItems']);
-      Route::put('/orders/{id}/status', [PesananAdminController::class, 'updateStatus']);
-
-      // Pesanan Offline
-      Route::get('/pesanan/offline', [PesananAdminController::class, 'offline'])
-         ->name('pesananOfflineAdmin');
-
-
-      // Iklan
-      Route::get('/iklan', [IklanAdminController::class, 'index'])
-         ->name('iklanAdmin');
-      Route::post('/iklan', [IklanAdminController::class, 'store'])
-         ->name('iklanAdmin.store');
-      Route::put('/iklan/{id}', [IklanAdminController::class, 'update'])
-         ->name('iklanAdmin.update');
-      Route::delete('/iklan/{id}', [IklanAdminController::class, 'destroy'])
-         ->name('iklanAdmin.destroy');
+         // produk 
+         Route::get('/produk', [ProdukAdminController::class, 'index'])
+            ->name('produkAdmin');
+         Route::post('/produk', [ProdukAdminController::class, 'store'])
+            ->name('produkAdmin.store');
+         Route::put('/produk/update/{id}', [ProdukAdminController::class, 'update'])
+            ->name('produkAdmin.update');
+         Route::delete('/produk/{id}', [ProdukAdminController::class, 'destroy'])
+            ->name('produkAdmin.destroy');
 
 
-      // Diskon
-      Route::get('/diskon', [DiskonAdminController::class, 'index'])
-         ->name('diskonAdmin');
-      Route::post('/diskon/store', [DiskonAdminController::class, 'store'])
-         ->name('diskonAdmin.store');
-      Route::delete('/diskon/{id}', [DiskonAdminController::class, 'destroy'])
-         ->name('diskonAdmin.destroy');
-      Route::put('/diskon/{id}', [DiskonAdminController::class, 'update'])
-         ->name('diskonAdmin.update');
+         // Pesanan Online
+         Route::get('/pesanan/online', [PesananAdminController::class, 'online'])
+            ->name('pesananOnlineAdmin');
+         Route::get('/orders/{id}/items', [PesananAdminController::class, 'getItems']);
+         Route::put('/orders/{id}/status', [PesananAdminController::class, 'updateStatus']);
+
+         // Pesanan Offline
+         Route::get('/pesanan/offline', [PesananAdminController::class, 'offline'])
+            ->name('pesananOfflineAdmin');
+
+
+         // Iklan
+         Route::get('/iklan', [IklanAdminController::class, 'index'])
+            ->name('iklanAdmin');
+         Route::post('/iklan', [IklanAdminController::class, 'store'])
+            ->name('iklanAdmin.store');
+         Route::put('/iklan/{id}', [IklanAdminController::class, 'update'])
+            ->name('iklanAdmin.update');
+         Route::delete('/iklan/{id}', [IklanAdminController::class, 'destroy'])
+            ->name('iklanAdmin.destroy');
+
+
+         // Diskon
+         Route::get('/diskon', [DiskonAdminController::class, 'index'])
+            ->name('diskonAdmin');
+         Route::post('/diskon/store', [DiskonAdminController::class, 'store'])
+            ->name('diskonAdmin.store');
+         Route::delete('/diskon/{id}', [DiskonAdminController::class, 'destroy'])
+            ->name('diskonAdmin.destroy');
+         Route::put('/diskon/{id}', [DiskonAdminController::class, 'update'])
+            ->name('diskonAdmin.update');
 
 
 
-      // Karyawan
-      Route::get('/karyawan', [KaryawanAdminController::class, 'index'])
-         ->name('karyawanAdmin');
-      Route::post('/karyawan/store', [KaryawanAdminController::class, 'store'])
-         ->name('karyawanAdmin.store');
-      Route::put('/karyawan/update/{id}', [KaryawanAdminController::class, 'update'])
-         ->name('karyawanAdmin.update');
-      Route::delete('/karyawan/delete/{id}', [KaryawanAdminController::class, 'destroy'])
-         ->name('karyawanAdmin.destroy');
+         // Karyawan
+         Route::get('/karyawan', [KaryawanAdminController::class, 'index'])
+            ->name('karyawanAdmin');
+         Route::post('/karyawan/store', [KaryawanAdminController::class, 'store'])
+            ->name('karyawanAdmin.store');
+         Route::put('/karyawan/update/{id}', [KaryawanAdminController::class, 'update'])
+            ->name('karyawanAdmin.update');
+         Route::delete('/karyawan/delete/{id}', [KaryawanAdminController::class, 'destroy'])
+            ->name('karyawanAdmin.destroy');
 
-      // Laporan
-      Route::get('/laporan', [LaporanAdminController::class, 'index'])
-         ->name('laporanAdmin');
-      // Profile
-      Route::get('/profile', [ProfileAdminController::class, 'index'])
-         ->name('profileAdmin');
-   }
-);
+         // Laporan
+         Route::get('/laporan', [LaporanAdminController::class, 'index'])
+            ->name('laporanAdmin');
+         // Profile
+         Route::get('/profile', [ProfileAdminController::class, 'index'])
+            ->name('profileAdmin');
+      }
+   );
