@@ -10,19 +10,20 @@ use App\Models\Product;
 class DashboardClientController extends Controller
 {
     public function index(Request $request)
-{
-    $iklan = Iklan::all();
-    $products = Product::with('discount')->paginate(9);
+    {
+        $iklan = Iklan::all();
+        $products = Product::with('discount')
+            ->latest() // urut berdasarkan created_at terbaru
+            ->paginate(9);
 
-    if ($request->ajax()) {
-        return view('client.product_list', compact('products'))->render();
+        if ($request->ajax()) {
+            return view('client.product_list', compact('products'))->render();
+        }
+
+        return view('client.dashboard', [
+            'title' => 'Dashboard',
+            'iklan' => $iklan,
+            'products' => $products,
+        ]);
     }
-
-    return view('client.dashboard', [
-        'title' => 'Dashboard',
-        'iklan' => $iklan,
-        'products' => $products,
-    ]);
-}
-
 }

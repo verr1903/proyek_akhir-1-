@@ -126,6 +126,10 @@
                                 </tbody>
 
                             </table>
+                            <div class="mt-3">
+                                {{ $products->links('pagination::bootstrap-5') }}
+                            </div>
+
 
                             <!-- Modal Detail Stok -->
                             <div class="modal fade" id="stokDetailModal" tabindex="-1" aria-labelledby="stokDetailModalLabel" aria-hidden="true">
@@ -619,7 +623,7 @@
             .catch(error => {
                 console.error(error);
             });
-            
+
         ClassicEditor
             .create(document.querySelector('#editDetail'), {
                 toolbar: [
