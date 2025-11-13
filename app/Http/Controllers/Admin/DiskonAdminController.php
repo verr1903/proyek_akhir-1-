@@ -9,23 +9,50 @@ use App\Models\Product;
 
 class DiskonAdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $discounts = Discount::with('product')->get();
+        // Query dasar
+        $query = Discount::with('product');
 
-        // Ambil semua ID produk yang sudah punya diskon
+        // 🔍 Searching
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('product', function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('kategori', 'like', "%{$search}%");
+            });
+        }
+
+        // 🔽 Sorting
+        $sort = $request->get('sort', 'created_at');
+        $direction = $request->get('direction', 'desc');
+
+        // Jika kolom dari relasi (misal product.nama)
+        if ($sort === 'nama_produk') {
+            $query->join('products', 'discounts.id_product', '=', 'products.id')
+                ->orderBy('products.nama', $direction)
+                ->select('discounts.*');
+        } else {
+            $query->orderBy($sort, $direction);
+        }
+
+        // Pagination (10 per halaman)
+        $discounts = $query->paginate(10)->appends($request->query());
+
+        // Produk yang sudah punya diskon
         $usedProductIds = Discount::pluck('id_product');
 
-        // Ambil semua produk
+        // Semua produk
         $products = Product::all();
 
         return view('admin.diskon', [
             'title' => 'Diskon',
             'discounts' => $discounts,
             'products' => $products,
-            'usedProductIds' => $usedProductIds, // kirim ke view
+            'usedProductIds' => $usedProductIds,
         ]);
     }
+
 
 
 

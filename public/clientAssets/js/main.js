@@ -93,15 +93,7 @@
 		Product Countdown
 	-----------------------------------*/
 
-	function countdown() {
-		$('[data-countdown]').each(function () {
-			var $this = $(this), finalDate = $(this).data('countdown');
-			$this.countdown(finalDate, function (event) {
-				$this.html(event.strftime('<div class="single-count"><span class="count">%D</span><p>Days</p></div><div class="single-count"><span class="count">%H</span><p>Hour</p></div><div class="single-count"><span class="count">%M</span><p>mint</p></div><div class="single-count"><span class="count">%S</span><p>Sec</p></div>'));
-			});
-		});
-	}
-	countdown();
+
 
 
 	/*--

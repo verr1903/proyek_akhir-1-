@@ -205,7 +205,7 @@
 
     </div>
 
-       @push('scripts')
+    @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
@@ -227,7 +227,11 @@
 
                 loadMoreBtn.innerText = "Memuat...";
 
-                fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                fetch(url, {
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    })
                     .then(res => res.text())
                     .then(html => {
                         const tempDiv = document.createElement("div");
@@ -242,7 +246,11 @@
                         const currentPage = parseInt(paginationUrl.searchParams.get("page"));
                         const nextUrl = url.replace(`page=${currentPage}`, `page=${currentPage + 1}`);
 
-                        fetch(nextUrl, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                        fetch(nextUrl, {
+                                headers: {
+                                    "X-Requested-With": "XMLHttpRequest"
+                                }
+                            })
                             .then(res => {
                                 if (res.status === 404 || res.redirected) {
                                     loadMoreBtn.innerText = "Semua produk sudah dimuat";
@@ -294,6 +302,44 @@
     });
     </script>
     @endif -->
+
+    <!-- countdown discount -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function updateCountdowns() {
+                document.querySelectorAll('[data-countdown]').forEach(el => {
+                    const end = new Date(el.dataset.countdown);
+                    const now = new Date();
+                    const diff = end - now;
+
+                    if (diff <= 0) {
+                        el.innerHTML = `<div class="single-count"><span class="count text-danger">0</span><p>Days</p></div>
+                                <div class="single-count"><span class="count text-danger">0</span><p>Hour</p></div>
+                                <div class="single-count"><span class="count text-danger">0</span><p>Mint</p></div>
+                                <div class="single-count"><span class="count text-danger">0</span><p>Sec</p></div>`;
+                        return;
+                    }
+
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                    const seconds = Math.floor((diff / 1000) % 60);
+
+                    el.innerHTML = `
+                <div class="single-count"><span class="count">${days}</span><p>Days</p></div>
+                <div class="single-count"><span class="count">${hours}</span><p>Hour</p></div>
+                <div class="single-count"><span class="count">${minutes}</span><p>Mint</p></div>
+                <div class="single-count"><span class="count">${seconds}</span><p>Sec</p></div>
+            `;
+                });
+            }
+
+            updateCountdowns();
+            setInterval(updateCountdowns, 1000);
+        });
+    </script>
+
+
 
     @endpush
 
