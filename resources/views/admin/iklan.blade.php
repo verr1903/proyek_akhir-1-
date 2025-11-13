@@ -34,6 +34,52 @@
                     </div>
                     @endif
 
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <form action="{{ route('iklanAdmin') }}" method="GET" class="w-100">
+                            <div class="d-flex flex-wrap align-items-center gap-3 py-2">
+
+                                <!-- Search -->
+                                <div class="flex-grow-1 min-w-0">
+                                    <input type="text" name="search" value="{{ request('search') }}"
+                                        class="form-control border-0 rounded-pill"
+                                        placeholder="Cari iklan berdasarkan judul..."
+                                        style="height:44px; font-size:14px; min-width:150px; padding-left:18px;">
+                                </div>
+
+                                <!-- Sort -->
+                                <select name="sort" class="form-select mx-1 form-select-sm border-0 bg-white text-dark rounded-pill px-2"
+                                    style="width:170px; height:44px; font-size:14px;">
+                                    <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Tanggal dibuat</option>
+                                    <option value="judul" {{ request('sort') == 'judul' ? 'selected' : '' }}>Judul</option>
+                                </select>
+
+                                <!-- Direction -->
+                                <select name="direction" class="form-select mx-1 form-select-sm border-0 bg-white text-dark rounded-pill px-2"
+                                    style="width:140px; height:44px; font-size:14px;">
+                                    <option value="asc" {{ request('direction') == 'asc' ? 'selected' : '' }}>Naik</option>
+                                    <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}>Turun</option>
+                                </select>
+
+                                <!-- Buttons -->
+                                <div class="d-flex align-items-center gap-2 mx-1">
+                                    <button type="submit" class="btn btn-primary rounded-pill d-flex align-items-center"
+                                        style="height:44px; padding: 0 18px; font-weight:600;">
+                                        <i class="zmdi zmdi-search" style="margin-right:5px; margin-top:-5px;"></i> Cari
+                                    </button>
+
+                                    @if(request()->has('search') || request()->has('sort') || request()->has('direction'))
+                                    <a href="{{ route('iklanAdmin') }}" class="btn mx-1 btn-light border rounded-pill d-flex align-items-center text-muted"
+                                        style="height:44px; padding: 0 12px;">
+                                        <i class="zmdi zmdi-refresh" style="margin-right:5px; margin-top:-5px;"></i> Reset
+                                    </a>
+                                    @endif
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+
 
                     <div class="card product_item_list">
                         <div class="body table-responsive">
@@ -102,6 +148,11 @@
                                 </tbody>
 
                             </table>
+
+                            <div class="d-flex justify-content-end mt-3">
+                                {{ $iklans->links('pagination::bootstrap-5') }}
+                            </div>
+
 
                             <!-- Modal Edit Produk -->
                             <div class="modal fade" id="editProdukModal" tabindex="-1" aria-labelledby="editProdukModalLabel" aria-hidden="true">

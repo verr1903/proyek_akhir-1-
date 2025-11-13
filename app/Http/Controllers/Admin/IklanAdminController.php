@@ -9,15 +9,37 @@ use Illuminate\Support\Facades\Storage;
 
 class IklanAdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $iklans = Iklan::latest()->get();
+        $query = Iklan::query();
+
+        // 🔍 Pencarian berdasarkan judul atau sub judul
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                    ->orWhere('sub_judul', 'like', "%{$search}%");
+            });
+        }
+
+        // ↕️ Sorting dinamis
+        $sort = $request->get('sort', 'created_at');
+        $direction = $request->get('direction', 'desc');
+        $allowedSorts = ['created_at', 'judul'];
+
+        if (in_array($sort, $allowedSorts)) {
+            $query->orderBy($sort, $direction);
+        }
+
+        // 🔢 Pagination (10 per halaman)
+        $iklans = $query->paginate(10)->appends($request->all());
 
         return view('admin.iklan', [
             'title' => 'Iklan',
-            'iklans' => $iklans
+            'iklans' => $iklans,
         ]);
     }
+
 
     public function store(Request $request)
     {
