@@ -10,16 +10,34 @@ use Illuminate\Support\Facades\Storage;
 class ProdukAdminController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = Product::query();
+
+        // 🔍 Filter pencarian
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function ($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->search . '%')
+                    ->orWhere('kategori', 'like', '%' . $request->search . '%')
+                    ->orWhere('detail', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // ↕️ Sort berdasarkan kolom
+        $sort = $request->get('sort', 'created_at'); // default sort by created_at
+        $direction = $request->get('direction', 'desc'); // default descending
+
+        $products = $query->orderBy($sort, $direction)->paginate(10);
 
         return view('admin.produk', [
             'title' => 'Produk',
             'products' => $products,
+            'sort' => $sort,
+            'direction' => $direction,
+            'search' => $request->search,
         ]);
     }
+
 
     public function store(Request $request)
     {
