@@ -11,6 +11,53 @@
                         <h5 class="fw-bold text-dark"></h5>
                     </div>
 
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <form action="{{ route('pesananOnlineAdmin') }}" method="GET" class="w-100">
+                            <div class="d-flex flex-wrap align-items-center gap-3 py-2">
+
+                                <!-- Search -->
+                                <div class="flex-grow-1 min-w-0">
+                                    <input type="text" name="search" value="{{ request('search') }}"
+                                        class="form-control border-0 rounded-pill"
+                                        placeholder="Cari pesanan (nama atau no pesanan)..."
+                                        style="height:44px; font-size:14px; min-width:150px; padding-left:18px;">
+                                </div>
+
+                                <!-- Sort -->
+                                <select name="sort" class="form-select mx-1 form-select-sm border-0 bg-white text-dark rounded-pill px-2"
+                                    style="width:170px; height:44px; font-size:14px;">
+                                    <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Tanggal dibuat</option>
+                                    <option value="no_pesanan" {{ request('sort') == 'no_pesanan' ? 'selected' : '' }}>No Pesanan</option>
+                                    <option value="total_harga" {{ request('sort') == 'total_harga' ? 'selected' : '' }}>Total Harga</option>
+                                    <option value="status" {{ request('sort') == 'status' ? 'selected' : '' }}>Status</option>
+                                </select>
+
+                                <!-- Direction -->
+                                <select name="direction" class="form-select mx-1 form-select-sm border-0 bg-white text-dark rounded-pill px-2"
+                                    style="width:140px; height:44px; font-size:14px;">
+                                    <option value="asc" {{ request('direction') == 'asc' ? 'selected' : '' }}> Naik</option>
+                                    <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}> Turun</option>
+                                </select>
+
+                                <!-- Buttons -->
+                                <div class="d-flex align-items-center gap-2 mx-1">
+                                    <button type="submit" class="btn btn-primary rounded-pill d-flex align-items-center"
+                                        style="height:44px; padding: 0 18px; font-weight:600;">
+                                        <i class="zmdi zmdi-search" style="margin-right:5px; margin-top:-5px;"></i>Cari
+                                    </button>
+
+                                    @if(request()->has('search') || request()->has('sort') || request()->has('direction'))
+                                    <a href="{{ route('pesananOnlineAdmin') }}" class="btn mx-1 btn-light border rounded-pill d-flex align-items-center text-muted"
+                                        style="height:44px; padding: 0 12px;">
+                                        <i class="zmdi zmdi-refresh" style="margin-right:5px; margin-top:-5px;"></i> Reset
+                                    </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
                     <div class="card product_item_list">
                         <div class="body table-responsive">
                             <table class="table table-hover m-b-0 text-center align-middle">
@@ -18,7 +65,7 @@
                                     <tr class="text-center">
                                         <th>No</th>
                                         <th>No Pesanan</th>
-                                        <th>Total Pesanan</th>
+                                        <th>Total Produk</th>
                                         <th>Detail</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
@@ -75,6 +122,9 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div class="mt-3">
+                                {{ $orders->links('pagination::bootstrap-5') }}
+                            </div>
 
 
                             <!-- Modal Detail Stok -->
@@ -201,13 +251,13 @@
 
                     // Ambil detail produk via AJAX
                     fetch(`/admin/orders/${id}/items`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const tbody = document.getElementById('detail-produk-body');
-                        tbody.innerHTML = '';
+                        .then(res => res.json())
+                        .then(data => {
+                            const tbody = document.getElementById('detail-produk-body');
+                            tbody.innerHTML = '';
 
-                        data.items.forEach(item => {
-                            tbody.innerHTML += `
+                            data.items.forEach(item => {
+                                tbody.innerHTML += `
                                 <tr>
                                     <td class="text-center">
                                         <img src="${item.gambar}" alt="${item.nama}" class="img-thumbnail rounded-3" style="width: 60px;">
@@ -219,11 +269,11 @@
                                     <td>Rp${parseInt(item.subtotal).toLocaleString('id-ID')}</td>
                                 </tr>
                             `;
+                            });
+                        })
+                        .catch(err => {
+                            console.error('Gagal mengambil data produk:', err);
                         });
-                    })
-                    .catch(err => {
-                        console.error('Gagal mengambil data produk:', err);
-                    });
                 });
             });
         });
@@ -232,112 +282,116 @@
     <!-- tombol antar -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-    // Tombol "Antar"
-    document.querySelectorAll('.btn-antar').forEach(button => {
-        button.addEventListener('click', function() {
-            const row = this.closest('tr');
-            const orderId = row.dataset.id;
+            // Tombol "Antar"
+            document.querySelectorAll('.btn-antar').forEach(button => {
+                button.addEventListener('click', function() {
+                    const row = this.closest('tr');
+                    const orderId = row.dataset.id;
 
-            Swal.fire({
-                title: 'Konfirmasi Pengantaran',
-                text: 'Apakah pesanan ini akan diantar?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Antar Sekarang',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch(`/admin/orders/${orderId}/status`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        },
-                        body: JSON.stringify({ status: 'diantar' })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire('Berhasil!', 'Pesanan telah diantar.', 'success');
-                            // Update tampilan status langsung di tabel
-                            const statusCell = row.querySelector('.status-cell span');
-                            statusCell.textContent = 'Diantar';
-                            statusCell.className = 'badge status-badge bg-primary text-white';
-                            // Ganti tombol aksi jadi "Diterima"
-                            row.querySelector('.action-cell').innerHTML = `
+                    Swal.fire({
+                        title: 'Konfirmasi Pengantaran',
+                        text: 'Apakah pesanan ini akan diantar?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Antar Sekarang',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`/admin/orders/${orderId}/status`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                    },
+                                    body: JSON.stringify({
+                                        status: 'diantar'
+                                    })
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire('Berhasil!', 'Pesanan telah diantar.', 'success');
+                                        // Update tampilan status langsung di tabel
+                                        const statusCell = row.querySelector('.status-cell span');
+                                        statusCell.textContent = 'Diantar';
+                                        statusCell.className = 'badge status-badge bg-primary text-white';
+                                        // Ganti tombol aksi jadi "Diterima"
+                                        row.querySelector('.action-cell').innerHTML = `
                                 <button class="btn btn-outline-success btn-sm rounded-pill px-3 py-1 fw-semibold shadow-sm btn-diterima" data-id="${orderId}">
                                     <i class="zmdi zmdi-check-circle me-1"></i> Diterima
                                 </button>
                             `;
-                            attachDiterimaHandler(); // pasang ulang listener tombol baru
-                        } else {
-                            Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
+                                        attachDiterimaHandler(); // pasang ulang listener tombol baru
+                                    } else {
+                                        Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error(err);
+                                    Swal.fire('Error', 'Tidak dapat memperbarui status.', 'error');
+                                });
                         }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        Swal.fire('Error', 'Tidak dapat memperbarui status.', 'error');
                     });
-                }
-            });
-        });
-    });
-
-    // Fungsi untuk pasang event listener ke tombol "Diterima"
-    function attachDiterimaHandler() {
-        document.querySelectorAll('.btn-diterima').forEach(button => {
-            button.addEventListener('click', function() {
-                const row = this.closest('tr');
-                const orderId = row.dataset.id;
-
-                Swal.fire({
-                    title: 'Konfirmasi Pesanan',
-                    text: 'Apakah pesanan ini sudah diterima oleh pelanggan?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, Sudah Diterima',
-                    cancelButtonText: 'Batal',
-                    confirmButtonColor: '#198754',
-                    cancelButtonColor: '#d33',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        fetch(`/admin/orders/${orderId}/status`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                            },
-                            body: JSON.stringify({ status: 'selesai' })
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                Swal.fire('Selesai!', 'Pesanan telah selesai.', 'success');
-                                // Update tampilan status langsung
-                                const statusCell = row.querySelector('.status-cell span');
-                                statusCell.textContent = 'Selesai';
-                                statusCell.className = 'badge status-badge bg-success text-white';
-                                // Hapus tombol, ganti teks
-                                row.querySelector('.action-cell').innerHTML = '<span class="text-success fw-semibold">Pesanan Selesai</span>';
-                            } else {
-                                Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
-                            }
-                        })
-                        .catch(err => {
-                            console.error(err);
-                            Swal.fire('Error', 'Tidak dapat memperbarui status.', 'error');
-                        });
-                    }
                 });
             });
-        });
-    }
 
-    // Panggil untuk pertama kali
-    attachDiterimaHandler();
-});
+            // Fungsi untuk pasang event listener ke tombol "Diterima"
+            function attachDiterimaHandler() {
+                document.querySelectorAll('.btn-diterima').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const row = this.closest('tr');
+                        const orderId = row.dataset.id;
+
+                        Swal.fire({
+                            title: 'Konfirmasi Pesanan',
+                            text: 'Apakah pesanan ini sudah diterima oleh pelanggan?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya, Sudah Diterima',
+                            cancelButtonText: 'Batal',
+                            confirmButtonColor: '#198754',
+                            cancelButtonColor: '#d33',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                fetch(`/admin/orders/${orderId}/status`, {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                        },
+                                        body: JSON.stringify({
+                                            status: 'selesai'
+                                        })
+                                    })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            Swal.fire('Selesai!', 'Pesanan telah selesai.', 'success');
+                                            // Update tampilan status langsung
+                                            const statusCell = row.querySelector('.status-cell span');
+                                            statusCell.textContent = 'Selesai';
+                                            statusCell.className = 'badge status-badge bg-success text-white';
+                                            // Hapus tombol, ganti teks
+                                            row.querySelector('.action-cell').innerHTML = '<span class="text-success fw-semibold">Pesanan Selesai</span>';
+                                        } else {
+                                            Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.error(err);
+                                        Swal.fire('Error', 'Tidak dapat memperbarui status.', 'error');
+                                    });
+                            }
+                        });
+                    });
+                });
+            }
+
+            // Panggil untuk pertama kali
+            attachDiterimaHandler();
+        });
     </script>
     @endpush
 

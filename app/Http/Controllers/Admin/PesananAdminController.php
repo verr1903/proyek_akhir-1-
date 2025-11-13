@@ -9,19 +9,40 @@ use App\Models\Order;
 
 class PesananAdminController extends Controller
 {
-    public function online()
+    public function online(Request $request)
     {
-        // Ambil semua pesanan online dengan relasi user dan item
-        $orders = Order::with(['user', 'items.product', 'address'])
-            ->where('tempat_pesanan', 'online')
-            ->latest()
-            ->get();
+        $query = Order::with(['user', 'items.product', 'address'])
+            ->where('tempat_pesanan', 'online');
+
+        // 🔍 Searching (berdasarkan nama penerima atau no pesanan)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('no_pesanan', 'like', "%{$search}%")
+                    ->orWhereHas('address', function ($qa) use ($search) {
+                        $qa->where('nama_penerima', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('user', function ($qu) use ($search) {
+                        $qu->where('username', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // 🔽 Sorting
+        $sort = $request->get('sort', 'created_at'); // default kolom
+        $direction = $request->get('direction', 'desc'); // default urutan
+        $query->orderBy($sort, $direction);
+
+        // Pagination
+        $orders = $query->paginate(10)->appends($request->query());
 
         return view('admin.pesananOnline', [
             'title' => 'Pesanan Online',
             'orders' => $orders,
         ]);
     }
+
+
 
     public function getItems($id)
     {
@@ -38,7 +59,7 @@ class PesananAdminController extends Controller
                     'nama' => $item->product->nama ?? '-',
                     'size' => $item->size ?? '-',
                     'jumlah' => $item->quantity,
-                    'harga' => $item->harga_saat_ini,
+                    'harga' => $item->harga_setelah_diskon,
                     'subtotal' => $item->subtotal,
                 ];
             }),
