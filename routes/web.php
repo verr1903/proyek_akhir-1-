@@ -35,7 +35,7 @@ Route::get('/logoutt', [LoginController::class, 'logout'])
 
 
 // Routes untuk guest (belum login)
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', 'prevent.back'])->group(function () {
    // login routes
    Route::get('/login', [LoginController::class, 'index'])
       ->name('login');
@@ -61,7 +61,7 @@ Route::middleware('guest')->group(function () {
 
 
 // Routes yang memerlukan autentikasi user
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'prevent.back'])->group(function () {
 
    // detail produk routes
    Route::get('/detail/{encryptedId}', [DetailClientController::class, 'index'])
@@ -114,7 +114,7 @@ Route::middleware('auth')->group(function () {
 
 // Routes untuk admin
 Route::prefix('admin')
-   ->middleware(['auth', 'role:karyawan,owner'])
+   ->middleware(['auth', 'role:karyawan,owner', 'prevent.back'])
    ->group(
       function () {
 
