@@ -6,14 +6,25 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Iklan;
 use App\Models\Product;
+use App\Models\Discount;
 
 class DashboardClientController extends Controller
 {
     public function index(Request $request)
     {
+        // Hapus diskon yang sudah expired
+        $discounts = Discount::all();
+
+        foreach ($discounts as $discount) {
+            if ($discount->isExpired()) {
+                $discount->delete();
+            }
+        }
+
+        // Ambil data lain
         $iklan = Iklan::all();
         $products = Product::with('discount')
-            ->latest() // urut berdasarkan created_at terbaru
+            ->latest()
             ->paginate(9);
 
         if ($request->ajax()) {

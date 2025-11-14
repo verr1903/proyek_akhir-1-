@@ -34,4 +34,9 @@ class Discount extends Model
             ? Carbon::parse($this->created_at)->addDays($this->durasi)->toDateString()
             : null;
     }
+
+    public function isExpired()
+    {
+        return now()->greaterThan($this->created_at->addHours($this->durasi));
+    }
 }

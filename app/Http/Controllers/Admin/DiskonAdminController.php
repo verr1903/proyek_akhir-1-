@@ -11,6 +11,14 @@ class DiskonAdminController extends Controller
 {
     public function index(Request $request)
     {
+        // Hapus diskon yang sudah expired
+        $discounts = Discount::all();
+
+        foreach ($discounts as $discount) {
+            if ($discount->isExpired()) {
+                $discount->delete();
+            }
+        }
         // Query dasar
         $query = Discount::with('product');
 
