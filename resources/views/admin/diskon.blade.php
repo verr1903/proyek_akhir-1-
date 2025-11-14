@@ -124,6 +124,10 @@
 
                             </table>
 
+                            <div class="mt-3">
+                                {{ $discounts->links('pagination::bootstrap-5') }}
+                            </div>
+
                             <!-- Modal Edit Produk -->
                             <div class="modal fade" id="editProdukModal" tabindex="-1" aria-labelledby="editProdukModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg modal-dialog-centered">

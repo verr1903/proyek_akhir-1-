@@ -9,15 +9,35 @@ use Illuminate\Support\Facades\Hash;
 
 class KaryawanAdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $karyawans = User::where('role', 'karyawan')->get();
+        $query = User::where('role', 'karyawan');
+
+        // Search
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('username', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Sort by
+        $sort = $request->sort ?? 'created_at';
+        $direction = $request->direction ?? 'desc';
+
+        $allowedSort = ['created_at', 'username', 'email'];
+        if (!in_array($sort, $allowedSort)) {
+            $sort = 'created_at';
+        }
+
+        $karyawans = $query->orderBy($sort, $direction)->paginate(10);
 
         return view('admin.karyawan', [
             'title' => 'Karyawan',
             'karyawans' => $karyawans,
         ]);
     }
+
 
     public function store(Request $request)
     {
