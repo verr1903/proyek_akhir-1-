@@ -134,6 +134,7 @@
                     </div>
                 </div>
 
+
                 <!-- Modal Detail Pesanan -->
                 <div class="modal fade" id="detailTransaksiModal-{{ $order->id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -148,6 +149,11 @@
                             <!-- Detail Produk -->
                             @foreach ($order->items as $item)
 
+                            @php
+                            $product = $item->product; // ambil produk sesuai item
+                            @endphp
+
+
                             <div class="d-flex align-items-start mb-2">
                                 <img src="{{ asset('storage/' . $product->gambar) }}"
                                     class="rounded me-2 border"
@@ -156,15 +162,15 @@
                                     <p class="fw-semibold mb-1 small">{{ $product->nama }}</p>
                                     <p class="text-muted mb-1 small">Size: {{ $item->size }}</p>
                                     <p class="text-dark small">
-                                      @if ($item->diskon_presentase != 0.00)
-                                            <span class="text-danger fw-bold">
-                                                {{ $item->quantity }} x Rp. {{ number_format($item->harga_setelah_diskon, 0, ',', '.') }}
-                                            </span><br>
-                                            <span class="text-muted text-decoration-line-through small">
-                                                {{ $item->quantity }} x Rp. {{ number_format($item->harga_awal, 0, ',', '.') }}
-                                            </span>
-                                        @else
+                                        @if ($item->diskon_presentase != 0.00)
+                                        <span class="text-danger fw-bold">
+                                            {{ $item->quantity }} x Rp. {{ number_format($item->harga_setelah_diskon, 0, ',', '.') }}
+                                        </span><br>
+                                        <span class="text-muted text-decoration-line-through small">
                                             {{ $item->quantity }} x Rp. {{ number_format($item->harga_awal, 0, ',', '.') }}
+                                        </span>
+                                        @else
+                                        {{ $item->quantity }} x Rp. {{ number_format($item->harga_awal, 0, ',', '.') }}
                                         @endif
                                     </p>
                                 </div>
@@ -173,9 +179,9 @@
                             @endforeach
 
                             @php
-                                $ongkir = $order->address ? app('\App\Http\Controllers\Client\KeranjangClientController')
-                                    ->calculateShippingCost($order->address->kecamatan) : 0;
-                                $totalProduk = $order->total_harga - $ongkir;
+                            $ongkir = $order->address ? app('\App\Http\Controllers\Client\KeranjangClientController')
+                            ->calculateShippingCost($order->address->kecamatan) : 0;
+                            $totalProduk = $order->total_harga - $ongkir;
                             @endphp
 
                             <div class="d-flex justify-content-between mt-2">
