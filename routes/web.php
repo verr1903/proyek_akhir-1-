@@ -81,6 +81,8 @@ Route::middleware(['auth', 'prevent.back'])->group(function () {
       ->name('checkout.store');
    Route::post('/midtrans/token', [KeranjangClientController::class, 'getSnapToken'])
       ->name('midtrans.token');
+   Route::post('/cart/clear-all', [KeranjangClientController::class, 'clearAll'])->name('cart.clearAll');
+
 
 
    // lokasi routes

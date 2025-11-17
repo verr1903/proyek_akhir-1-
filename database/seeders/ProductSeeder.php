@@ -110,7 +110,7 @@ class ProductSeeder extends Seeder
                 'stok_xl' => 0,
             ],
             [
-                'nama' => 'TSHIRT oversize sideline SERIES “JAQYUU VINTAGE”',
+                'nama' => 'TSHIRT oversize sideline SERIES "JAQYUU VINTAGE"',
                 'kategori' => 'Tshirt',
                 'detail' => '<p><strong>T-Shirt Oversize Sideline Series “JAQYUU VINTAGE”</strong> Hadir dengan <strong>gaya retro yang timeless</strong> dan potongan <strong>oversize kekinian</strong> yang nyaman dipakai seharian. Terbuat dari <strong>material premium cotton</strong> yang adem dan lembut di kulit — cocok buat kamu yang suka tampil santai tapi tetap standout.</p>',
                 'harga' => 80000,

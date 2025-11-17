@@ -439,4 +439,27 @@ class KeranjangClientController extends Controller
             ]);
         }
     }
+
+    public function clearAll()
+    {
+        $userId = auth()->id(); // user yang sedang login
+
+        // Ambil semua cart milik user
+        $carts = Cart::where('user_id', $userId)->get();
+
+        if ($carts->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Keranjang kosong.'
+            ]);
+        }
+
+        // Hapus semua cart milik user
+        Cart::where('user_id', $userId)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Semua produk berhasil dihapus.'
+        ]);
+    }
 }

@@ -175,7 +175,7 @@
                                 <div class="d-flex flex-column gap-2 h-100 justify-content-between">
                                     <div>
                                         <button class="btn rounded-3  btn-soft-danger w-100 mb-2 pb-5">Bersihkan</button>
-                                        <button class="btn rounded-3 btn-soft-success w-100 pb-5">Pilih Semua</button>
+                                        <button class="btn rounded-3 btn-soft-success w-100 pb-5  pilih_semua">Pilih Semua</button>
                                     </div>
                                 </div>
                             </div>
@@ -554,6 +554,7 @@
         });
     </script>
 
+    <!-- script co -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const checkoutBtn = document.querySelector('.btn-soft-success.btn-lg');
@@ -741,6 +742,77 @@
 
    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
 
+   <!-- script pilih semua dan bersihkan -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        const btnClearAll = document.querySelector('.btn-soft-danger.w-100'); 
+
+        btnClearAll.addEventListener('click', async () => {
+            Swal.fire({
+                title: 'Hapus Semua Produk?',
+                text: 'Semua produk di keranjang akan dihapus.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus semua',
+                cancelButtonText: 'Batal'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const res = await fetch("{{ route('cart.clearAll') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            }
+                        });
+
+                        const data = await res.json();
+                        if (res.ok && data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                // Hapus semua baris tabel dari DOM
+                                document.querySelectorAll('tbody tr[data-cart-id]').forEach(tr => tr.remove());
+                                // Update summary
+                                if (typeof updateSummary === 'function') updateSummary();
+                            });
+                        } else {
+                            Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
+                        }
+                    } catch (err) {
+                        Swal.fire('Error', 'Terjadi kesalahan koneksi.', 'error');
+                    }
+                }
+            });
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const btnSelectAll = document.querySelector('.pilih_semua'); // tombol pilih semua
+
+        btnSelectAll.addEventListener('click', () => {
+            const toggleButtons = document.querySelectorAll('.toggle-check');
+
+            toggleButtons.forEach(btn => {
+                // Jika tombol belum aktif, trigger klik seperti tombol manual
+                if (!btn.classList.contains('active')) {
+                    btn.click(); // 🔹 ini akan memanggil toggle class dan updateSummary()
+                }
+            });
+        });
+    });
+
+    </script>
 
 
 
