@@ -287,7 +287,6 @@ class KeranjangClientController extends Controller
                 'metode_pembayaran' => $request->metode_pembayaran,
             ]);
 
-            // Buat item-item order
             // Buat item-item order dengan data harga & diskon
             foreach ($carts as $cart) {
                 $product = $cart->product;
@@ -295,13 +294,11 @@ class KeranjangClientController extends Controller
                 // Ambil harga awal produk
                 $hargaAwal = $product->harga;
 
-                // Jika produk punya relasi diskon (misal $product->discount->persentase)
-                // Sesuaikan ini dengan struktur modelmu
+                // Diskon
                 $diskonPersentase = $product->discount->persentase ?? 0;
-
-                // Hitung harga setelah diskon
                 $hargaSetelahDiskon = $hargaAwal - ($hargaAwal * $diskonPersentase / 100);
 
+                // Tambah order item
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $cart->product_id,
@@ -312,6 +309,23 @@ class KeranjangClientController extends Controller
                     'harga_setelah_diskon' => $hargaSetelahDiskon,
                     'subtotal' => $cart->quantity * $hargaSetelahDiskon,
                 ]);
+
+                // ================================
+                // 🔥 UPDATE STOK PRODUK BERDASARKAN SIZE
+                // ================================
+                $size = strtolower($cart->size);
+
+                $kolomStok = "stok_{$size}";
+
+                if ($product->{$kolomStok} < $cart->quantity) {
+                    throw new \Exception("Stok ukuran {$cart->size} tidak mencukupi.");
+                }
+
+
+                // Simpan update stok
+
+                $product->{$kolomStok} -= $cart->quantity;
+                $product->save();
             }
 
 
