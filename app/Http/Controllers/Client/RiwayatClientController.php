@@ -10,7 +10,7 @@ use App\Models\Review;
 
 class RiwayatClientController extends Controller
 {
-    
+
     public function index()
     {
         $orders = Order::with(['items.product.ulasan'])
@@ -20,20 +20,24 @@ class RiwayatClientController extends Controller
 
         // Urutkan ulang koleksi secara manual
         $orders = $orders->sortBy(function ($order) {
-            // Ambil produk pertama
-            $firstItem = $order->items->first();
 
-            // Cek apakah sudah ada ulasan untuk produk itu
-            $sudahUlas = $firstItem && $firstItem->product->ulasan->isNotEmpty();
+            // Cek apakah ada item yang sudah diulas
+            $sudahUlas = $order->items->contains(function ($item) {
+                return $item->product->ulasan->isNotEmpty();
+            });
 
-            // Logika urutan:
-            // 0 => belum diulas (paling atas)
-            // 1 => sudah diulas (paling bawah)
             return [
-                $order->status === 'selesai' ? ($sudahUlas ? 1 : 0) : 2, // status lain di bawah selesai
-                -strtotime($order->created_at), // urutkan terbaru dulu
+                // 0 = Selesai & belum diulas (paling atas)
+                // 1 = Status lain (diproses, dikirim, dsb)
+                // 2 = Selesai & sudah diulas (paling bawah)
+                $order->status === 'selesai'
+                    ? ($sudahUlas ? 2 : 0)
+                    : 1,
+
+                -strtotime($order->created_at), // terbaru ke atas dalam kategori
             ];
         })->values();
+
 
         return view('client.riwayat', [
             'title'  => 'Riwayat Pesanan',
