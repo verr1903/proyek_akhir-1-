@@ -18,7 +18,7 @@ class DetailClientController extends Controller
         }
 
         // Ambil produk beserta relasi diskon
-        $product = Product::with('discount')->findOrFail($id);
+        $product = Product::with(['discount', 'reviews.user'])->withCount('reviews')->findOrFail($id);
 
         // Hitung harga setelah diskon (jika ada)
         $discountPrice = null;

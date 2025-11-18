@@ -65,9 +65,13 @@
                             <h3 class="title">{{ $product->nama }}</h3>
                             <div class="product-rating">
                                 <div class="rating">
-                                    <div class="rating-on" style="width: 80%;"></div>
+                                    <div class="rating-on" style="width: {{ $product->rating_percent }}%;"></div>
                                 </div>
+                                @if($product->reviews_count > 0)
+                                <span>{{ $product->rating_avg }}({{ $product->reviews_count }} reviews)</span>
+                                @else
                                 <span>No reviews</span>
+                                @endif
                             </div>
                             <div class="thumb-price">
                                 @if ($discountPrice)
@@ -170,93 +174,37 @@
 
                     <div class="tab-content">
                         <div class="tab-pane fade  show active" id="tab2" role="tabpanel">
-                            <div class="reviews">
-                                <h3 class="review-title">Customer Reviews</h3>
+                            <ul class="reviews-items">
 
-                                <ul class="reviews-items">
-                                    <li>
-                                        <div class="single-review">
-                                            <h6 class="name">Rosie Silva</h6>
-                                            <div class="rating-date">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <span class="date">Oct 20, 2022</span>
+                                @forelse ($product->reviews as $review)
+                                <li>
+                                    <div class="single-review">
+                                        <h6 class="name">
+                                            {{ $review->user->username ?? 'Anonymous' }}
+                                        </h6>
+
+                                        <div class="rating-date">
+                                            <div class="rating">
+                                                <!-- buat persen berdasarkan nilai bintang -->
+                                                <div class="rating-on" style="width: {{ ($review->bintang / 5) * 100 }}%;"></div>
                                             </div>
 
-                                            <p>Proin bibendum dolor vitae neque ornare, vel mollis est venenatis. Orci varius natoque penatibus et magnis dis parturient montes, nascet</p>
+                                            <span class="date">
+                                                {{ $review->created_at->format('M d, Y') }}
+                                            </span>
                                         </div>
-                                    </li>
-                                    <li>
-                                        <div class="single-review">
-                                            <h6 class="name">Rosie Silva</h6>
-                                            <div class="rating-date">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <span class="date">Oct 20, 2022</span>
-                                            </div>
 
-                                            <p>Proin bibendum dolor vitae neque ornare, vel mollis est venenatis. Orci varius natoque penatibus et magnis dis parturient montes, nascet</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="single-review">
-                                            <h6 class="name">Rosie Silva</h6>
-                                            <div class="rating-date">
-                                                <div class="rating">
-                                                    <div class="rating-on" style="width: 80%;"></div>
-                                                </div>
-                                                <span class="date">Oct 20, 2022</span>
-                                            </div>
+                                        <p>{{ $review->komentar }}</p>
+                                    </div>
+                                </li>
+                                @empty
+                                <li>
+                                    <p class="text-muted">Belum ada review untuk produk ini.</p>
+                                </li>
+                                @endforelse
 
-                                            <p>Proin bibendum dolor vitae neque ornare, vel mollis est venenatis. Orci varius natoque penatibus et magnis dis parturient montes, nascet</p>
-                                        </div>
-                                    </li>
-                                </ul>
+                            </ul>
 
-                                <!-- <div class="reviews-form">
-                                    <form action="#">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="single-form">
-                                                    <label>Name</label>
-                                                    <input type="text" placeholder="Enter your name">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="single-form">
-                                                    <label>Email</label>
-                                                    <input type="text" placeholder="john.smith@example.com">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="reviews-rating">
-                                                    <label>Rating</label>
-                                                    <ul id="rating" class="rating">
-                                                        <li class="star" title='Poor' data-value='1'><i class="fa fa-star-o"></i></li>
-                                                        <li class="star" title='Poor' data-value='2'><i class="fa fa-star-o"></i></li>
-                                                        <li class="star" title='Poor' data-value='3'><i class="fa fa-star-o"></i></li>
-                                                        <li class="star" title='Poor' data-value='4'><i class="fa fa-star-o"></i></li>
-                                                        <li class="star" title='Poor' data-value='5'><i class="fa fa-star-o"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="single-form">
-                                                    <label>Body of Review (1500)</label>
-                                                    <textarea placeholder="Write your comments here"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="single-form">
-                                                    <button class="btn btn-dark">Submit Review</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div> -->
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -443,7 +391,7 @@
         });
     </script>
 
-   <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const addToCartBtn = document.getElementById('addToCartBtn');
             const quantityInput = document.getElementById('quantityInput');
@@ -476,48 +424,52 @@
                     if (result.isConfirmed) {
                         // 🔹 Kirim request ke server
                         fetch('/keranjang/tambah', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Accept': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                product_id: {{ $product->id }},
-                                size: selectedSize,
-                                quantity: quantity
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    product_id: {
+                                        {
+                                            $product - > id
+                                        }
+                                    },
+                                    size: selectedSize,
+                                    quantity: quantity
+                                })
                             })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: 'Produk berhasil ditambahkan ke keranjang',
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(() => {
-                                window.location.reload(); // 🔄 reload halaman setelah notifikasi hilang
-                            });
-                            } else {
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Berhasil!',
+                                        text: 'Produk berhasil ditambahkan ke keranjang',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    }).then(() => {
+                                        window.location.reload(); // 🔄 reload halaman setelah notifikasi hilang
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal!',
+                                        text: data.message || 'Terjadi kesalahan saat menambahkan produk',
+                                        confirmButtonColor: '#d33'
+                                    });
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err);
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Gagal!',
-                                    text: data.message || 'Terjadi kesalahan saat menambahkan produk',
+                                    title: 'Oops...',
+                                    text: 'Terjadi kesalahan pada server!',
                                     confirmButtonColor: '#d33'
                                 });
-                            }
-                        })
-                        .catch(err => {
-                            console.error(err);
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Terjadi kesalahan pada server!',
-                                confirmButtonColor: '#d33'
                             });
-                        });
                     }
                 });
             });
