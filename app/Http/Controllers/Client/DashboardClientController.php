@@ -23,7 +23,7 @@ class DashboardClientController extends Controller
 
         // Ambil data lain
         $iklan = Iklan::all();
-        $products = Product::with('discount')
+        $products = Product::with(['discount', 'reviews'])
             ->latest()
             ->paginate(9);
 

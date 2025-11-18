@@ -53,4 +53,21 @@ class Product extends Model
     {
         return $this->hasMany(Review::class, 'id_product');
     }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'id_product');
+    }
+
+    public function getRatingPercentAttribute()
+    {
+        if ($this->reviews->count() == 0) {
+            return 0; // jika belum ada review
+        }
+
+        // Hitung rata-rata bintang
+        $averageRating = $this->reviews->avg('bintang'); // nilai 1-5
+
+        // Ubah ke persentase (5 bintang = 100%)
+        return ($averageRating / 5) * 100;
+    }
 }

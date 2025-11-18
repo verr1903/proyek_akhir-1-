@@ -62,7 +62,7 @@ $totalStok = ($product->stok_s ?? 0)
 
         <div class="product-content text-center">
             <div class="rating">
-                <div class="rating-on" style="width: {{ $product->rating_percent ?? 80 }}%;"></div>
+                <div class="rating-on" style="width: {{ $product->rating_percent }}%;"></div>
             </div>
 
             <h4 class="product-name">
