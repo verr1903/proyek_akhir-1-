@@ -70,4 +70,9 @@ class Product extends Model
         // Ubah ke persentase (5 bintang = 100%)
         return ($averageRating / 5) * 100;
     }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'product_id');
+    }
 }

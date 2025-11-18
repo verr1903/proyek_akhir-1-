@@ -101,21 +101,34 @@
 
                     <!-- Tab Menu -->
                     <div class="product-tab-menu d-flex flex-wrap justify-content-center align-items-center gap-3">
-                        <ul class="nav nav-pills d-flex flex-row justify-content-center flex-nowrap" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link nav-link1 active" data-bs-toggle="tab" href="#tab1" role="tab">New</a>
+
+                        <ul class="nav nav-pills d-flex flex-row justify-content-center flex-nowrap me-5" id="productTabs" role="tablist">
+
+                            <li class="nav-item" role="presentation">
+                                <button class="text-dark nav-link active" id="tab1-tab" data-bs-toggle="tab"
+                                    data-bs-target="#tab1" type="button" role="tab">
+                                    New
+                                </button>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#tab2" role="tab">Recommended</a>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="text-dark nav-link" id="tab2-tab" data-bs-toggle="tab"
+                                    data-bs-target="#tab2" type="button" role="tab">
+                                    Recommended
+                                </button>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#tab3" role="tab" style="margin-right: 100px;">Trending</a>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="text-dark nav-link" id="tab3-tab" data-bs-toggle="tab"
+                                    data-bs-target="#tab3" type="button" role="tab">
+                                    Trending
+                                </button>
                             </li>
+
                         </ul>
 
-
                         <!-- Filter & Sort -->
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 ms-5">
                             <!-- Sort By -->
                             <div class="dropdown">
                                 <button class="btn btn-sm dropdown-toggle rounded-3" style="background-color: #485444;color: white;" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -134,8 +147,45 @@
                                 Filter
                             </button>
                         </div>
+
+                        <div class="tab-content product-items-tab">
+
+                            {{-- TAB 1: NEW --}}
+                            <div class="tab-pane fade show active" id="tab1" role="tabpanel">
+                                <div class="row justify-content-center">
+                                    @include('client.product_list', ['products' => $newProducts])
+                                </div>
+                            </div>
+
+                            {{-- TAB 2: RECOMMENDED --}}
+                            <div class="tab-pane fade" id="tab2" role="tabpanel">
+                                <div class="row justify-content-center">
+                                    @include('client.product_list', ['products' => $recommendedProducts])
+                                </div>
+                            </div>
+
+                            {{-- TAB 3: TRENDING --}}
+                            <div class="tab-pane fade" id="tab3" role="tabpanel">
+                                <div class="row justify-content-center">
+                                    @include('client.product_list', ['products' => $trendingProducts])
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
 
+                    @if ($newProducts->hasMorePages())
+                    <div class="text-center mt-3">
+                        <button
+                            id="load-more"
+                            class="btn btn-sm rounded-3"
+                            style="background-color: #485444;color: white;"
+                            data-next-page="{{ $newProducts->nextPageUrl() }}">
+                            Lihat Lebih Banyak
+                        </button>
+                    </div>
+                    @endif
 
                     <!-- Modal Filter -->
                     <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
@@ -171,31 +221,7 @@
 
 
 
-                    <div class="tab-content product-items-tab">
 
-                        <div class="tab-pane fade show active" id="tab1" role="tabpanel">
-                            <div class="row justify-content-center" id="product-list">
-                                @include('client.product_list', ['products' => $products])
-
-
-                                @if ($products->hasMorePages())
-                                <div id="load-more-wrapper" class="text-center mt-3">
-                                    <button id="load-more"
-                                        class="btn btn-sm rounded-3" style="background-color: #485444;color: white;"
-                                        data-next-page="{{ $products->nextPageUrl() ?? '' }}"
-                                        @if(!$products->hasMorePages()) disabled @endif>
-                                        {{ $products->hasMorePages() ? 'Lihat Lebih Banyak' : 'Semua produk sudah dimuat' }}
-                                    </button>
-                                </div>
-
-                                @endif
-
-                            </div>
-                        </div>
-
-
-
-                    </div>
                 </div>
             </div>
         </div>
@@ -280,28 +306,9 @@
         });
     </script>
 
-    <!-- @if (session('success'))
     <script>
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: '{{ session('success') }}',
-        showConfirmButton: false,
-        timer: 2000
-    });
+        const container = document.querySelector("#tab1 .row");
     </script>
-    @endif
-
-    @if (session('error'))
-    <script>
-    Swal.fire({
-        icon: 'error',
-        title: 'Gagal!',
-        text: '{{ session('error') }}',
-        showConfirmButton: true
-    });
-    </script>
-    @endif -->
 
     <!-- countdown discount -->
     <script>
