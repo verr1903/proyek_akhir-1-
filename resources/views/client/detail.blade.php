@@ -234,7 +234,9 @@
 
 
     </div>
-
+    @php
+        $isLoggedIn = auth()->check();
+    @endphp
     @push('scripts')
     <script>
         // Tombol Share WhatsApp
@@ -395,8 +397,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             const addToCartBtn = document.getElementById('addToCartBtn');
             const quantityInput = document.getElementById('quantityInput');
-
             addToCartBtn.addEventListener('click', function() {
+
+                // 🔒 Cek login
+                if (!{{ $isLoggedIn ? 'true' : 'false' }}) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Belum Login!',
+                        text: 'Silakan login terlebih dahulu untuk menambahkan produk ke keranjang.',
+                        confirmButtonText: 'Login Sekarang',
+                        confirmButtonColor: '#445244'
+                    }).then(() => {
+                        window.location.href = "{{ route('login') }}";
+                    });
+                    return;
+                }
+
                 const selectedSize = document.querySelector('input[name="size"]:checked')?.value;
                 const quantity = quantityInput.value;
 
@@ -430,15 +446,11 @@
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                     'Accept': 'application/json'
                                 },
-                                body: JSON.stringify({
-                                    product_id: {
-                                        {
-                                            $product - > id
-                                        }
-                                    },
-                                    size: selectedSize,
-                                    quantity: quantity
-                                })
+                               body: JSON.stringify({
+                                product_id: {{ $product->id }},
+                                size: selectedSize,
+                                quantity: quantity
+                            })
                             })
                             .then(response => response.json())
                             .then(data => {
