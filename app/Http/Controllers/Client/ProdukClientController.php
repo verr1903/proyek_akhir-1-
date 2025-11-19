@@ -11,6 +11,13 @@ class ProdukClientController extends Controller
 {
     public function index(Request $request, $kategori = null)
     {
+        // Hapus diskon expired
+        $discounts = Discount::all();
+        foreach ($discounts as $discount) {
+            if ($discount->isExpired()) {
+                $discount->delete();
+            }
+        }
         // Jika promo & diskon → ambil produk yang ada di tabel discount
         if ($request->discount == 'true') {
 
