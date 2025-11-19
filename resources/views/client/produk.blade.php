@@ -31,19 +31,163 @@
                 <!--Shop Top Bar End-->
 
 
-                <div class="row" id="product-list">
-                    @include('client.product_list', ['products' => $products])
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="grid" role="tabpanel">
+                        <div class="row">
+                            @forelse($products as $product)
+@php
+// hitung total stok dulu sebelum dipakai
+$totalStok = ($product->stok_s ?? 0)
++ ($product->stok_m ?? 0)
++ ($product->stok_l ?? 0)
++ ($product->stok_xl ?? 0);
+@endphp
+
+<div class="col-lg-4 col-sm-6 mb-2">
+    <div class="single-product">
+        <div class="product-image position-relative">
+            @if($totalStok > 0)
+            <a href="{{ route('detail', $product->encrypted_id) }}">
+                <img src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}">
+            </a>
+            @else
+            <img src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}" style="opacity: 0.70; cursor: not-allowed;">
+            @endif
+
+            {{-- Jika stok habis --}}
+            @if($totalStok <= 0)
+                <span class="sticker-new soldout-title">Soldout</span>
+                @endif
+
+                {{-- Jika ada diskon --}}
+                @if($product->discount && $product->discount->persentase > 0)
+                <span class="sticker-new label-sale">-{{ $product->discount->persentase }}%</span>
+                @endif
+
+                <div class="action-links">
+                    <ul>
+                        @if($totalStok > 0)
+                        <li class="mt-3 me-3">
+
+                        </li>
+                        @endif
+                    </ul>
                 </div>
 
-                @if ($products->hasMorePages())
-                <div class="text-center mt-3" id="load-more-wrapper">
-                    <button id="load-more"
-                        class="btn btn-primary"
-                        data-next-page="{{ $products->nextPageUrl() }}">
-                        Lihat Lebih Banyak
-                    </button>
+                {{-- Countdown (contoh jika ada event promo dengan tanggal akhir) --}}
+                @if($product->discount)
+                <div class="product-countdown mt-2">
+                    <div data-countdown="{{ \Carbon\Carbon::parse($product->discount->created_at)->addHours($product->discount->durasi)->toISOString() }}">
+                        <div class="single-count"><span class="count">0</span>
+                            <p>Days</p>
+                        </div>
+                        <div class="single-count"><span class="count">0</span>
+                            <p>Hour</p>
+                        </div>
+                        <div class="single-count"><span class="count">0</span>
+                            <p>Mint</p>
+                        </div>
+                        <div class="single-count"><span class="count">0</span>
+                            <p>Sec</p>
+                        </div>
+                    </div>
                 </div>
                 @endif
+
+        </div>
+
+        <div class="product-content text-center">
+            <div class="rating">
+                <div class="rating-on" style="width: {{ $product->rating_percent }}%;"></div>
+            </div>
+
+            <h4 class="product-name">
+                @if($totalStok > 0)
+                <a href="{{ route('detail', $product->encrypted_id) }}">
+                    {{ $product->nama }}
+                </a>
+                @else
+                <span style="opacity: 0.6; cursor: not-allowed;">{{ $product->nama }}</span>
+                @endif
+            </h4>
+
+            <div class="price-box">
+                @if($totalStok > 0)
+                @if($product->discount && $product->discount->persentase > 0)
+                @php
+                $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
+                @endphp
+                <span class="current-price">Rp{{ number_format($discountPrice, 0, ',', '.') }}</span>
+                <span class="old-price text-decoration-line-through">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
+                @else
+                <span class="current-price">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
+                @endif
+                @else
+                @if($product->discount && $product->discount->persentase > 0)
+                @php
+                $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
+                @endphp
+                <span style="opacity: 0.6; cursor: not-allowed;" class="current-price">Rp{{ number_format($discountPrice, 0, ',', '.') }}</span>
+                <span style="opacity: 0.6; cursor: not-allowed;" class="old-price text-decoration-line-through">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
+                @else
+                <span style="opacity: 0.6; cursor: not-allowed;" class="current-price">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
+                @endif
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+@empty
+<div class="text-center py-5">
+    <h5 class="text-muted">Belum ada produk tersedia.</h5>
+</div>
+@endforelse
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!--Pagination Start-->
+                <div class="page-pagination mt-4">
+                    <ul class="pagination justify-content-center">
+
+                        {{-- Prev --}}
+                        @if ($products->onFirstPage())
+                        <li class="page-item disabled">
+                            <span class="page-link prev">Prev</span>
+                        </li>
+                        @else
+                        <li class="page-item">
+                            <a class="page-link prev" href="{{ $products->previousPageUrl() }}">Prev</a>
+                        </li>
+                        @endif
+
+                        {{-- Nomor halaman --}}
+                        @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                        <li class="page-item">
+                            <a class="page-link {{ $page == $products->currentPage() ? 'active' : '' }}" href="{{ $url }}">
+                                {{ $page }}
+                            </a>
+                        </li>
+                        @endforeach
+
+                        {{-- Next --}}
+                        @if ($products->hasMorePages())
+                        <li class="page-item">
+                            <a class="page-link next" href="{{ $products->nextPageUrl() }}">Next</a>
+                        </li>
+                        @else
+                        <li class="page-item disabled">
+                            <span class="page-link next">Next</span>
+                        </li>
+                        @endif
+
+                    </ul>
+                </div>
+
+                <!--Pagination End-->
 
 
             </div>
@@ -206,7 +350,7 @@
         <x-footer-client></x-footer-client>
     </div>
 
-    @push('scripts')
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
@@ -246,6 +390,4 @@
         });
     </script>
     @endpush
-
-
 </x-layout-client>
