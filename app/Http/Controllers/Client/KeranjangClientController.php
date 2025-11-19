@@ -155,28 +155,46 @@ class KeranjangClientController extends Controller
             'action' => 'required|in:plus,minus',
         ]);
 
-        $cart = \App\Models\Cart::with('product')->find($request->cart_id);
-
-        if ($request->action === 'plus') {
-            $cart->quantity++;
-        } elseif ($request->action === 'minus' && $cart->quantity > 1) {
-            $cart->quantity--;
-        }
-
-        $cart->save();
+        $cart = Cart::with('product')->find($request->cart_id);
 
         $harga = $cart->product->harga;
         if ($cart->product->discount) {
             $harga -= $harga * $cart->product->discount->persentase / 100;
         }
 
-        // Kembalikan respon JSON
+        // Tentukan stok sesuai size
+        $size = strtolower($cart->size);
+        $kolomStok = "stok_{$size}";
+        $stokTersedia = $cart->product->{$kolomStok};
+
+        // ========= 🔥 CEK STOK DI SINI =========
+        if ($request->action === 'plus') {
+            if ($cart->quantity >= $stokTersedia) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Stok tidak mencukupi.',
+                    'quantity' => $cart->quantity,
+                    'total' => $cart->quantity * $harga
+                ], 422);
+            }
+
+            $cart->quantity++;
+        }
+        // ========================================
+
+        elseif ($request->action === 'minus' && $cart->quantity > 1) {
+            $cart->quantity--;
+        }
+
+        $cart->save();
+
         return response()->json([
             'success' => true,
             'quantity' => $cart->quantity,
             'total' => $cart->quantity * $harga,
         ]);
     }
+
 
     public function destroy($id)
     {

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\OrderItem;
 
 class PesananAdminController extends Controller
 {
@@ -104,7 +106,60 @@ class PesananAdminController extends Controller
     public function offline()
     {
         return view('admin.pesananOffline', [
-            'title'            => 'Pesanan Offline'
+            'title' => 'Pesanan Offline',
+            'products' => Product::all()
+        ]);
+    }
+
+
+    public function storeOffline(Request $request)
+    {
+        $request->validate([
+            'produk' => 'required|array',
+            'produk.*.id_product' => 'required|exists:products,id',
+            'produk.*.jumlah' => 'required|integer|min:1',
+            'produk.*.ukuran' => 'required|string',
+            'metode_pembayaran' => 'required|string',
+            'total_harga' => 'required|numeric|min:0'
+        ]);
+
+        // Generate nomor pesanan offline
+        $noPesanan = 'OFF-' . date('Ymd') . '-' . strtoupper(uniqid());
+
+        // Buat order offline
+        $order = Order::create([
+            'id_users' => null,                   // offline tidak ada user
+            'id_address' => null,                 // offline tidak butuh alamat
+            'no_pesanan' => $noPesanan,
+            'total_harga' => $request->total_harga,
+            'metode_pembayaran' => $request->metode_pembayaran,
+            'status' => 'diproses',
+            'tempat_pesanan' => 'offline',
+        ]);
+
+        // Simpan item order
+        foreach ($request->produk as $item) {
+            $product = Product::find($item['id_product']);
+
+            $harga = $product->harga_setelah_diskon ?? $product->harga;
+            $subtotal = $harga * $item['jumlah'];
+
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item['id_product'],
+                'quantity' => $item['jumlah'],
+                'size' => $item['ukuran'],
+                'harga_awal' => $product->harga,
+                'diskon_presentase' => $product->diskon_presentase ?? 0,
+                'harga_setelah_diskon' => $harga,
+                'subtotal' => $subtotal,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan offline berhasil dibuat!',
+            'order_id' => $order->id
         ]);
     }
 }

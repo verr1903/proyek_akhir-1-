@@ -23,10 +23,15 @@
                                     type="button" aria-label="Close" style="font-size: 25px;padding: 7px 10px;border-radius: 30px;margin-top: -10px;margin-left: 690px;"></i>
                                 <div class="form-group mb-3">
                                     <label class="fw-semibold text-secondary">Nama Produk</label>
-                                    <select class="form-control produk-ukuran px-2" style="margin-top: -6px;width: 800px;margin-left: -10px;">
-                                        <option value="" selected disabled>Pilih Produk</option>
-                                        <option>Whoa</option>
-                                        <option>Hoodie retro</option>
+                                   <select class="form-control produk-nama">
+                                        <option value="" disabled selected>Pilih Produk</option>
+                                        @foreach ($products as $product)
+                                            <option 
+                                                value="{{ $product->id }}"
+                                                data-harga="{{ $product->harga_setelah_diskon ?? $product->harga }}">
+                                                {{ $product->nama }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
 
@@ -69,7 +74,7 @@
 
                         <!-- Tombol Submit -->
                         <div class="mt-4 text-center">
-                            <button type="button" class="btn btn-success w-100 rounded-pill py-2 fw-semibold shadow-sm">
+                            <button type="button" id="submitOrder" class="btn btn-success w-100 rounded-pill py-2 fw-semibold shadow-sm">
                                 <i class="zmdi zmdi-check me-2"></i> Buat Pesanan
                             </button>
                         </div>
@@ -204,5 +209,50 @@
 
         hitungTotal();
     </script>
+
+    <!-- submit -->
+     <script>
+        document.getElementById('submitOrder').addEventListener('click', function () {
+
+            let produkData = [];
+
+            document.querySelectorAll('.produk-item').forEach(item => {
+                produkData.push({
+                    id_product: item.querySelector('.produk-nama').value,
+                    jumlah: item.querySelector('.produk-jumlah').value,
+                    ukuran: item.querySelector('.produk-ukuran').value,
+                });
+            });
+
+            const metode = document.querySelector('select[name="metode_pembayaran"]').value;
+            const total = document.getElementById('totalHarga').textContent.replace(/[^0-9]/g, '');
+
+            fetch("{{ route('pesananOffline.store') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    produk: produkData,
+                    metode_pembayaran: metode,
+                    total_harga: total
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: data.message
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+            });
+        });
+    </script>
+
     @endpush
 </x-layout-admin>

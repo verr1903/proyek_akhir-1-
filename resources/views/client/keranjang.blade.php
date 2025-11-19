@@ -34,7 +34,7 @@
                             </thead>
                             <tbody>
                                 @forelse($carts as $cart)
-                                <tr data-cart-id="{{ $cart->id }}">
+                               <tr data-cart-id="{{ $cart->id }}" data-stok="{{ $cart->product->{'stok_' . strtolower($cart->size)} }}">
                                     <td class="py-4">
                                         <a href="{{ route('detail', $cart->product->encrypted_id) }}">
                                             <img src="{{ asset('storage/' . $cart->product->gambar) }}"
@@ -187,16 +187,11 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
             </div>
         </div>
-        <!--Shop Single End-->
+        
 
-
+        <!-- mobile view -->
         <div class="mobile-view p-2">
             <div class="card mb-3 rounded-4 shadow-sm">
                 <a href="{{ route('lokasi')}}" class="text-decoration-none text-dark">
@@ -379,12 +374,26 @@
 
     @push('scripts')
 
+    <!-- tambah kurang jumlah produk -->
     <script>
         // ambil semua tombol tambah & kurang pada jumlah produk
         document.querySelectorAll('.btn-plus').forEach(btn => {
             btn.addEventListener('click', function() {
-                const input = this.parentElement.querySelector('.qty-input');
-                let value = parseInt(input.value) || 0;
+                const row = this.closest('tr');
+                const input = row.querySelector('.qty-input');
+
+                const stok = parseInt(row.getAttribute('data-stok')); // stok dari product
+                let value = parseInt(input.value);
+
+                if (value + 1 > stok) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Stok Tidak Cukup',
+                        text: `Stok tersedia hanya ${stok} untuk ukuran ini.`,
+                    });
+                    return;
+                }
+
                 input.value = value + 1;
             });
         });
@@ -451,8 +460,6 @@
         });
     </script>
 
-
-
     <!-- update quantity -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -489,6 +496,7 @@
         });
     </script>
 
+    <!-- Hapus Produk -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -737,85 +745,82 @@
                 }
             });
         });
-        </script>
-
-
+    </script>
+    
+    <!-- midtrans snap -->
    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
 
    <!-- script pilih semua dan bersihkan -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        const btnClearAll = document.querySelector('.btn-soft-danger.w-100'); 
+            const btnClearAll = document.querySelector('.btn-soft-danger.w-100'); 
 
-        btnClearAll.addEventListener('click', async () => {
-            Swal.fire({
-                title: 'Hapus Semua Produk?',
-                text: 'Semua produk di keranjang akan dihapus.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, hapus semua',
-                cancelButtonText: 'Batal'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    try {
-                        const res = await fetch("{{ route('cart.clearAll') }}", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': csrfToken,
-                                'Accept': 'application/json'
-                            }
-                        });
-
-                        const data = await res.json();
-                        if (res.ok && data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil',
-                                text: data.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(() => {
-                                // Hapus semua baris tabel dari DOM
-                                document.querySelectorAll('tbody tr[data-cart-id]').forEach(tr => tr.remove());
-                                // Update summary
-                                if (typeof updateSummary === 'function') updateSummary();
+            btnClearAll.addEventListener('click', async () => {
+                Swal.fire({
+                    title: 'Hapus Semua Produk?',
+                    text: 'Semua produk di keranjang akan dihapus.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus semua',
+                    cancelButtonText: 'Batal'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        try {
+                            const res = await fetch("{{ route('cart.clearAll') }}", {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken,
+                                    'Accept': 'application/json'
+                                }
                             });
-                        } else {
-                            Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
+
+                            const data = await res.json();
+                            if (res.ok && data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: data.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(() => {
+                                    // Hapus semua baris tabel dari DOM
+                                    document.querySelectorAll('tbody tr[data-cart-id]').forEach(tr => tr.remove());
+                                    // Update summary
+                                    if (typeof updateSummary === 'function') updateSummary();
+                                });
+                            } else {
+                                Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
+                            }
+                        } catch (err) {
+                            Swal.fire('Error', 'Terjadi kesalahan koneksi.', 'error');
                         }
-                    } catch (err) {
-                        Swal.fire('Error', 'Terjadi kesalahan koneksi.', 'error');
                     }
-                }
+                });
             });
         });
-    });
 
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const btnSelectAll = document.querySelector('.pilih_semua'); // tombol pilih semua
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnSelectAll = document.querySelector('.pilih_semua'); // tombol pilih semua
 
-        btnSelectAll.addEventListener('click', () => {
-            const toggleButtons = document.querySelectorAll('.toggle-check');
+            btnSelectAll.addEventListener('click', () => {
+                const toggleButtons = document.querySelectorAll('.toggle-check');
 
-            toggleButtons.forEach(btn => {
-                // Jika tombol belum aktif, trigger klik seperti tombol manual
-                if (!btn.classList.contains('active')) {
-                    btn.click(); // 🔹 ini akan memanggil toggle class dan updateSummary()
-                }
+                toggleButtons.forEach(btn => {
+                    // Jika tombol belum aktif, trigger klik seperti tombol manual
+                    if (!btn.classList.contains('active')) {
+                        btn.click(); // 🔹 ini akan memanggil toggle class dan updateSummary()
+                    }
+                });
             });
         });
-    });
 
     </script>
-
-
-
 
     @endpush
 

@@ -128,16 +128,17 @@
                             </ul>
 
                             {{-- Quantity --}}
-                            <div class="product-quantity d-flex flex-wrap align-items-center mt-3">
+                            <div class="product-quantity d-flex flex-wrap align-items-center mt-3 opacity-0 position-absolute pe-auto">
                                 <span class="quantity-title me-2">Quantity:</span>
                                 <form action="#">
                                     <div class="quantity d-flex align-items-center">
-                                        <button type="button" class="sub btn btn-light border" style="padding-bottom: 40px;padding-right: 50px;"><i class="ti-minus"></i></button>
+                                        <button type="button" class="sub btn btn-light border"><i class="ti-minus"></i></button>
                                         <input type="text" class="form-control text-center mx-1" id="quantityInput" value="1" style="width:60px;" readonly>
-                                        <button type="button" class="add btn btn-light border" style="padding-bottom: 40px;padding-right: 50px;"><i class="ti-plus"></i></button>
+                                        <button type="button" class="add btn btn-light border"><i class="ti-plus"></i></button>
                                     </div>
                                 </form>
                             </div>
+
 
                             {{-- Toast Notification --}}
                             <div id="toast" class="toast-message">Produk ukuran ini sedang tidak tersedia 😢</div>
