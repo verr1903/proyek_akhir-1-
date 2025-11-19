@@ -68,11 +68,19 @@
                         <div class="col-lg-4">
                             <div class="header-meta-info">
                                 <div class="header-search">
-                                    <form action="#" class="btn-round"
-                                        style="background-color: #485444; width: 100%; max-width: 400px; margin-left: 0;">
-                                        <input type="text" class="ms-3" placeholder="Cari Produk Disini ">
+                                    <form action="{{ route('search.suggest')}}" method="GET" class="btn-round position-relative" id="searchForm"
+                                        style="background-color:#485444; width:100%; max-width:400px;">
+                                        <input type="text" id="searchInput" name="search" class="ms-3" placeholder="Cari Produk Disini" autocomplete="off">
+                                        <input type="hidden" id="detailBase" value="{{ url('detail') }}">
                                         <button><i class="icon-search"></i></button>
+
+                                        <!-- Suggestion box -->
+                                        <div id="suggestBox"
+                                            class="bg-white shadow rounded position-absolute w-100 mt-2 d-none"
+                                            style="z-index: 1000;">
+                                        </div>
                                     </form>
+
                                 </div>
                                 <div class="header-account">
                                     <div class="header-account-list dropdown mini-cart">
@@ -192,3 +200,54 @@
 
         </div>
         <!--Header Mobile Menu End -->
+
+        @push('scripts')
+        <script>
+            document.getElementById('searchInput').addEventListener('keyup', function() {
+                let keyword = this.value.trim();
+
+                if (keyword.length < 1) {
+                    document.getElementById('suggestBox').classList.add('d-none');
+                    return;
+                }
+
+                fetch(`/search-suggest?q=${keyword}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        let box = document.getElementById('suggestBox');
+
+                        if (data.length === 0) {
+                            box.innerHTML = '<div class="p-2 text-muted">Tidak ada hasil</div>';
+                            box.classList.remove('d-none');
+                            return;
+                        }
+
+                        let html = '';
+                        data.forEach(item => {
+                            let baseDetail = document.getElementById('detailBase').value;
+
+                            html += `
+                            <a href="${baseDetail}/${item.encrypted_id}" 
+                            class="d-flex align-items-center p-2 border-bottom text-decoration-none text-dark">
+                                <img src="/storage/${item.gambar}" width="40" height="40" class="rounded me-2">
+                                <div>
+                                    <div>${item.nama}</div>
+                                    <small class="text-muted">Rp ${item.harga}</small>
+                                </div>
+                            </a>
+                        `;
+                        });
+
+                        box.innerHTML = html;
+                        box.classList.remove('d-none');
+                    });
+            });
+
+            // hide suggest when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!document.getElementById('searchForm').contains(e.target)) {
+                    document.getElementById('suggestBox').classList.add('d-none');
+                }
+            });
+        </script>
+        @endpush

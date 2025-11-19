@@ -18,6 +18,7 @@ use App\Http\Controllers\Client\ProdukClientController;
 use App\Http\Controllers\Client\ProfileClientController;
 use App\Http\Controllers\Client\RiwayatClientController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Client\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardClientController::class, 'index'])
@@ -31,6 +32,15 @@ Route::post('/logout', [LoginController::class, 'logout'])
 
 Route::get('/logoutt', [LoginController::class, 'logout'])
    ->name('logoutt');
+
+// search suggestion route
+Route::get('/search-suggest', [SearchController::class, 'suggest'])
+   ->name('search.suggest');
+
+// detail produk routes
+Route::get('/detail/{encryptedId}', [DetailClientController::class, 'index'])
+   ->name('detail');
+
 
 
 
@@ -62,11 +72,6 @@ Route::middleware(['guest', 'prevent.back'])->group(function () {
 
 // Routes yang memerlukan autentikasi user
 Route::middleware(['auth', 'prevent.back'])->group(function () {
-
-   // detail produk routes
-   Route::get('/detail/{encryptedId}', [DetailClientController::class, 'index'])
-      ->name('detail');
-
 
    // keranjang routes
    Route::get('/keranjang', [KeranjangClientController::class, 'index'])
