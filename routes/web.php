@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardClientController::class, 'index'])
    ->name('dashboard');
 
-Route::get('/produk', [ProdukClientController::class, 'index'])
+Route::get('/produk/{kategori?}', [ProdukClientController::class, 'index'])
    ->name('produk');
 
 Route::post('/logout', [LoginController::class, 'logout'])
