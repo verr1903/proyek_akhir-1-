@@ -152,21 +152,27 @@
 
                             {{-- TAB 1: NEW --}}
                             <div class="tab-pane fade show active" id="tab1" role="tabpanel">
-                                <div class="row justify-content-center">
+                                <div class="row justify-content-center"
+                                    id="product-container-new"
+                                    data-next-page="{{ $newProducts->nextPageUrl() }}">
                                     @include('client.product_list', ['products' => $newProducts])
                                 </div>
                             </div>
 
                             {{-- TAB 2: RECOMMENDED --}}
                             <div class="tab-pane fade" id="tab2" role="tabpanel">
-                                <div class="row justify-content-center">
+                                <div class="row justify-content-center"
+                                    id="product-container-rec"
+                                    data-next-page="{{ $recommendedProducts->nextPageUrl() }}">
                                     @include('client.product_list', ['products' => $recommendedProducts])
                                 </div>
                             </div>
 
                             {{-- TAB 3: TRENDING --}}
                             <div class="tab-pane fade" id="tab3" role="tabpanel">
-                                <div class="row justify-content-center">
+                                <div class="row justify-content-center"
+                                    id="product-container-trend"
+                                    data-next-page="{{ $trendingProducts->nextPageUrl() }}">
                                     @include('client.product_list', ['products' => $trendingProducts])
                                 </div>
                             </div>
@@ -175,17 +181,7 @@
 
                     </div>
 
-                    @if ($newProducts->hasMorePages())
-                    <div class="text-center mt-3">
-                        <button
-                            id="load-more"
-                            class="btn btn-sm rounded-3"
-                            style="background-color: #485444;color: white;"
-                            data-next-page="{{ $newProducts->nextPageUrl() }}">
-                            Lihat Lebih Banyak
-                        </button>
-                    </div>
-                    @endif
+
 
                     <!-- Modal Filter -->
                     <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
@@ -236,75 +232,78 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const container = document.getElementById("product-list");
-            const loadMoreBtn = document.getElementById("load-more");
-            const wrapper = document.getElementById("load-more-wrapper");
 
-            if (!loadMoreBtn) return;
+            let currentTab = "new";
 
-            loadMoreBtn.addEventListener("click", function() {
-                const url = loadMoreBtn.dataset.nextPage;
-                if (!url) {
-                    loadMoreBtn.innerText = "Semua produk sudah dimuat";
-                    loadMoreBtn.disabled = true;
-                    showNoMoreProductsMessage();
-                    return;
+            // Ambil nextPage dari tab default
+            let nextPageUrl = document.getElementById("product-container-new").dataset.nextPage || null;
+
+            let loading = false;
+
+            const containerMap = {
+                "new": document.getElementById("product-container-new"),
+                "rec": document.getElementById("product-container-rec"),
+                "trend": document.getElementById("product-container-trend"),
+            };
+
+            // Detect tab change
+            document.querySelectorAll("[data-bs-toggle='tab']").forEach(btn => {
+                btn.addEventListener("shown.bs.tab", function() {
+                    currentTab = this.dataset.bsTarget.replace("#tab", "") // tab1 => new
+                        .replace("1", "new")
+                        .replace("2", "rec")
+                        .replace("3", "trend");
+
+                    nextPageUrl = containerMap[currentTab].dataset.nextPage || null;
+                });
+            });
+
+            // Infinite Scroll Listener
+            window.addEventListener("scroll", function() {
+                if (loading) return;
+                if (!nextPageUrl) return;
+
+                const footer = document.querySelector(".footer-area");
+                const footerTop = footer.getBoundingClientRect().top;
+
+                // Jika footer hampir terlihat → load next page
+                if (footerTop < window.innerHeight + 150) {
+                    loadMore();
                 }
+            });
 
-                loadMoreBtn.innerText = "Memuat...";
+            function loadMore() {
+                if (!nextPageUrl) return;
 
-                fetch(url, {
+                loading = true;
+                console.log("CALL FETCH:", nextPageUrl);
+                fetch(nextPageUrl + "&tab=" + currentTab, {
                         headers: {
                             "X-Requested-With": "XMLHttpRequest"
                         }
                     })
-                    .then(res => res.text())
-                    .then(html => {
-                        const tempDiv = document.createElement("div");
-                        tempDiv.innerHTML = html;
+                    .then(res => res.json())
+                    .then(data => {
+                        const temp = document.createElement("div");
+                        temp.innerHTML = data.html;
 
-                        const newProducts = tempDiv.querySelectorAll(".col-lg-4, .col-sm-6");
-                        newProducts.forEach(p => container.appendChild(p));
+                        temp.querySelectorAll(".col-lg-4, .col-sm-6")
+                            .forEach(p => containerMap[currentTab].appendChild(p));
 
-                        container.parentNode.appendChild(wrapper);
+                        // Update next page
+                        nextPageUrl = data.next_page || null;
+                        containerMap[currentTab].dataset.nextPage = nextPageUrl;
 
-                        const paginationUrl = new URL(url);
-                        const currentPage = parseInt(paginationUrl.searchParams.get("page"));
-                        const nextUrl = url.replace(`page=${currentPage}`, `page=${currentPage + 1}`);
-
-                        fetch(nextUrl, {
-                                headers: {
-                                    "X-Requested-With": "XMLHttpRequest"
-                                }
-                            })
-                            .then(res => {
-                                if (res.status === 404 || res.redirected) {
-                                    loadMoreBtn.innerText = "Semua produk sudah dimuat";
-                                    loadMoreBtn.disabled = true;
-                                    showNoMoreProductsMessage();
-                                } else {
-                                    loadMoreBtn.dataset.nextPage = nextUrl;
-                                    loadMoreBtn.innerText = "Lihat Lebih Banyak";
-                                }
-                            });
                     })
-                    .catch(() => {
-                        loadMoreBtn.innerText = "Gagal memuat data";
+                    .catch(err => console.error(err))
+                    .finally(() => {
+                        loading = false;
                     });
-            });
-
-            function showNoMoreProductsMessage() {
-                let info = document.getElementById("no-more-products");
-                if (!info) {
-                    info = document.createElement("p");
-                    info.id = "no-more-products";
-                    info.className = "text-muted mt-2";
-                    info.innerHTML = "✅ Semua produk sudah dimuat.";
-                    wrapper.appendChild(info);
-                }
             }
+
         });
     </script>
+
 
     <script>
         const container = document.querySelector("#tab1 .row");

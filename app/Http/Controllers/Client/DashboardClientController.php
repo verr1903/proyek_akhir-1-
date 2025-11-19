@@ -42,10 +42,31 @@ class DashboardClientController extends Controller
             ->paginate(9, ['*'], 'trend_page');
 
         if ($request->ajax()) {
-            return view('client.product_list', [
-                'products' => $newProducts
-            ])->render();
+
+            $tab = $request->query('tab');
+
+            if ($tab === 'new') {
+                $products = Product::with(['discount', 'reviews'])
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(9, ['*'], 'new_page');
+            } elseif ($tab === 'rec') {
+                $products = Product::withCount('reviews')
+                    ->withAvg('reviews', 'bintang')
+                    ->orderByDesc('reviews_avg_bintang')
+                    ->orderByDesc('reviews_count')
+                    ->paginate(9, ['*'], 'rec_page');
+            } else { // trend
+                $products = Product::withCount('orderItems')
+                    ->orderByDesc('order_items_count')
+                    ->paginate(9, ['*'], 'trend_page');
+            }
+
+            return response()->json([
+                'html' => view('client.product_list', ['products' => $products])->render(),
+                'next_page' => $products->nextPageUrl()
+            ]);
         }
+
 
         return view('client.dashboard', [
             'title' => 'Dashboard',
