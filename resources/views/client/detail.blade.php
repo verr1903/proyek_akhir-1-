@@ -127,16 +127,9 @@
 
                             </ul>
 
-                            {{-- Quantity --}}
-                            <div class="product-quantity d-flex flex-wrap align-items-center mt-3 opacity-0 position-absolute pe-auto">
-                                <span class="quantity-title me-2">Quantity:</span>
-                                <form action="#">
-                                    <div class="quantity d-flex align-items-center">
-                                        <button type="button" class="sub btn btn-light border"><i class="ti-minus"></i></button>
-                                        <input type="text" class="form-control text-center mx-1" id="quantityInput" value="1" style="width:60px;" readonly>
-                                        <button type="button" class="add btn btn-light border"><i class="ti-plus"></i></button>
-                                    </div>
-                                </form>
+                            {{-- Sisa Stok --}}
+                            <div id="stockInfo" class="mt-2" style="font-weight: 500; color: #445244;">
+                                <!-- Stok akan muncul di sini -->
                             </div>
 
 
@@ -486,6 +479,37 @@
                     }
                 });
             });
+        });
+    </script>
+
+    <!-- menmpilkan stok per ukuran -->
+     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const stockInfo = document.getElementById('stockInfo');
+
+            const stok = {
+                S: {{ $product->stok_s }},
+                M: {{ $product->stok_m }},
+                L: {{ $product->stok_l }},
+                XL: {{ $product->stok_xl }}
+            };
+
+            // Saat page load → tampilkan stok default size
+            let selectedSize = document.querySelector('input[name="size"]:checked')?.value;
+            if (selectedSize) {
+                stockInfo.textContent = "Stok tersedia: " + stok[selectedSize];
+            }
+
+            // Ketika ukuran diganti
+            document.querySelectorAll('input[name="size"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    selectedSize = this.value;
+
+                    stockInfo.textContent = "Stok tersedia: " + stok[selectedSize];
+                });
+            });
+
         });
     </script>
 
