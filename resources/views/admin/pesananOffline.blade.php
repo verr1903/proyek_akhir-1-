@@ -22,28 +22,29 @@
                                 <i class="remove-produk close-footer zmdi zmdi-close-circle"
                                     type="button" aria-label="Close" style="font-size: 25px;padding: 7px 10px;border-radius: 30px;margin-top: -10px;margin-left: 690px;"></i>
                                 <div class="form-group mb-3">
-                                    <label class="fw-semibold text-secondary">Nama Produk</label>
-                                   <select class="form-control produk-nama">
+                                    <label class="fw-semibold " style="margin-right: 8px;">Nama Produk</label>
+                                    <select id="produkSelect"
+                                        class="form-select  rounded-3 produk-nama shadow-sm"
+                                        style="padding: 8px 240px 8px 4px;border-radius: 5px;border: none;"
+                                        name="produk-nama">
                                         <option value="" disabled selected>Pilih Produk</option>
                                         @foreach ($products as $product)
-                                            <option 
-                                                value="{{ $product->id }}"
-                                                data-harga="{{ $product->harga_setelah_diskon ?? $product->harga }}">
-                                                {{ $product->nama }}
-                                            </option>
+                                        <option value="{{ $product->id }}"
+                                            data-harga="{{ $product->harga_setelah_diskon ?? $product->harga }}">
+                                            {{ $product->nama }}
+                                        </option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="form-row">
+
                                     <div class="form-group col-md-6">
-                                        <label class="fw-semibold text-secondary">Jumlah</label>
-                                        <input type="number" min="1" placeholder="Masukkan jumlah"
-                                            class="form-control produk-jumlah px-2  ">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="fw-semibold text-secondary">Ukuran</label>
-                                        <select class="form-control produk-ukuran px-2" style="margin-top: -6px;width: 800px;margin-left: -10px;">
+                                        <label class="fw-semibold ">Ukuran</label>
+                                        <select id="ukuranSelect"
+                                            class="form-select  rounded-3  produk-ukuran shadow-sm"
+                                            style="padding: 8px 240px 8px 4px;border-radius: 5px;border: none;"
+                                            name=" produk-ukuran" disabled>
                                             <option value="" selected disabled>Pilih ukuran...</option>
                                             <option>S</option>
                                             <option>M</option>
@@ -51,14 +52,28 @@
                                             <option>XL</option>
                                         </select>
                                     </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label class="fw-semibold ">Jumlah</label>
+                                        <input id="jumlahInput"
+                                            type="number"
+                                            min="1"
+                                            placeholder="Masukkan jumlah"
+                                            class="form-control produk-jumlah px-2 shadow-sm bg-white"
+                                            name="jumlah-input"
+                                            disabled>
+                                    </div>
+
                                 </div>
+
                             </div>
                         </div>
 
                         <!-- Metode Pembayaran -->
                         <div class="form-group mb-3">
-                            <label class="fw-semibold text-secondary">Metode Pembayaran</label>
-                            <select class="form-control">
+                            <label class="fw-semibold ">Metode Pembayaran</label>
+                            <select class="form-select w-100 rounded-3 metode-pembayaran shadow-sm"
+                                style="padding: 8px 240px 8px 4px;border-radius: 5px;border: none;">
                                 <option value="" selected disabled>Pilih metode pembayaran...</option>
                                 <option>Tunai</option>
                                 <option>Transfer Bank</option>
@@ -211,8 +226,8 @@
     </script>
 
     <!-- submit -->
-     <script>
-        document.getElementById('submitOrder').addEventListener('click', function () {
+    <script>
+        document.getElementById('submitOrder').addEventListener('click', function() {
 
             let produkData = [];
 
@@ -228,31 +243,57 @@
             const total = document.getElementById('totalHarga').textContent.replace(/[^0-9]/g, '');
 
             fetch("{{ route('pesananOffline.store') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({
-                    produk: produkData,
-                    metode_pembayaran: metode,
-                    total_harga: total
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        produk: produkData,
+                        metode_pembayaran: metode,
+                        total_harga: total
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Berhasil",
-                        text: data.message
-                    }).then(() => {
-                        location.reload();
-                    });
-                }
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Berhasil",
+                            text: data.message
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                });
         });
     </script>
+
+    <!-- disabled input dan berurutan -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const produk = document.getElementById("produkSelect");
+            const ukuran = document.getElementById("ukuranSelect");
+            const jumlah = document.getElementById("jumlahInput");
+
+            // STEP 1 → Aktifkan ukuran setelah produk dipilih
+            produk.addEventListener("change", function() {
+                ukuran.disabled = false;
+                ukuran.value = "";
+                jumlah.disabled = true;
+                jumlah.value = "";
+            });
+
+            // STEP 2 → Aktifkan jumlah setelah ukuran dipilih
+            ukuran.addEventListener("change", function() {
+                jumlah.disabled = false;
+                jumlah.value = "";
+            });
+
+        });
+    </script>
+
 
     @endpush
 </x-layout-admin>
