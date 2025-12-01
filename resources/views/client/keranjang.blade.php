@@ -672,8 +672,7 @@
                                     }
                                 },
                                 onPending: function (result) {
-                                    console.log('⌛ Pending:', result);
-                                    Swal.fire('Menunggu Pembayaran', 'Silakan selesaikan pembayaranmu.', 'info');
+                                    Swal.fire('Dibatalkan', 'Kamu menutup pembayaran sebelum selesai.', 'warning');
                                 },
                                 onError: function (result) {
                                     console.error('❌ Error pembayaran:', result);
