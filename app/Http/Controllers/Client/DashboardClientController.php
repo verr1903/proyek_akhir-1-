@@ -44,28 +44,42 @@ class DashboardClientController extends Controller
         if ($request->ajax()) {
 
             $tab = $request->query('tab');
+            $sort = $request->query('sort');
+            
 
             if ($tab === 'new') {
-                $products = Product::with(['discount', 'reviews'])
-                    ->orderBy('created_at', 'desc')
-                    ->paginate(9, ['*'], 'new_page');
+                $query = Product::with(['discount', 'reviews'])
+                    ->orderBy('created_at', 'desc');
             } elseif ($tab === 'rec') {
-                $products = Product::withCount('reviews')
+                $query = Product::withCount('reviews')
                     ->withAvg('reviews', 'bintang')
                     ->orderByDesc('reviews_avg_bintang')
-                    ->orderByDesc('reviews_count')
-                    ->paginate(9, ['*'], 'rec_page');
+                    ->orderByDesc('reviews_count');
             } else { // trend
-                $products = Product::withCount('orderItems')
-                    ->orderByDesc('order_items_count')
-                    ->paginate(9, ['*'], 'trend_page');
+                $query = Product::withCount('orderItems')
+                    ->orderByDesc('order_items_count');
             }
+
+            if ($sort) {
+                // Hapus semua orderBy sebelumnya
+                $query->getQuery()->orders = [];
+
+                if ($sort === 'asc') {
+                    $query->orderBy('harga', 'asc');
+                } elseif ($sort === 'desc') {
+                    $query->orderBy('harga', 'desc');
+                }
+            }
+
+            $page = $request->query("{$tab}_page", 1);
+            $products = $query->paginate(9, ['*'], "{$tab}_page", $page);
 
             return response()->json([
                 'html' => view('client.product_list', ['products' => $products])->render(),
                 'next_page' => $products->nextPageUrl()
             ]);
         }
+
 
 
         return view('client.dashboard', [

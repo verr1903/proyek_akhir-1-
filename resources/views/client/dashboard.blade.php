@@ -128,24 +128,21 @@
                         </ul>
 
                         <!-- Filter & Sort -->
-                        <div class="d-flex gap-2 ms-5">
+                        <div class="d-flex gap-2">
                             <!-- Sort By -->
                             <div class="dropdown">
                                 <button class="btn btn-sm dropdown-toggle rounded-3" style="background-color: #485444;color: white;" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Sort By
+                                    Urutkan
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-                                    <li><a class="dropdown-item" href="#">Newest</a></li>
-                                    <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
-                                    <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
-                                    <li><a class="dropdown-item" href="#">Best Rated</a></li>
+                                    <li><a class="dropdown-item sort-option" data-sort="asc" href="#">Harga: Termurah → Termahal</a></li>
+                                    <li><a class="dropdown-item sort-option" data-sort="desc" href="#">Harga: Termahal → Termurah</a></li>
                                 </ul>
+
                             </div>
 
-                            <!-- Filter -->
-                            <button class="btn btn-sm rounded-3" style="background-color: #485444;color: white;" data-bs-toggle="modal" data-bs-target="#filterModal">
-                                Filter
-                            </button>
+
+
                         </div>
 
                         <div class="tab-content product-items-tab">
@@ -178,45 +175,9 @@
                             </div>
 
                         </div>
+                        <div id="product-container-sort" class="row justify-content-center d-none"></div>
 
                     </div>
-
-
-
-                    <!-- Modal Filter -->
-                    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="filterModalLabel">Filter Products</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <!-- Contoh isi filter -->
-                                    <div class="mb-3">
-                                        <label class="form-label">Category</label>
-                                        <select class="form-select">
-                                            <option>All</option>
-                                            <option>Electronics</option>
-                                            <option>Fashion</option>
-                                            <option>Home</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Price Range</label>
-                                        <input type="range" class="form-range" min="0" max="1000">
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Apply</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
 
                 </div>
             </div>
@@ -234,6 +195,7 @@
         document.addEventListener("DOMContentLoaded", function() {
 
             let currentTab = "new";
+            let currentSort = null;
 
             // Ambil nextPage dari tab default
             let nextPageUrl = document.getElementById("product-container-new").dataset.nextPage || null;
@@ -246,63 +208,151 @@
                 "trend": document.getElementById("product-container-trend"),
             };
 
-            // Detect tab change
+            // ------ TAB CHANGE -------
             document.querySelectorAll("[data-bs-toggle='tab']").forEach(btn => {
                 btn.addEventListener("shown.bs.tab", function() {
-                    currentTab = this.dataset.bsTarget.replace("#tab", "") // tab1 => new
+
+                   // -------- RESET SORT MODE ----------
+                    currentSort = null;            // tidak dalam mode sorting lagi
+                    currentTab = this.dataset.bsTarget
+                        .replace("#tab", "")
                         .replace("1", "new")
                         .replace("2", "rec")
                         .replace("3", "trend");
 
+                    // Reset next page untuk tab baru
                     nextPageUrl = containerMap[currentTab].dataset.nextPage || null;
+
+                    // Sembunyikan container sorting
+                    const sortContainer = document.getElementById("product-container-sort");
+                    sortContainer.classList.add("d-none");
+                    sortContainer.innerHTML = "";  // hapus data lama
                 });
             });
 
-            // Infinite Scroll Listener
+            // ------- SORTING -------
+            document.querySelectorAll(".sort-option").forEach(item => {
+                item.addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    currentSort = this.dataset.sort;
+
+                    fetchSortedProducts();
+                });
+            });
+
+            function fetchSortedProducts() {
+                const baseUrl = window.location.pathname;
+
+                // --- 1. Nonaktifkan semua tab ---
+                document.querySelectorAll(".nav-link").forEach(tab => {
+                    tab.classList.remove("active");
+                });
+
+                // --- 2. Sembunyikan semua tab-pane ---
+                document.querySelectorAll(".tab-pane").forEach(pane => {
+                    pane.classList.remove("show", "active");
+                });
+
+                // --- 3. Tampilkan container sorting ---
+                const sortContainer = document.getElementById("product-container-sort");
+                sortContainer.classList.remove("d-none");
+                sortContainer.innerHTML = `<p class='text-center'>Loading...</p>`;
+
+                // URL request
+                const url = `${baseUrl}?sort=${currentSort}`;
+
+                fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                    .then(res => res.json())
+                    .then(data => {
+
+                        sortContainer.innerHTML = "";
+
+                        const temp = document.createElement("div");
+                        temp.innerHTML = data.html;
+
+                        let targetContainer;
+
+                        if (currentTab === null) {
+                            targetContainer = document.getElementById("product-container-sort");
+                        } else {
+                            targetContainer = containerMap[currentTab];
+                        }
+
+                        temp.querySelectorAll(".col-lg-4, .col-sm-6")
+                            .forEach(p => targetContainer.appendChild(p));
+
+
+                        nextPageUrl = data.next_page;
+                        sortContainer.dataset.nextPage = nextPageUrl;
+
+                        // Matikan tab mode → sekarang infinite scroll hanya ambil sorting
+                        currentTab = null;
+                    })
+                    .catch(err => console.error(err));
+            }
+
+
+            // ------- INFINITE SCROLL -------
             window.addEventListener("scroll", function() {
                 if (loading) return;
                 if (!nextPageUrl) return;
 
                 const footer = document.querySelector(".footer-area");
-                const footerTop = footer.getBoundingClientRect().top;
-
-                // Jika footer hampir terlihat → load next page
-                if (footerTop < window.innerHeight + 150) {
+                if (footer.getBoundingClientRect().top < window.innerHeight + 150) {
                     loadMore();
                 }
             });
+            
+
+            function getCurrentPageNumber(url) {
+                const match = url.match(/page=(\d+)/);
+                return match ? match[1] : 1;
+            }
 
             function loadMore() {
                 if (!nextPageUrl) return;
 
                 loading = true;
-                console.log("CALL FETCH:", nextPageUrl);
-                fetch(nextPageUrl + "&tab=" + currentTab, {
-                        headers: {
-                            "X-Requested-With": "XMLHttpRequest"
-                        }
-                    })
+
+                let url = nextPageUrl;
+
+                if (currentTab !== null) {
+                    url += "&" + currentTab + "_page=" + getCurrentPageNumber(nextPageUrl);
+                    url += "&tab=" + currentTab;
+                }
+
+                if (currentSort !== null) {
+                    url += (url.includes("?") ? "&" : "?") + "sort=" + currentSort;
+                }
+
+                fetch(url, {
+                    headers: { "X-Requested-With": "XMLHttpRequest" }
+                })
                     .then(res => res.json())
                     .then(data => {
                         const temp = document.createElement("div");
                         temp.innerHTML = data.html;
 
+                        // TARGET CONTAINER
+                        let targetContainer = currentTab === null 
+                            ? document.getElementById("product-container-sort") 
+                            : containerMap[currentTab];
+
                         temp.querySelectorAll(".col-lg-4, .col-sm-6")
-                            .forEach(p => containerMap[currentTab].appendChild(p));
+                            .forEach(p => targetContainer.appendChild(p));
 
-                        // Update next page
                         nextPageUrl = data.next_page || null;
-                        containerMap[currentTab].dataset.nextPage = nextPageUrl;
-
+                        targetContainer.dataset.nextPage = nextPageUrl;
                     })
                     .catch(err => console.error(err))
-                    .finally(() => {
-                        loading = false;
-                    });
+                    .finally(() => loading = false);
             }
+
 
         });
     </script>
+
 
 
     <script>
