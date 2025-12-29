@@ -132,6 +132,21 @@
                                 <!-- Stok akan muncul di sini -->
                             </div>
 
+                            <div class="product-quantity mt-3 d-flex align-items-center gap-2 d-none">
+                                <button type="button" class="btn btn-outline-secondary sub">-</button>
+
+                                <input
+                                    type="number"
+                                    id="quantityInput"
+                                    class="form-control text-center"
+                                    value="1"
+                                    min="1"
+                                    style="width: 80px;"
+                                >
+
+                                <button type="button" class="btn btn-outline-secondary add">+</button>
+                            </div>
+
 
                             {{-- Toast Notification --}}
                             <div id="toast" class="toast-message">Produk ukuran ini sedang tidak tersedia 😢</div>
