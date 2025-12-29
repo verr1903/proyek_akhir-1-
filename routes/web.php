@@ -150,8 +150,8 @@ Route::prefix('admin')
          // Pesanan Offline
          Route::get('/pesanan/offline', [PesananAdminController::class, 'offline'])
             ->name('pesananOfflineAdmin');
-         Route::post('/pesanan/offline/store', [PesananAdminController::class, 'storeOffline'])
-            ->name('pesananOffline.store');
+         Route::post('/pesanan/offline/store', [PesananAdminController::class, 'coOffline'])
+            ->name('pesananOffline.coOffline');
 
 
          // Iklan

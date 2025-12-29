@@ -3,97 +3,119 @@
 
     <section class="content home" style="margin-top: 100px;">
         <div class="container d-flex justify-content-center">
-            <div class="card shadow-lg border-0 rounded-4 w-100" style="max-width: 800px;">
+            <div class="card shadow-lg border-0 rounded-4 w-100" style="max-width: 9000px;">
                 <div class="card-header bg-white border-0 px-4 pt-4 d-flex justify-content-between align-items-center">
                     <h5 class="fw-bold text-dark mb-0">
                         Buat Pesanan
                     </h5>
-                    <button id="addProductBtn" type="button"
-                        class="btn btn-sm btn-success rounded-pill fw-semibold shadow-sm px-3 py-1">
-                        <i class="zmdi zmdi-plus me-1"></i> Tambah Produk
-                    </button>
+
                 </div>
 
                 <div class="card-body px-4 pb-4">
-                    <form id="orderForm">
-                        <div id="produkContainer">
-                            <!-- Produk Item -->
-                            <div class="produk-item border rounded-4 p-3 mb-3 bg-light position-relative">
-                                <i class="remove-produk close-footer zmdi zmdi-close-circle"
-                                    type="button" aria-label="Close" style="font-size: 25px;padding: 7px 10px;border-radius: 30px;margin-top: -10px;margin-left: 690px;"></i>
-                                <div class="form-group mb-3">
-                                    <label class="fw-semibold " style="margin-right: 8px;">Nama Produk</label>
-                                    <select id="produkSelect"
-                                        class="form-select  rounded-3 produk-nama shadow-sm"
-                                        style="padding: 8px 240px 8px 4px;border-radius: 5px;border: none;"
-                                        name="produk-nama">
-                                        <option value="" disabled selected>Pilih Produk</option>
-                                        @foreach ($products as $product)
-                                        <option value="{{ $product->id }}"
-                                            data-harga="{{ $product->harga_setelah_diskon ?? $product->harga }}">
-                                            {{ $product->nama }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                    <form id="kasirForm" action="javascript:void(0)">
 
-                                <div class="form-row">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Produk</th>
+                                    <th>Ukuran</th>
+                                    <th>Jumlah</th>
+                                    <th>Harga</th>
+                                    <th>Subtotal</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="cartBody"></tbody>
+                        </table>
 
-                                    <div class="form-group col-md-6">
-                                        <label class="fw-semibold ">Ukuran</label>
-                                        <select id="ukuranSelect"
-                                            class="form-select  rounded-3  produk-ukuran shadow-sm"
-                                            style="padding: 8px 240px 8px 4px;border-radius: 5px;border: none;"
-                                            name=" produk-ukuran" disabled>
-                                            <option value="" selected disabled>Pilih ukuran...</option>
-                                            <option>S</option>
-                                            <option>M</option>
-                                            <option>L</option>
-                                            <option>XL</option>
-                                        </select>
-                                    </div>
+                        <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#produkModal">
+                            + Tambah Produk
+                        </button>
 
-                                    <div class="form-group col-md-6">
-                                        <label class="fw-semibold ">Jumlah</label>
-                                        <input id="jumlahInput"
-                                            type="number"
-                                            min="1"
-                                            placeholder="Masukkan jumlah"
-                                            class="form-control produk-jumlah px-2 shadow-sm bg-white"
-                                            name="jumlah-input"
-                                            disabled>
-                                    </div>
+                        <hr>
 
-                                </div>
-
-                            </div>
+                        <div class="d-flex justify-content-between">
+                            <h5>Total</h5>
+                            <h4 id="totalHarga">Rp 0</h4>
                         </div>
 
-                        <!-- Metode Pembayaran -->
-                        <div class="form-group mb-3">
-                            <label class="fw-semibold ">Metode Pembayaran</label>
-                            <select class="form-select w-100 rounded-3 metode-pembayaran shadow-sm"
-                                style="padding: 8px 240px 8px 4px;border-radius: 5px;border: none;">
-                                <option value="" selected disabled>Pilih metode pembayaran...</option>
-                                <option>Tunai</option>
-                                <option>Transfer Bank</option>
-                                <option>QRIS</option>
+                        <div class="mt-3">
+                            <label class="fw-bold">Metode Pembayaran</label>
+                            <select class="form-select" id="paymentMethod">
+                                <option value="">Pilih</option>
+                                <option value="cash">Cash</option>
+                                <option value="transfer">Transfer</option>
+                                <option value="qris">QRIS</option>
                             </select>
                         </div>
 
-                        <!-- Total -->
-                        <div class="d-flex justify-content-between align-items-center border-top pt-3">
-                            <h6 class="fw-semibold text-dark mb-0">Total :</h6>
-                            <h5 id="totalHarga" class="fw-bold text-success mb-0">Rp 0,00</h5>
-                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-4">
+                            Konfirmasi Pesanan
+                        </button>
 
-                        <!-- Tombol Submit -->
-                        <div class="mt-4 text-center">
-                            <button type="button" id="submitOrder" class="btn btn-success w-100 rounded-pill py-2 fw-semibold shadow-sm">
-                                <i class="zmdi zmdi-check me-2"></i> Buat Pesanan
-                            </button>
-                        </div>
                     </form>
+
+                    <div class="modal fade" id="produkModal" tabindex="-1">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content rounded-4">
+                                <div class="modal-header">
+                                    <h5 class="modal-title fw-bold">Tambah Produk</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <!-- PILIH PRODUK -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold">Produk</label>
+                                        <select class="form-select" id="modalProduk">
+                                            <option value="">Pilih Produk</option>
+                                            @foreach($products as $p)
+                                            <option
+                                                value="{{ $p->id }}"
+                                                data-nama="{{ $p->nama }}"
+                                                data-harga="{{ $p->harga }}"
+                                                data-s="{{ $p->stok_s }}"
+                                                data-m="{{ $p->stok_m }}"
+                                                data-l="{{ $p->stok_l }}"
+                                                data-xl="{{ $p->stok_xl }}">
+                                                {{ $p->nama }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- UKURAN -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold">Ukuran</label>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-outline-dark ukuran-btn" data-size="S">S</button>
+                                            <button class="btn btn-outline-dark ukuran-btn" data-size="M">M</button>
+                                            <button class="btn btn-outline-dark ukuran-btn" data-size="L">L</button>
+                                            <button class="btn btn-outline-dark ukuran-btn" data-size="XL">XL</button>
+                                        </div>
+                                        <div class="mt-2 text-muted small" id="stokInfo">Stok: -</div>
+                                    </div>
+
+                                    <!-- JUMLAH -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold">Jumlah</label>
+                                        <input type="number" min="1" class="form-control" id="modalJumlah">
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                    <button class="btn btn-success" id="simpanProduk">
+                                        Tambahkan ke Pesanan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -180,120 +202,220 @@
 
     @push('scripts')
     <script>
-        const produkContainer = document.getElementById('produkContainer');
-        const addProductBtn = document.getElementById('addProductBtn');
-        const totalHargaEl = document.getElementById('totalHarga');
+        let selectedSize = null;
+        let editRow = null;
+        let selectedStock = 0;
 
-        function formatRupiah(angka) {
-            return 'Rp ' + angka.toLocaleString('id-ID') + ',00';
+        const modalProduk = document.getElementById("modalProduk");
+        const stokInfo = document.getElementById("stokInfo");
+        const cartBody = document.getElementById("cartBody");
+        const totalHarga = document.getElementById("totalHarga");
+
+        function formatRupiah(num) {
+            return "Rp " + num.toLocaleString("id-ID");
         }
 
         function hitungTotal() {
             let total = 0;
-            document.querySelectorAll('.produk-item').forEach(item => {
-                const select = item.querySelector('.produk-nama');
-                const harga = parseInt(select.options[select.selectedIndex]?.dataset.harga || 0);
-                const jumlah = parseInt(item.querySelector('.produk-jumlah').value) || 0;
-                total += harga * jumlah;
+            document.querySelectorAll(".subtotal").forEach(el => {
+                total += parseInt(el.dataset.value);
             });
-            totalHargaEl.textContent = formatRupiah(total);
+            totalHarga.textContent = formatRupiah(total);
         }
 
-        addProductBtn.addEventListener('click', () => {
-            const clone = produkContainer.querySelector('.produk-item').cloneNode(true);
-            clone.querySelectorAll('input, select').forEach(el => el.value = '');
-            produkContainer.appendChild(clone);
-            hitungTotal();
+        /* === PILIH UKURAN === */
+        document.querySelectorAll(".ukuran-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                document.querySelectorAll(".ukuran-btn").forEach(b => {
+                    b.classList.remove("btn-success");
+                    b.classList.add("btn-outline-dark");
+                });
+
+                this.classList.remove("btn-outline-dark");
+                this.classList.add("btn-success");
+
+                selectedSize = this.dataset.size;
+
+                const opt = modalProduk.selectedOptions[0];
+                selectedStock = opt ? parseInt(opt.dataset[selectedSize.toLowerCase()]) : 0;
+
+                stokInfo.textContent = "Stok: " + selectedStock;
+            });
         });
 
-        document.addEventListener('input', e => {
-            if (e.target.classList.contains('produk-nama') || e.target.classList.contains('produk-jumlah')) {
+        document.getElementById("simpanProduk").addEventListener("click", () => {
+            const opt = modalProduk.selectedOptions[0];
+            const jumlah = parseInt(document.getElementById("modalJumlah").value);
+
+            if (!opt || !selectedSize || !jumlah) {
+                alert("Lengkapi produk, ukuran, dan jumlah");
+                return;
+            }
+
+            if (jumlah > selectedStock) {
+                alert("Jumlah melebihi stok");
+                return;
+            }
+
+            const harga = parseInt(opt.dataset.harga);
+            const subtotal = harga * jumlah;
+
+            /* === MODE EDIT === */
+            if (editRow) {
+                editRow.innerHTML = `
+            <td>${opt.dataset.nama}</td>
+            <td>${selectedSize}</td>
+            <td>${jumlah}</td>
+            <td>${formatRupiah(harga)}</td>
+            <td class="subtotal" data-value="${subtotal}">
+                ${formatRupiah(subtotal)}
+            </td>
+            <td>
+                <button type="button" class="btn btn-warning btn-sm edit me-1">Edit</button>
+                <button type="button" class="btn btn-danger btn-sm hapus">X</button>
+            </td>
+        `;
+                editRow = null;
+            }
+            /* === MODE TAMBAH === */
+            else {
+                const row = document.createElement("tr");
+                row.dataset.productId = opt.value;
+                row.innerHTML = `
+                    <td>${opt.dataset.nama}</td>
+                    <td>${selectedSize}</td>
+                    <td>${jumlah}</td>
+                    <td>${formatRupiah(harga)}</td>
+                    <td class="subtotal" data-value="${subtotal}">
+                        ${formatRupiah(subtotal)}
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-warning btn-sm edit me-1">Edit</button>
+                        <button type="button" class="btn btn-danger btn-sm hapus">X</button>
+                    </td>
+                `;
+                cartBody.appendChild(row);
+            }
+
+            hitungTotal();
+
+            bootstrap.Modal.getInstance(document.getElementById("produkModal")).hide();
+
+            // reset modal
+            modalProduk.selectedIndex = 0;
+            document.getElementById("modalJumlah").value = "";
+            stokInfo.textContent = "Stok: -";
+            selectedSize = null;
+        });
+
+
+        /* === HAPUS ITEM === */
+        cartBody.addEventListener("click", (e) => {
+            if (e.target.classList.contains("hapus")) {
+                e.target.closest("tr").remove();
                 hitungTotal();
             }
         });
 
-        document.addEventListener('click', e => {
-            if (e.target.classList.contains('remove-produk')) {
-                const items = document.querySelectorAll('.produk-item');
-                if (items.length > 1) {
-                    e.target.closest('.produk-item').remove();
-                    hitungTotal();
-                }
-            }
-        });
+        cartBody.addEventListener("click", (e) => {
 
-        hitungTotal();
-    </script>
+            /* === EDIT === */
+            if (e.target.classList.contains("edit")) {
+                editRow = e.target.closest("tr");
 
-    <!-- submit -->
-    <script>
-        document.getElementById('submitOrder').addEventListener('click', function() {
+                const namaProduk = editRow.children[0].textContent;
+                const ukuran = editRow.children[1].textContent;
+                const jumlah = editRow.children[2].textContent;
 
-            let produkData = [];
-
-            document.querySelectorAll('.produk-item').forEach(item => {
-                produkData.push({
-                    id_product: item.querySelector('.produk-nama').value,
-                    jumlah: item.querySelector('.produk-jumlah').value,
-                    ukuran: item.querySelector('.produk-ukuran').value,
-                });
-            });
-
-            const metode = document.querySelector('select[name="metode_pembayaran"]').value;
-            const total = document.getElementById('totalHarga').textContent.replace(/[^0-9]/g, '');
-
-            fetch("{{ route('pesananOffline.store') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({
-                        produk: produkData,
-                        metode_pembayaran: metode,
-                        total_harga: total
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Berhasil",
-                            text: data.message
-                        }).then(() => {
-                            location.reload();
-                        });
+                // pilih produk sesuai nama
+                [...modalProduk.options].forEach(opt => {
+                    if (opt.dataset.nama === namaProduk) {
+                        opt.selected = true;
                     }
                 });
+
+                // set ukuran
+                document.querySelectorAll(".ukuran-btn").forEach(btn => {
+                    btn.classList.remove("btn-success");
+                    btn.classList.add("btn-outline-dark");
+
+                    if (btn.dataset.size === ukuran) {
+                        btn.classList.remove("btn-outline-dark");
+                        btn.classList.add("btn-success");
+                        selectedSize = ukuran;
+
+                        const opt = modalProduk.selectedOptions[0];
+                        selectedStock = parseInt(opt.dataset[ukuran.toLowerCase()]);
+                        stokInfo.textContent = "Stok: " + selectedStock;
+                    }
+                });
+
+                document.getElementById("modalJumlah").value = jumlah;
+
+                new bootstrap.Modal(document.getElementById("produkModal")).show();
+            }
+
+            /* === HAPUS === */
+            if (e.target.classList.contains("hapus")) {
+                e.target.closest("tr").remove();
+                hitungTotal();
+            }
         });
     </script>
 
-    <!-- disabled input dan berurutan -->
+    <!-- co -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('kasirForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // 🔥 cegah reload
 
-            const produk = document.getElementById("produkSelect");
-            const ukuran = document.getElementById("ukuranSelect");
-            const jumlah = document.getElementById("jumlahInput");
+            const items = [];
 
-            // STEP 1 → Aktifkan ukuran setelah produk dipilih
-            produk.addEventListener("change", function() {
-                ukuran.disabled = false;
-                ukuran.value = "";
-                jumlah.disabled = true;
-                jumlah.value = "";
+            document.querySelectorAll('#cartBody tr').forEach(row => {
+                items.push({
+                    product_id: row.dataset.productId,
+                    size: row.children[1].innerText,
+                    quantity: parseInt(row.children[2].innerText)
+                });
             });
 
-            // STEP 2 → Aktifkan jumlah setelah ukuran dipilih
-            ukuran.addEventListener("change", function() {
-                jumlah.disabled = false;
-                jumlah.value = "";
-            });
+            if (items.length === 0) {
+                alert('Pesanan kosong');
+                return;
+            }
 
+            fetch("{{ route('pesananOffline.coOffline') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        items
+                    })
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if (!res.success) {
+                        alert(res.message);
+                        return;
+                    }
+
+                    alert(`Pesanan berhasil!\nNo Pesanan: ${res.no_pesanan}`);
+
+                    // reset kasir
+                    document.getElementById('cartBody').innerHTML = '';
+                    document.getElementById('totalHarga').innerText = 'Rp 0';
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Terjadi kesalahan sistem');
+                });
         });
     </script>
 
 
     @endpush
+
+
+
 </x-layout-admin>

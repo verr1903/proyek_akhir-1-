@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_users');
-            $table->unsignedBigInteger('id_address');
+            $table->unsignedBigInteger('id_users')->nullable();
+            $table->unsignedBigInteger('id_address')->nullable();
             $table->string('no_pesanan')->unique();
-            $table->integer('total_harga');
+            $table->decimal('total_harga');
             $table->string('status')->default('diproses');
             $table->string('action_by')->nullable();
             $table->string('action_by_2')->nullable();
@@ -26,14 +26,12 @@ return new class extends Migration
 
             // Relasi foreign key
             $table->foreign('id_users')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
+                ->references('id')->on('users')
+                ->nullOnDelete();
 
             $table->foreign('id_address')
-                ->references('id')
-                ->on('addresses')
-                ->onDelete('cascade');
+                ->references('id')->on('addresses')
+                ->nullOnDelete();
         });
     }
 

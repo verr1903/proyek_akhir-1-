@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\Product;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\DB;
 
 class PesananAdminController extends Controller
 {
@@ -105,6 +107,10 @@ class PesananAdminController extends Controller
 
     public function offline()
     {
+        $products = Product::all();
+
+        Debugbar::info($products);
+
         return view('admin.pesananOffline', [
             'title' => 'Pesanan Offline',
             'products' => Product::all()
@@ -112,54 +118,135 @@ class PesananAdminController extends Controller
     }
 
 
-    public function storeOffline(Request $request)
+    public function coOffline(Request $request)
     {
         $request->validate([
-            'produk' => 'required|array',
-            'produk.*.id_product' => 'required|exists:products,id',
-            'produk.*.jumlah' => 'required|integer|min:1',
-            'produk.*.ukuran' => 'required|string',
-            'metode_pembayaran' => 'required|string',
-            'total_harga' => 'required|numeric|min:0'
+            'items' => 'required|array|min:1',
+            'items.*.product_id' => 'required|integer|exists:products,id',
+            'items.*.size' => 'required|string|in:S,M,L,XL',
+            'items.*.quantity' => 'required|integer|min:1',
         ]);
 
-        // Generate nomor pesanan offline
-        $noPesanan = 'OFF-' . date('Ymd') . '-' . strtoupper(uniqid());
+        $adminId = Auth::id();
 
-        // Buat order offline
-        $order = Order::create([
-            'id_users' => null,                   // offline tidak ada user
-            'id_address' => null,                 // offline tidak butuh alamat
-            'no_pesanan' => $noPesanan,
-            'total_harga' => $request->total_harga,
-            'metode_pembayaran' => $request->metode_pembayaran,
-            'status' => 'diproses',
-            'tempat_pesanan' => 'offline',
-        ]);
+        DB::beginTransaction();
 
-        // Simpan item order
-        foreach ($request->produk as $item) {
-            $product = Product::find($item['id_product']);
+        try {
+            // ============================
+            // AMBIL PRODUK + KATEGORI
+            // ============================
+            $products = Product::whereIn(
+                'id',
+                collect($request->items)->pluck('product_id')
+            )->get()->keyBy('id');
 
-            $harga = $product->harga_setelah_diskon ?? $product->harga;
-            $subtotal = $harga * $item['jumlah'];
+            $kategoriUnik = $products->pluck('kategori')->unique();
 
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item['id_product'],
-                'quantity' => $item['jumlah'],
-                'size' => $item['ukuran'],
-                'harga_awal' => $product->harga,
-                'diskon_presentase' => $product->diskon_presentase ?? 0,
-                'harga_setelah_diskon' => $harga,
-                'subtotal' => $subtotal,
+            if ($kategoriUnik->count() > 1) {
+                $kodeKategori = 'MX';
+            } else {
+                $namaKategori = strtolower($kategoriUnik->first());
+
+                if (str_contains($namaKategori, 'tshirt') || str_contains($namaKategori, 'kaos')) {
+                    $kodeKategori = 'TS';
+                } elseif (str_contains($namaKategori, 'hoodie')) {
+                    $kodeKategori = 'HD';
+                } elseif (str_contains($namaKategori, 'sweater')) {
+                    $kodeKategori = 'SW';
+                } else {
+                    $kodeKategori = 'OT';
+                }
+            }
+
+            // ============================
+            // KODE PESANAN OFFLINE
+            // ============================
+            $kodePembayaran = 'OFL';
+            $kodeTanggal = now()->format('dmy');
+
+            $jumlahHariIni = Order::whereDate('created_at', today())
+                ->where('no_pesanan', 'LIKE', "{$kodeKategori}-{$kodePembayaran}-%")
+                ->count() + 1;
+
+            $kodeUrut = str_pad($jumlahHariIni, 3, '0', STR_PAD_LEFT);
+
+            $noPesanan = "{$kodeKategori}-{$kodePembayaran}-{$kodeTanggal}-{$kodeUrut}";
+
+            // ============================
+            // HITUNG TOTAL (AMAN)
+            // ============================
+            $totalHarga = 0;
+
+            foreach ($request->items as $item) {
+                $product = $products[$item['product_id']];
+                $diskon = optional($product->discount)->persentase ?? 0;
+                $hargaFinal = $product->harga - ($product->harga * $diskon / 100);
+                $totalHarga += $hargaFinal * $item['quantity'];
+            }
+
+            // ============================
+            // BUAT ORDER UTAMA
+            // ============================
+            $order = Order::create([
+                'no_pesanan' => $noPesanan,
+                'id_users' => null,          // pelanggan kosong
+                'id_address' => null,        // offline tidak pakai alamat
+                'total_harga' => $totalHarga,
+                'status' => 'diproses',
+                'action_by' => $adminId,     // admin / kasir
+                'action_by_2' => null,
+                'tempat_pesanan' => 'offline',
+                'metode_pembayaran' => 'offline',
             ]);
-        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Pesanan offline berhasil dibuat!',
-            'order_id' => $order->id
-        ]);
+            // ============================
+            // ORDER ITEMS + UPDATE STOK
+            // ============================
+            foreach ($request->items as $item) {
+                $product = $products[$item['product_id']];
+                $size = strtolower($item['size']);
+                $kolomStok = "stok_{$size}";
+
+                if ($product->{$kolomStok} < $item['quantity']) {
+                    throw new \Exception("Stok {$product->nama} ukuran {$item['size']} tidak mencukupi.");
+                }
+
+                $diskon = optional($product->discount)->persentase ?? 0;
+
+                $hargaFinal = $product->harga - ($product->harga * $diskon / 100);
+
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product->id,
+                    'size' => $item['size'],
+                    'quantity' => $item['quantity'],
+                    'harga_awal' => $product->harga,
+                    'diskon_presentase' => $diskon,
+                    'harga_setelah_diskon' => $hargaFinal,
+                    'subtotal' => $hargaFinal * $item['quantity'],
+                ]);
+
+                // update stok
+                $product->{$kolomStok} -= $item['quantity'];
+                $product->save();
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pesanan offline berhasil dibuat.',
+                'order_id' => $order->id,
+                'no_pesanan' => $noPesanan
+            ], 201);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membuat pesanan offline.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
