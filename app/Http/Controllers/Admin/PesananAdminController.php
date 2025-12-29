@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 class PesananAdminController extends Controller
 {
+    // online
+
     public function online(Request $request)
     {
         $query = Order::with(['user', 'items.product', 'address'])
@@ -45,7 +47,6 @@ class PesananAdminController extends Controller
             'orders' => $orders,
         ]);
     }
-
 
 
     public function getItems($id)
@@ -103,6 +104,40 @@ class PesananAdminController extends Controller
     }
 
 
+    // Offline
+
+    public function offlineindex(Request $request)
+    {
+        $query = Order::with(['user', 'items.product', 'address'])
+            ->where('tempat_pesanan', 'offline');
+
+        // 🔍 Searching (berdasarkan nama penerima atau no pesanan)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('no_pesanan', 'like', "%{$search}%")
+                    ->orWhereHas('address', function ($qa) use ($search) {
+                        $qa->where('nama_penerima', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('user', function ($qu) use ($search) {
+                        $qu->where('username', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // 🔽 Sorting
+        $sort = $request->get('sort', 'created_at'); // default kolom
+        $direction = $request->get('direction', 'desc'); // default urutan
+        $query->orderBy($sort, $direction);
+
+        // Pagination
+        $orders = $query->paginate(10)->appends($request->query());
+
+        return view('admin.pesananOfflineIndex', [
+            'title' => 'Pesanan Online',
+            'orders' => $orders,
+        ]);
+    }
 
 
     public function offline()
@@ -122,6 +157,7 @@ class PesananAdminController extends Controller
     {
         $request->validate([
             'items' => 'required|array|min:1',
+            'metode_pembayaran' => 'required|in:cash,transfer,qris',
             'items.*.product_id' => 'required|integer|exists:products,id',
             'items.*.size' => 'required|string|in:S,M,L,XL',
             'items.*.quantity' => 'required|integer|min:1',
@@ -189,14 +225,14 @@ class PesananAdminController extends Controller
             // ============================
             $order = Order::create([
                 'no_pesanan' => $noPesanan,
-                'id_users' => null,          // pelanggan kosong
+                'id_users' => $adminId,
                 'id_address' => null,        // offline tidak pakai alamat
                 'total_harga' => $totalHarga,
-                'status' => 'diproses',
+                'status' => 'selesai',
                 'action_by' => $adminId,     // admin / kasir
-                'action_by_2' => null,
+                'action_by_2' => $adminId,
                 'tempat_pesanan' => 'offline',
-                'metode_pembayaran' => 'offline',
+                'metode_pembayaran' => $request->metode_pembayaran,
             ]);
 
             // ============================

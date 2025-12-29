@@ -128,7 +128,7 @@ Route::prefix('admin')
          // dashboard admin
          Route::get('/', [DashboardAdminController::class, 'index'])
             ->name('dashboardAdmin');
-         
+
 
          // produk 
          Route::get('/produk', [ProdukAdminController::class, 'index'])
@@ -140,7 +140,7 @@ Route::prefix('admin')
          Route::delete('/produk/{id}', [ProdukAdminController::class, 'destroy'])
             ->name('produkAdmin.destroy');
 
-         
+
          // Pesanan Online
          Route::get('/pesanan/online', [PesananAdminController::class, 'online'])
             ->name('pesananOnlineAdmin');
@@ -148,6 +148,8 @@ Route::prefix('admin')
          Route::put('/orders/{id}/status', [PesananAdminController::class, 'updateStatus']);
 
          // Pesanan Offline
+         Route::get('/pesanan/offline/index', [PesananAdminController::class, 'offlineindex'])
+            ->name('pesananOffline.index');
          Route::get('/pesanan/offline', [PesananAdminController::class, 'offline'])
             ->name('pesananOfflineAdmin');
          Route::post('/pesanan/offline/store', [PesananAdminController::class, 'coOffline'])

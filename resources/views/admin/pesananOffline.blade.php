@@ -22,7 +22,7 @@
                                     <th>Jumlah</th>
                                     <th>Harga</th>
                                     <th>Subtotal</th>
-                                    <th></th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="cartBody"></tbody>
@@ -40,16 +40,22 @@
                         </div>
 
                         <div class="mt-3">
-                            <label class="fw-bold">Metode Pembayaran</label>
-                            <select class="form-select" id="paymentMethod">
-                                <option value="">Pilih</option>
+                            <label for="paymentMethod" class="form-label fw-semibold mb-2">
+                                Metode Pembayaran
+                            </label>
+                            <select
+                                class="form-select rounded-3 kategori-select shadow-sm border-1"
+                                id="paymentMethod" style="padding: 8px 36px 8px 14px;"
+                                required>
+                                <option value="" selected disabled>Pilih metode pembayaran</option>
                                 <option value="cash">Cash</option>
                                 <option value="transfer">Transfer</option>
                                 <option value="qris">QRIS</option>
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100 mt-4">
+
+                        <button type="submit" class="btn btn-success w-100 mt-4">
                             Konfirmasi Pesanan
                         </button>
 
@@ -58,17 +64,22 @@
                     <div class="modal fade" id="produkModal" tabindex="-1">
                         <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content rounded-4">
-                                <div class="modal-header">
-                                    <h5 class="modal-title fw-bold">Tambah Produk</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                <!-- Header -->
+                                <div class="modal-header bg-success text-white rounded-top-4">
+                                    <h5 class="modal-title fw-semibold" id="stokDetailModalLabel">
+                                        Tambah Produk
+                                    </h5>
+                                    <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white; font-size: 22px;">
+                                        <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
+                                    </button>
                                 </div>
 
                                 <div class="modal-body">
 
                                     <!-- PILIH PRODUK -->
                                     <div class="mb-3">
-                                        <label class="fw-semibold">Produk</label>
-                                        <select class="form-select" id="modalProduk">
+                                        <label for="modalProduk" class="form-label fw-semibold mb-2 ">Produk</label>
+                                        <select class="form-select rounded-3 kategori-select shadow-sm border-1" style="padding: 8px 36px 8px 14px;" id="modalProduk">
                                             <option value="">Pilih Produk</option>
                                             @foreach($products as $p)
                                             <option
@@ -88,7 +99,7 @@
                                     <!-- UKURAN -->
                                     <div class="mb-3">
                                         <label class="fw-semibold">Ukuran</label>
-                                        <div class="d-flex gap-2">
+                                        <div class="d-flex">
                                             <button class="btn btn-outline-dark ukuran-btn" data-size="S">S</button>
                                             <button class="btn btn-outline-dark ukuran-btn" data-size="M">M</button>
                                             <button class="btn btn-outline-dark ukuran-btn" data-size="L">L</button>
@@ -201,6 +212,7 @@
     @endpush
 
     @push('scripts')
+
     <script>
         let selectedSize = null;
         let editRow = null;
@@ -270,10 +282,14 @@
             <td class="subtotal" data-value="${subtotal}">
                 ${formatRupiah(subtotal)}
             </td>
-            <td>
-                <button type="button" class="btn btn-warning btn-sm edit me-1">Edit</button>
-                <button type="button" class="btn btn-danger btn-sm hapus">X</button>
-            </td>
+             <td>
+                        <a type="button" class="btn-action edit waves-effect waves-yellow" title="Edit">
+                            <i class="zmdi zmdi-edit"></i>
+                        </a>                                            
+                        <a type="button" class="btn-action hapus waves-effect waves-red " title="Edit">
+                            <i class="zmdi zmdi-delete"></i>
+                        </a>                                                                 
+                    </td>
         `;
                 editRow = null;
             }
@@ -290,8 +306,12 @@
                         ${formatRupiah(subtotal)}
                     </td>
                     <td>
-                        <button type="button" class="btn btn-warning btn-sm edit me-1">Edit</button>
-                        <button type="button" class="btn btn-danger btn-sm hapus">X</button>
+                        <a type="button" class="btn-action edit waves-effect waves-yellow" title="Edit">
+                            <i class="zmdi zmdi-edit"></i>
+                        </a>                                            
+                        <a type="button" class="btn-action hapus waves-effect waves-red " title="Edit">
+                            <i class="zmdi zmdi-delete"></i>
+                        </a>                                                                 
                     </td>
                 `;
                 cartBody.appendChild(row);
@@ -366,7 +386,19 @@
     <!-- co -->
     <script>
         document.getElementById('kasirForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // 🔥 cegah reload
+            e.preventDefault();
+
+            const paymentMethod = document.getElementById('paymentMethod').value;
+
+            if (!paymentMethod) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Metode pembayaran kosong',
+                    text: 'Silakan pilih metode pembayaran terlebih dahulu',
+                    confirmButtonColor: '#198754'
+                });
+                return;
+            }
 
             const items = [];
 
@@ -379,39 +411,87 @@
             });
 
             if (items.length === 0) {
-                alert('Pesanan kosong');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Pesanan kosong',
+                    text: 'Tambahkan minimal satu produk',
+                    confirmButtonColor: '#198754'
+                });
                 return;
             }
 
-            fetch("{{ route('pesananOffline.coOffline') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({
-                        items
-                    })
-                })
-                .then(res => res.json())
-                .then(res => {
-                    if (!res.success) {
-                        alert(res.message);
-                        return;
+            // 🔔 KONFIRMASI DULU
+            Swal.fire({
+                title: 'Konfirmasi Pesanan',
+                text: 'Apakah Anda yakin ingin pesanan telah selesai, dan pastikan duit sudah diterima?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#6c757d'
+            }).then((result) => {
+                if (!result.isConfirmed) return;
+
+                // ⏳ LOADING
+                Swal.fire({
+                    title: 'Memproses...',
+                    text: 'Mohon tunggu',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
                     }
-
-                    alert(`Pesanan berhasil!\nNo Pesanan: ${res.no_pesanan}`);
-
-                    // reset kasir
-                    document.getElementById('cartBody').innerHTML = '';
-                    document.getElementById('totalHarga').innerText = 'Rp 0';
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert('Terjadi kesalahan sistem');
                 });
+
+                // 🚀 KIRIM DATA
+                fetch("{{ route('pesananOffline.coOffline') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({
+                            items,
+                            metode_pembayaran: paymentMethod
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (!res.success) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: res.message || 'Terjadi kesalahan',
+                                confirmButtonColor: '#dc3545'
+                            });
+                            return;
+                        }
+
+                        // ✅ BERHASIL
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pesanan Berhasil!',
+                            text: `No Pesanan: ${res.no_pesanan}`,
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#198754'
+                        }).then(() => {
+                            window.location.href = "{{ route('pesananOffline.index') }}";
+                        });
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Kesalahan Sistem',
+                            text: 'Terjadi kesalahan pada server',
+                            confirmButtonColor: '#dc3545'
+                        });
+                    });
+            });
         });
     </script>
+
+
 
 
     @endpush
