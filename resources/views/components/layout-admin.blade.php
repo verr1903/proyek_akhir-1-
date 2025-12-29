@@ -9,6 +9,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{$title}} | Jaqyuu</title>
+
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
+
     <!-- Favicon-->
     <link rel="shortcut icon" type="image/x-icon" href="/clientAssets/images/logo/logo.jpg">
     <link rel="stylesheet" href="/AdminAssets/plugins/bootstrap/css/bootstrap.min.css">

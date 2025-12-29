@@ -193,9 +193,15 @@ Route::prefix('admin')
          Route::get('/laporan', [LaporanAdminController::class, 'index'])
             ->name('laporanAdmin');
 
+         Route::get('/laporan/bulan', [LaporanAdminController::class, 'orderByMonth']);
+         Route::get('/laporan/order-items/{orderId}', [LaporanAdminController::class, 'orderItems']);
+
+
 
          // Profile
          Route::get('/profile', [ProfileAdminController::class, 'index'])
             ->name('profileAdmin');
+         Route::post('/profile/update', [ProfileAdminController::class, 'update'])
+            ->name('profileAdmin.update');
       }
    );
