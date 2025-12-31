@@ -192,9 +192,10 @@ Route::prefix('admin')
          // Laporan
          Route::get('/laporan', [LaporanAdminController::class, 'index'])
             ->name('laporanAdmin');
-
          Route::get('/laporan/bulan', [LaporanAdminController::class, 'orderByMonth']);
          Route::get('/laporan/order-items/{orderId}', [LaporanAdminController::class, 'orderItems']);
+         Route::get('/laporan/range', [LaporanAdminController::class, 'range']);
+         Route::get('/laporan/export-excel', [LaporanAdminController::class, 'exportExcel']);
 
 
 

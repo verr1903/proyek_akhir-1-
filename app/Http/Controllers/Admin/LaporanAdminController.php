@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LaporanMultiSheetExport;
 
 class LaporanAdminController extends Controller
 {
@@ -49,5 +52,29 @@ class LaporanAdminController extends Controller
                 'order_items.subtotal'
             )
             ->get();
+    }
+
+    public function range(Request $request)
+    {
+        return Order::whereBetween('created_at', [
+            $request->dari . ' 00:00:00',
+            $request->sampai . ' 23:59:59'
+        ])
+            ->where('status', 'selesai')
+            ->orderBy('created_at', 'asc')
+            ->get();
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $request->validate([
+            'dari' => 'required|date',
+            'sampai' => 'required|date',
+        ]);
+
+        return Excel::download(
+            new LaporanMultiSheetExport($request->dari, $request->sampai),
+            'laporan_penjualan_' . $request->dari . '_sd_' . $request->sampai . '.xlsx'
+        );
     }
 }
