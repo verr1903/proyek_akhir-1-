@@ -5,9 +5,11 @@
     <section class="content home" style="margin-top: 100px;">
 
         <div class="container-fluid">
+            @if($stokMenipis > 0)
             <div class="alert alert-warning">
-                ⚠️ 5 produk hampir kehabisan stok.
+                ⚠️ {{ $stokMenipis }} produk hampir kehabisan stok.
             </div>
+            @endif
             <div class="alert alert-info">
                 📢 Iklan “Promo Ramadhan” akan berakhir dalam 2 hari.
             </div>
@@ -27,7 +29,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-12 text-center">
                     <a href="{{ route('produkAdmin') }}" style="text-decoration: none;color: black;">
                         <div class="card tasks_report p-3">
-                            <div class="card-value">26</div>
+                            <div class="card-value">{{ $totalProduk }}</div>
                             <div class="progress">
                                 <div class="progress-bar" style="width:100%; background-color:#ffa07a;"></div>
                             </div>
@@ -38,7 +40,7 @@
 
                 <div class="col-lg-3 col-md-6 col-sm-12 text-center">
                     <div class="card tasks_report p-3">
-                        <div class="card-value">100</div>
+                        <div class="card-value">{{ $totalPesanan }}</div>
                         <div class="progress">
                             <div class="progress-bar" style="width:100%; background-color:00adef#8fbc8f;"></div>
                         </div>
@@ -49,7 +51,8 @@
                 <div class="col-lg-3 col-md-6 col-sm-12 text-center">
                     <div class="card tasks_report p-3">
                         <div class="card-value"><i class="fa fa-star" style="font-size: 20px;"></i>
-                        <span style="margin-top: 30px;">4.5</span></div>
+                            <span style="margin-top: 30px;">4.5</span>
+                        </div>
                         <div class="progress">
                             <div class="progress-bar" style="width:100%; background-color:#8fbc8f;"></div>
                         </div>
@@ -93,27 +96,26 @@
                                 <div class="col-lg-4 col-md-12 text-center mt-4">
                                     <div id="donut_chart" class="dashboard-donut-chart"></div>
                                     <table class="table m-t-15 m-b-0">
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Tshirt</td>
-                                                <td>6985</td>
-                                                <td><i class="zmdi zmdi-caret-up text-success"></i></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Hoodie</td>
-                                                <td>2697</td>
-                                                <td><i class="zmdi zmdi-caret-up text-success"></i></td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Sweater</td>
-                                                <td>3597</td>
-                                                <td><i class="zmdi zmdi-caret-down text-danger"></i></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+    <tbody>
+        @forelse($distribusiProduk as $i => $item)
+        <tr>
+            <td>{{ $i + 1 }}</td>
+            <td>{{ $item->kategori }}</td>
+            <td class="fw-semibold">
+                {{ number_format($item->total, 0, ',', '.') }}
+            </td>
+           
+        </tr>
+        @empty
+        <tr>
+            <td colspan="4" class="text-center text-muted">
+                Tidak ada data
+            </td>
+        </tr>
+        @endforelse
+    </tbody>
+</table>
+
                                 </div>
                             </div>
                         </div>
@@ -143,30 +145,35 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Contoh data statis -->
+                                    @forelse($pesananPending as $i => $order)
                                     <tr>
-                                        <td>1</td>
-                                        <td>
-
-                                            <span>Andi Pratama</span>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td>{{ $order->address->nama_penerima ?? '-' }}</td>
+                                        <td>{{ $order->no_pesanan }}</td>
+                                        <td class="text-success fw-bold">
+                                            Rp {{ number_format($order->total_harga, 0, ',', '.') }}
                                         </td>
-                                        <td>Hoodie Oversize</td>
-                                        <td>Rp 250.000</td>
-                                        <td>Kec. Sukmajaya</td>
-                                        <td>2025-10-17</td>
+                                       <td>
+                                            {{ 
+                                                trim(
+                                                    'Jln.' . ' '. ($order->address->jalan ?? '') . ', ' .
+                                                    'Kel.' . ' '. ($order->address->kelurahan ?? '') . ', ' .
+                                                    'Kec.' . ' '. ($order->address->kecamatan ?? '')
+                                                ) ?: '-' 
+                                            }}
+                                        </td>
+
+                                        <td>{{ $order->created_at->format('d-m-Y') }}</td>
                                     </tr>
+                                    @empty
                                     <tr>
-                                        <td>2</td>
-                                        <td>
-
-                                            <span>Siti Lestari</span>
+                                        <td colspan="6" class="text-center text-muted">
+                                            Tidak ada pesanan pending
                                         </td>
-                                        <td>T-shirt Unisex</td>
-                                        <td>Rp 150.000</td>
-                                        <td>Kec. Beji</td>
-                                        <td>2025-10-16</td>
                                     </tr>
+                                    @endforelse
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
@@ -178,113 +185,55 @@
     </section>
     @push('scripts')
     <script>
-        // ===========================
-        // Laporan Aktivitas & Kinerja
-        // ===========================
+        const incomeData = @json($income);
 
-        // DATA PER TAHUN (contoh dummy)
-        const yearlyData = {
-            2025: {
-                income: [150000, 240000, 220000, 280000, 350000, 420000, 380000, 450000, 410000, 460000],
-                category: [25, 30, 15]
-            },
-            2024: {
-                income: [120000, 210000, 190000, 260000, 300000, 370000, 340000, 400000, 370000, 420000],
-                category: [20, 40, 10]
-            },
-            2023: {
-                income: [90000, 150000, 180000, 210000, 250000, 310000, 290000, 340000, 300000, 360000],
-                category: [30, 25, 20]
-            }
-        };
-
-        // Fungsi bantu untuk format angka jadi Rupiah
-        function formatRupiah(value) {
-            return 'Rp. ' + value.toLocaleString('id-ID');
-        }
-
-        // GRAFIK LINE PENDAPATAN
         const ctx1 = document.getElementById('activityChart').getContext('2d');
-        let activityChart = new Chart(ctx1, {
+        new Chart(ctx1, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt'],
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
                 datasets: [{
                     label: 'Pendapatan',
-                    data: yearlyData[2025].income,
+                    data: incomeData,
                     borderColor: '#0ea10eff',
-                    backgroundColor: 'rgba(19, 153, 48, 0.2)',
+                    backgroundColor: 'rgba(19,153,48,0.2)',
                     borderWidth: 2,
                     tension: 0.4,
                     fill: true,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#0ea10eff',
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            label: function(context) {
-                                // Format tooltip jadi "Pendapatan: Rp. xxx"
-                                let label = context.dataset.label || '';
-                                if (label) label += ': ';
-                                if (context.parsed.y !== null) {
-                                    label += formatRupiah(context.parsed.y);
-                                }
-                                return label;
-                            }
-                        }
-                    },
-                },
                 scales: {
-                    x: {
-                        grid: {
-                            color: '#f1f1f1'
-                        }
-                    },
                     y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: '#f1f1f1'
-                        },
                         ticks: {
-                            callback: function(value) {
-                                return 'Rp. ' + value.toLocaleString('id-ID');
-                            }
+                            callback: value => 'Rp ' + value.toLocaleString('id-ID')
                         }
                     }
                 }
             }
         });
-
-
-        // Pie Chart Distribusi Produk 
-        function initDonutChart() {
-            Morris.Donut({
-                element: 'donut_chart',
-                data: [{
-                    label: 'Tshirt',
-                    value: 37
-                }, {
-                    label: 'Hoodie',
-                    value: 30
-                }, {
-                    label: 'Sweater',
-                    value: 18
-                }],
-                colors: ['#00adef', '#fcb711', '#12a682'],
-                formatter: function(y) {
-                    return y + '%'
-                }
-            });
-        }
     </script>
+
+
+<script>
+    Morris.Donut({
+        element: 'donut_chart',
+        data: [
+            @foreach($distribusiProduk as $item)
+            {
+                label: '{{ $item->kategori }}',
+                value: {{ $item->total }}
+            },
+            @endforeach
+        ],
+        colors: ['#00adef', '#fcb711', '#12a682'],
+        formatter: function (y) {
+            return y + ' pcs'
+        }
+    });
+</script>
+
+
     @endpush
 </x-layout-admin>
