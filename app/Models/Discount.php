@@ -10,33 +10,53 @@ class Discount extends Model
 {
     use HasFactory;
 
+    protected $table = 'discounts';
+
     protected $fillable = [
         'id_product',
         'persentase',
-        'durasi',
+        'start_at',
+        'end_at',
+        'status',
     ];
 
-    protected $appends = ['end_date'];
+    protected $casts = [
+        'start_at' => 'datetime',
+        'end_at'   => 'datetime',
+    ];
 
     /**
-     * Relasi ke model Product
-     * Setiap discount milik satu produk
+     * Relasi ke Product
      */
     public function product()
     {
         return $this->belongsTo(\App\Models\Product::class, 'id_product');
     }
 
-    public function getEndDateAttribute()
+    /**
+     * Scope diskon aktif
+     */
+    public function scopeAktif($query)
     {
-        // Misalnya durasi dalam hari dan promo dimulai saat dibuat
-        return $this->created_at
-            ? Carbon::parse($this->created_at)->addDays($this->durasi)->toDateString()
-            : null;
+        return $query->where('status', 'aktif')
+                     ->where('start_at', '<=', now())
+                     ->where('end_at', '>=', now());
     }
 
+    /**
+     * Cek apakah diskon sudah berakhir
+     */
     public function isExpired()
     {
-        return now()->greaterThan($this->created_at->addHours($this->durasi));
+        return now()->greaterThan($this->end_at);
+    }
+
+    /**
+     * (Opsional) cek apakah diskon sedang aktif
+     */
+    public function isActive()
+    {
+        return $this->status === 'aktif'
+            && now()->between($this->start_at, $this->end_at);
     }
 }

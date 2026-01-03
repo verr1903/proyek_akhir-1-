@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_users')->nullable();
             $table->unsignedBigInteger('id_address')->nullable();
             $table->string('no_pesanan')->unique();
-            $table->decimal('total_harga');
+            $table->decimal('total_harga', 18, 2);
             $table->string('status')->default('diproses');
             $table->string('action_by')->nullable();
             $table->string('action_by_2')->nullable();

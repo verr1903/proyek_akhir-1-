@@ -4,12 +4,18 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Discount;
 use Illuminate\Support\Facades\Crypt;
 
 class DetailClientController extends Controller
 {
     public function index($encryptedId)
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         try {
             // Dekripsi ID produk
             $id = Crypt::decryptString($encryptedId);

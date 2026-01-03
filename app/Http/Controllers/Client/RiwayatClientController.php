@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\Discount;
 use Illuminate\Http\Request;
 use App\Models\Review;
 
@@ -13,6 +14,11 @@ class RiwayatClientController extends Controller
 
     public function index()
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         $orders = Order::with(['items.product.ulasan'])
             ->where('id_users', Auth::id())
             ->orderByDesc('created_at')

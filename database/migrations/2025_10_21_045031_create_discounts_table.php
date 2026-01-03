@@ -12,13 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('discounts', function (Blueprint $table) {
-            $table->id(); 
+            $table->id();
             $table->unsignedBigInteger('id_product');
+
             $table->integer('persentase');
-            $table->integer('durasi');
+
+            // waktu diskon
+            $table->dateTime('start_at');
+            $table->dateTime('end_at');
+
+            // status diskon
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
+
             $table->timestamps();
 
-            // Foreign key ke tabel produk (misal tabelnya bernama 'products')
+            // Foreign key
             $table->foreign('id_product')
                 ->references('id')
                 ->on('products')

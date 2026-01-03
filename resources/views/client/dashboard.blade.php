@@ -361,39 +361,46 @@
 
     <!-- countdown discount -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function updateCountdowns() {
-                document.querySelectorAll('[data-countdown]').forEach(el => {
-                    const end = new Date(el.dataset.countdown);
-                    const now = new Date();
-                    const diff = end - now;
+document.addEventListener('DOMContentLoaded', function () {
 
-                    if (diff <= 0) {
-                        el.innerHTML = `<div class="single-count"><span class="count text-danger">0</span><p>Days</p></div>
-                                <div class="single-count"><span class="count text-danger">0</span><p>Hour</p></div>
-                                <div class="single-count"><span class="count text-danger">0</span><p>Mint</p></div>
-                                <div class="single-count"><span class="count text-danger">0</span><p>Sec</p></div>`;
-                        return;
-                    }
+    function updateCountdowns() {
+        document.querySelectorAll('[data-countdown]').forEach(el => {
 
-                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-                    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-                    const seconds = Math.floor((diff / 1000) % 60);
+            const end = new Date(el.dataset.countdown);
+            const now = new Date();
+            let diff = end - now;
 
-                    el.innerHTML = `
+            // 🔴 JIKA WAKTU HABIS
+            if (diff <= 0) {
+                el.innerHTML = `
+                    <div class="single-count"><span class="count">0</span><p>Days</p></div>
+                    <div class="single-count"><span class="count">0</span><p>Hour</p></div>
+                    <div class="single-count"><span class="count">0</span><p>Mint</p></div>
+                    <div class="single-count"><span class="count">0</span><p>Sec</p></div>
+                `;
+                return; // ⛔ STOP hitung
+            }
+
+            // 🟢 NORMAL HITUNG
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            el.innerHTML = `
                 <div class="single-count"><span class="count">${days}</span><p>Days</p></div>
                 <div class="single-count"><span class="count">${hours}</span><p>Hour</p></div>
                 <div class="single-count"><span class="count">${minutes}</span><p>Mint</p></div>
                 <div class="single-count"><span class="count">${seconds}</span><p>Sec</p></div>
             `;
-                });
-            }
-
-            updateCountdowns();
-            setInterval(updateCountdowns, 1000);
         });
-    </script>
+    }
+
+    updateCountdowns();
+    setInterval(updateCountdowns, 1000);
+});
+</script>
+
 
 
 

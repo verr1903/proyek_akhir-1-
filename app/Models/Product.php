@@ -41,7 +41,8 @@ class Product extends Model
 
     public function discount()
     {
-        return $this->hasOne(\App\Models\Discount::class, 'id_product');
+        return $this->hasOne(Discount::class, 'id_product')
+            ->where('status', 'aktif');
     }
 
     public function getEncryptedIdAttribute()

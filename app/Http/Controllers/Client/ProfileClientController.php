@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use app\Models\Discount;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,6 +13,11 @@ class ProfileClientController extends Controller
 {
     public function index()
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         $user = Auth::user();
 
         return view('client.profile', [

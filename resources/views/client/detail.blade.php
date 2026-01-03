@@ -27,11 +27,8 @@
                                 {{-- Gambar utama --}}
                                 <img class="product-zoom" src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}" style="width: 100%; height: auto;">
 
-                                @if ($product->discount)
-                                <span class="sticker-new label-sale">
-                                    -{{ $product->discount->persentase }}%
-                                </span>
-                                @endif
+                               
+
 
                             </div>
                             <!-- <div id="gallery_01" class="shop-single-thumb-image shop-thumb-active swiper-container">
@@ -149,8 +146,8 @@
 
 
                             {{-- Toast Notification --}}
-                            <div id="toast" class="toast-message">Produk ukuran ini sedang tidak tersedia 😢</div>
-                            <div id="toastStock" class="toast-message">Jumlah sudah mencapai stok maksimum 😅</div>
+                            <div id="toast" class="toast-message">Produk ukuran ini sedang tidak tersedia</div>
+                            <div id="toastStock" class="toast-message">Jumlah sudah mencapai stok maksimum</div>
 
                             <div class="product-action d-flex flex-wrap">
                                 <div class="">
@@ -318,27 +315,11 @@
             const subBtn = document.querySelector('.sub');
             const addBtn = document.querySelector('.add');
 
-            const stok = {
-                S: {
-                    {
-                        $product - > stok_s
-                    }
-                },
-                M: {
-                    {
-                        $product - > stok_m
-                    }
-                },
-                L: {
-                    {
-                        $product - > stok_l
-                    }
-                },
-                XL: {
-                    {
-                        $product - > stok_xl
-                    }
-                }
+           const stok = {
+                S: {{ $product->stok_s }},
+                M: {{ $product->stok_m }},
+                L: {{ $product->stok_l }},
+                XL: {{ $product->stok_xl }}
             };
 
             let selectedSize = document.querySelector('input[name="size"]:checked')?.value;

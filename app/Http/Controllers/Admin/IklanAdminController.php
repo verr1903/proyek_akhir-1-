@@ -5,12 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Iklan;
+use App\Models\Discount;
 use Illuminate\Support\Facades\Storage;
 
 class IklanAdminController extends Controller
 {
     public function index(Request $request)
     {
+
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         $query = Iklan::query();
 
         // 🔍 Pencarian berdasarkan judul atau sub judul

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Discount;
 use Illuminate\Support\Facades\Storage;
 
 class ProdukAdminController extends Controller
@@ -12,6 +13,11 @@ class ProdukAdminController extends Controller
 
     public function index(Request $request)
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         $query = Product::query();
 
         // 🔍 Filter pencarian

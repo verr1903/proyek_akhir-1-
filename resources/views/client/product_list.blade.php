@@ -24,7 +24,7 @@ $totalStok = ($product->stok_s ?? 0)
                 @endif
 
                 {{-- Jika ada diskon --}}
-                @if($product->discount && $product->discount->persentase > 0)
+                @if($product->discount)
                 <span class="sticker-new label-sale">-{{ $product->discount->persentase }}%</span>
                 @endif
 
@@ -41,7 +41,7 @@ $totalStok = ($product->stok_s ?? 0)
                 {{-- Countdown (contoh jika ada event promo dengan tanggal akhir) --}}
                 @if($product->discount)
                 <div class="product-countdown mt-2">
-                    <div data-countdown="{{ \Carbon\Carbon::parse($product->discount->created_at)->addHours($product->discount->durasi)->toISOString() }}">
+                    <div data-countdown="{{ $product->discount->end_at->format('Y-m-d H:i:s') }}">
                         <div class="single-count"><span class="count">0</span>
                             <p>Days</p>
                         </div>
@@ -77,7 +77,7 @@ $totalStok = ($product->stok_s ?? 0)
 
             <div class="price-box">
                 @if($totalStok > 0)
-                @if($product->discount && $product->discount->persentase > 0)
+                @if($product->discount)
                 @php
                 $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
                 @endphp
@@ -87,7 +87,7 @@ $totalStok = ($product->stok_s ?? 0)
                 <span class="current-price">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
                 @endif
                 @else
-                @if($product->discount && $product->discount->persentase > 0)
+                @if($product->discount)
                 @php
                 $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
                 @endphp

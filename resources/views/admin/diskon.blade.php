@@ -72,8 +72,9 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Persentase</th>
-                                        <th>Durasi(Jam)</th>
+                                        <th>Periode Diskon</th>
                                         <th>Produk</th>
+                                        <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -87,13 +88,30 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <span class="fw-semibold text-black"
-                                                id="countdown-{{ $discount->id }}"
-                                                data-end="{{ \Carbon\Carbon::parse($discount->created_at)->addHours($discount->durasi)->toISOString() }}">
-                                                Memuat...
+                                            <span class="fw-semibold">
+                                                {{ $discount->start_at->format('d M Y H:i') }}
+                                                <br>
+                                                <small class="text-muted">
+                                                    s/d {{ $discount->end_at->format('d M Y H:i') }}
+                                                </small>
                                             </span>
                                         </td>
+
                                         <td><span class="text-muted">{{ $discount->product->nama ?? '-' }}</span></td>
+                                       <td>
+                                        @if($discount->status === 'aktif')
+                                            <span class="badge text-white bg-success px-3 py-2">
+                                                <i class="fa fa-check-circle me-1"></i> Aktif
+                                            </span>
+                                        @elseif($discount->status === 'nonaktif')
+                                            <span class="badge text-white bg-secondary px-3 py-2">
+                                                <i class="fa fa-times-circle me-1"></i> Nonaktif
+                                            </span>
+                                        @else
+                                            <span class="badge bg-light text-dark px-3 py-2">-</span>
+                                        @endif
+                                    </td>
+
                                         <td>
                                             <!-- edit -->
                                             <a href="javascript:void(0);"
@@ -150,9 +168,14 @@
                                                     <input type="number" id="editPersentase" name="persentase" class="form-control rounded-3 shadow-sm" required>
                                                 </div>
 
+                                               <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Tanggal Mulai</label>
+                                                    <input type="datetime-local" id="editStart" name="start_at" class="form-control">
+                                                </div>
+
                                                 <div class="mb-3">
-                                                    <label class="form-label fw-semibold">Durasi (Jam)</label>
-                                                    <input type="number" id="editDurasi" name="durasi" class="form-control rounded-3 shadow-sm" required>
+                                                    <label class="form-label fw-semibold">Tanggal Berakhir</label>
+                                                    <input type="datetime-local" id="editEnd" name="end_at" class="form-control">
                                                 </div>
 
                                                 <div class="mb-3">
@@ -210,9 +233,15 @@
                                                 </div>
 
                                                 <div class="mb-3">
-                                                    <label class="form-label fw-semibold">Durasi (Jam)</label>
-                                                    <input type="number" name="durasi" class="form-control rounded-3 shadow-sm" placeholder="Contoh: 72">
+                                                    <label class="form-label fw-semibold">Tanggal Mulai</label>
+                                                    <input type="datetime-local" name="start_at" class="form-control" required>
                                                 </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Tanggal Berakhir</label>
+                                                    <input type="datetime-local" name="end_at" class="form-control" required>
+                                                </div>
+
 
                                                 <div class="mb-3">
                                                     <label class="form-label fw-semibold">Produk</label>
@@ -300,7 +329,8 @@
                 // Isi form modal
                 document.getElementById('editId').value = id;
                 document.getElementById('editPersentase').value = persentase;
-                document.getElementById('editDurasi').value = durasi;
+                document.getElementById('editStart').value =
+                document.getElementById('editEnd').value =
                 document.getElementById('editProduk').value = produk;
 
                 // Ubah action form sesuai ID
@@ -310,35 +340,45 @@
     </script>
 
     <!-- script modal edit agar tidk tampil produk yang sama  -->
-    <script>
-        document.querySelectorAll('.btn-edit').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.dataset.id;
-                const persentase = this.dataset.persentase;
-                const durasi = this.dataset.durasi;
-                const produk = this.dataset.produk;
+   <script>
+    document.querySelectorAll('.btn-edit').forEach(button => {
+        button.addEventListener('click', function () {
 
-                const select = document.getElementById('editProduk');
+            const id = this.dataset.id;
+            const persentase = this.dataset.persentase;
+            const startAt = this.dataset.start;
+            const endAt = this.dataset.end;
+            const produk = this.dataset.produk;
 
-                // Sembunyikan semua produk yang punya diskon kecuali yang sedang diedit
-                select.querySelectorAll('option').forEach(opt => {
-                    if (opt.dataset.hasDiscount === "true" && opt.value !== produk) {
-                        opt.style.display = "none";
-                    } else {
-                        opt.style.display = "block";
-                    }
-                });
+            const select = document.getElementById('editProduk');
 
-                // Isi form modal
-                document.getElementById('editId').value = id;
-                document.getElementById('editPersentase').value = persentase;
-                document.getElementById('editDurasi').value = durasi;
-                select.value = produk;
-
-                // Ubah action form sesuai ID
-                document.getElementById('formEditDiskon').action = `/admin/diskon/${id}`;
+            // Sembunyikan produk yang sudah punya diskon (kecuali yang diedit)
+            select.querySelectorAll('option').forEach(opt => {
+                if (opt.dataset.hasDiscount === "true" && opt.value !== produk) {
+                    opt.style.display = "none";
+                } else {
+                    opt.style.display = "block";
+                }
             });
+
+            // Isi form modal
+            document.getElementById('editId').value = id;
+            document.getElementById('editPersentase').value = persentase;
+
+            // datetime-local butuh format YYYY-MM-DDTHH:MM
+            document.getElementById('editStart').value =
+                startAt ? startAt.replace(' ', 'T').substring(0, 16) : '';
+
+            document.getElementById('editEnd').value =
+                endAt ? endAt.replace(' ', 'T').substring(0, 16) : '';
+
+            select.value = produk;
+
+            // Action form
+            document.getElementById('formEditDiskon').action =
+                `/admin/diskon/${id}`;
         });
+    });
     </script>
 
     <!-- hitung mundur durasi -->

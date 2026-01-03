@@ -5,12 +5,18 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Address;
+use App\Models\Discount;
 use Illuminate\Support\Facades\Auth;
 
 class LokasiClientController extends Controller
 {
     public function index()
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         $userId = Auth::id();
 
         // Urutkan: alamat aktif di atas, lalu alamat lain berdasarkan waktu terbaru

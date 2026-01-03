@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use app\Models\Discount;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -13,6 +14,11 @@ class ProfileAdminController extends Controller
 {
     public function index()
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         $admin = Auth::user(); // ambil admin yang login
 
         return view('admin.profile', [

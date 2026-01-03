@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Discount;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -12,6 +13,12 @@ class DashboardAdminController extends Controller
 {
     public function index()
     {
+
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         $tahun = request('tahun', date('Y'));
 
         /* ================= CARD TOP ================= */
@@ -52,10 +59,16 @@ class DashboardAdminController extends Controller
             ->get();
 
         /* ================= STOK MENIPIS ================= */
-        $stokMenipis = Product::whereRaw(
-            '(stok_s + stok_m + stok_l + stok_xl) <= ?',
-            [5]
-        )->count();
+        $produkStokMenipis = Product::select(
+            'nama',
+            'stok_s',
+            'stok_m',
+            'stok_l',
+            'stok_xl'
+        )
+            ->whereRaw('(stok_s + stok_m + stok_l + stok_xl) <= ?', [5])
+
+            ->get();
 
 
         return view('admin.dashboard', [
@@ -65,7 +78,7 @@ class DashboardAdminController extends Controller
             'pesananPending'    => $pesananPending,
             'income'            => $income,
             'distribusiProduk'  => $distribusiProduk,
-            'stokMenipis'       => $stokMenipis,
+            'produkStokMenipis' => $produkStokMenipis,
             'tahun'             => $tahun
         ]);
     }

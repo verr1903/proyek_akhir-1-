@@ -5,11 +5,27 @@
     <section class="content home" style="margin-top: 100px;">
 
         <div class="container-fluid">
-            @if($stokMenipis > 0)
+           @if($produkStokMenipis->count() > 0)
             <div class="alert alert-warning">
-                ⚠️ {{ $stokMenipis }} produk hampir kehabisan stok.
+                <strong>⚠️ Stok Menipis!</strong>
+                <p class="mb-1">
+                    {{ $produkStokMenipis->count() }} produk hampir kehabisan stok:
+                </p>
+
+                <ul class="mb-0 ps-3">
+                    @foreach($produkStokMenipis as $produk)
+                        <li>
+                            <strong>{{ $produk->nama }}</strong>
+                            — sisa stok  <strong class="text-danger">
+                   {{ $produk->stok_s + $produk->stok_m + $produk->stok_l + $produk->stok_xl }}
+
+                </strong>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
             @endif
+
             <div class="alert alert-info">
                 📢 Iklan “Promo Ramadhan” akan berakhir dalam 2 hari.
             </div>
@@ -33,7 +49,7 @@
                             <div class="progress">
                                 <div class="progress-bar" style="width:100%; background-color:#ffa07a;"></div>
                             </div>
-                            <h6>Total Produk Tersedia</h6>
+                            <h6>Total Produk</h6>
                         </div>
                     </a>
                 </div>
@@ -75,13 +91,21 @@
 
                             <div class="year-filter">
                                 <label for="yearFilter" class="fw-semibold text-muted mb-0">Filter Tahun:</label>
-                                <select id="yearFilter" class="form-select form-select-sm text-black fw-semibold"
-                                    style="width: 120px; backdrop-filter: blur(10px); background: rgba(255,255,255,0.15);border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; padding: 5px 12px;">
-                                    <option value="2025" selected>2025</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2023">2023</option>
+                                <select
+                                    id="yearFilter"
+                                    name="tahun"
+                                    class="form-select form-select-sm text-black fw-semibold"
+                                    style="width:120px; backdrop-filter: blur(10px);
+                                        background: rgba(255,255,255,0.15);
+                                        border: 1px solid rgba(255,255,255,0.3);
+                                        border-radius: 12px; padding: 5px 12px;"
+                                    onchange="window.location.href='?tahun=' + this.value"
+                                >
+                                    <option value="2026" {{ $tahun == 2026 ? 'selected' : '' }}>2026</option>
+                                    <option value="2025" {{ $tahun == 2025 ? 'selected' : '' }}>2025</option>
                                 </select>
                             </div>
+
 
                         </div>
 

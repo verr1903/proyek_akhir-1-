@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Models\Order;
+use App\Models\Discount;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LaporanMultiSheetExport;
@@ -13,6 +14,11 @@ class LaporanAdminController extends Controller
 {
     public function index()
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         $ringkasanBulanan = DB::table('orders')
             ->select(
                 DB::raw('YEAR(created_at) as tahun'),

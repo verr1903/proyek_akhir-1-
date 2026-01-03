@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Cart;
+use App\Models\Discount;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Address;
@@ -20,6 +21,11 @@ class KeranjangClientController extends Controller
 {
     public function index()
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+            
         $userId = Auth::id();
 
         // Ambil alamat aktif user

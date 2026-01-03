@@ -11,14 +11,11 @@ class DiskonAdminController extends Controller
 {
     public function index(Request $request)
     {
-        // Hapus diskon yang sudah expired
-        $discounts = Discount::all();
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
 
-        foreach ($discounts as $discount) {
-            if ($discount->isExpired()) {
-                $discount->delete();
-            }
-        }
         // Query dasar
         $query = Discount::with('product');
 
@@ -69,13 +66,21 @@ class DiskonAdminController extends Controller
         $validated = $request->validate([
             'id_product' => 'required|exists:products,id',
             'persentase' => 'required|integer|min:1|max:100',
-            'durasi' => 'required|integer|min:1',
+            'start_at'   => 'required|date',
+            'end_at'     => 'required|date|after:start_at',
         ]);
 
-        Discount::create($validated);
+        Discount::create([
+            'id_product' => $validated['id_product'],
+            'persentase' => $validated['persentase'],
+            'start_at'   => $validated['start_at'],
+            'end_at'     => $validated['end_at'],
+            'status'     => 'aktif',
+        ]);
 
         return redirect()->route('diskonAdmin')->with('success', 'Diskon berhasil ditambahkan.');
     }
+
 
     public function destroy($id)
     {
@@ -87,16 +92,21 @@ class DiskonAdminController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'persentase' => 'required|integer|min:1|max:100',
-            'durasi' => 'required|integer|min:1',
             'id_product' => 'required|exists:products,id',
+            'persentase' => 'required|integer|min:1|max:100',
+            'start_at'   => 'required|date',
+            'end_at'     => 'required|date|after:start_at',
         ]);
 
         $discount = Discount::findOrFail($id);
         $discount->update([
-            'persentase' => $request->persentase,
-            'durasi' => $request->durasi,
             'id_product' => $request->id_product,
+            'persentase' => $request->persentase,
+            'start_at'   => $request->start_at,
+            'end_at'     => $request->end_at,
+            'status'     => now()->between($request->start_at, $request->end_at)
+                ? 'aktif'
+                : 'nonaktif',
         ]);
 
         return redirect()->back()->with('success', 'Diskon berhasil diperbarui!');

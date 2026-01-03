@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Discount;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PesananAdminController extends Controller
 {
@@ -17,6 +19,11 @@ class PesananAdminController extends Controller
 
     public function online(Request $request)
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         $query = Order::with(['user', 'items.product', 'address'])
             ->where('tempat_pesanan', 'online');
 
@@ -108,6 +115,11 @@ class PesananAdminController extends Controller
 
     public function offlineindex(Request $request)
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+
         $query = Order::with(['user', 'items.product', 'address'])
             ->where('tempat_pesanan', 'offline');
 
@@ -142,6 +154,11 @@ class PesananAdminController extends Controller
 
     public function offline()
     {
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
+            
         $products = Product::all();
 
         Debugbar::info($products);
@@ -278,10 +295,14 @@ class PesananAdminController extends Controller
         } catch (\Throwable $e) {
             DB::rollBack();
 
+            \Log::error('CO OFFLINE ERROR', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal membuat pesanan offline.',
-                'error' => $e->getMessage()
+                'message' => $e->getMessage(), // sementara tampilkan
             ], 500);
         }
     }

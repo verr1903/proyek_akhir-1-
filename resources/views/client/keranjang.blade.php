@@ -52,7 +52,7 @@
                                     </td>
 
                                     <td class="py-4">
-                                        @if ($cart->product->discount)
+                                        @if ($cart->product->discount && $cart->product->discount->status === 'aktif')
                                             <span class="text-danger fw-bold">
                                                 Rp {{ number_format($cart->harga_diskon, 0, ',', '.') }}
                                             </span><br>

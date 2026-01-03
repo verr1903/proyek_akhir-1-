@@ -12,13 +12,10 @@ class DashboardClientController extends Controller
 {
     public function index(Request $request)
     {
-        // Hapus diskon expired
-        $discounts = Discount::all();
-        foreach ($discounts as $discount) {
-            if ($discount->isExpired()) {
-                $discount->delete();
-            }
-        }
+        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
+        Discount::where('status', 'aktif')
+            ->where('end_at', '<', now())
+            ->update(['status' => 'nonaktif']);
 
         // Data iklan
         $iklan = Iklan::all();
@@ -45,7 +42,7 @@ class DashboardClientController extends Controller
 
             $tab = $request->query('tab');
             $sort = $request->query('sort');
-            
+
 
             if ($tab === 'new') {
                 $query = Product::with(['discount', 'reviews'])

@@ -60,7 +60,7 @@
                                             @endif
 
                                             {{-- Jika ada diskon --}}
-                                            @if($product->discount && $product->discount->persentase > 0)
+                                            @if($product->discount)
                                             <span class="sticker-new label-sale">-{{ $product->discount->persentase }}%</span>
                                             @endif
 
@@ -75,24 +75,17 @@
                                             </div>
 
                                             {{-- Countdown (contoh jika ada event promo dengan tanggal akhir) --}}
-                                            @if($product->discount)
+                                            @if($product->discount && $product->discount->status === 'aktif')
                                             <div class="product-countdown mt-2">
-                                                <div data-countdown="{{ \Carbon\Carbon::parse($product->discount->created_at)->addHours($product->discount->durasi)->toISOString() }}">
-                                                    <div class="single-count"><span class="count">0</span>
-                                                        <p>Days</p>
-                                                    </div>
-                                                    <div class="single-count"><span class="count">0</span>
-                                                        <p>Hour</p>
-                                                    </div>
-                                                    <div class="single-count"><span class="count">0</span>
-                                                        <p>Mint</p>
-                                                    </div>
-                                                    <div class="single-count"><span class="count">0</span>
-                                                        <p>Sec</p>
-                                                    </div>
+                                                <div data-countdown="{{ $product->discount->end_at->format('Y-m-d H:i:s') }}">
+                                                    <div class="single-count"><span class="count">0</span><p>Days</p></div>
+                                                    <div class="single-count"><span class="count">0</span><p>Hour</p></div>
+                                                    <div class="single-count"><span class="count">0</span><p>Mint</p></div>
+                                                    <div class="single-count"><span class="count">0</span><p>Sec</p></div>
                                                 </div>
                                             </div>
                                             @endif
+
 
                                     </div>
 
@@ -113,7 +106,7 @@
 
                                         <div class="price-box">
                                             @if($totalStok > 0)
-                                            @if($product->discount && $product->discount->persentase > 0)
+                                            @if($product->discount)
                                             @php
                                             $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
                                             @endphp
@@ -123,7 +116,7 @@
                                             <span class="current-price">Rp{{ number_format($product->harga, 0, ',', '.') }}</span>
                                             @endif
                                             @else
-                                            @if($product->discount && $product->discount->persentase > 0)
+                                            @if($product->discount)
                                             @php
                                             $discountPrice = $product->harga - ($product->harga * $product->discount->persentase / 100);
                                             @endphp
