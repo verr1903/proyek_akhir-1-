@@ -121,28 +121,28 @@
                                 </div>
 
                                 <!-- Pie Chart Distribusi Produk -->
-                                <div class="col-lg-4 col-md-12 text-center mt-4">
+                                <div class="col-lg-4 col-md-12 text-center" style="margin-top: 80px;">
                                     <div id="donut_chart" class="dashboard-donut-chart"></div>
                                     <table class="table m-t-15 m-b-0">
-    <tbody>
-        @forelse($distribusiProduk as $i => $item)
-        <tr>
-            <td>{{ $i + 1 }}</td>
-            <td>{{ $item->kategori }}</td>
-            <td class="fw-semibold">
-                {{ number_format($item->total, 0, ',', '.') }}
-            </td>
-           
-        </tr>
-        @empty
-        <tr>
-            <td colspan="4" class="text-center text-muted">
-                Tidak ada data
-            </td>
-        </tr>
-        @endforelse
-    </tbody>
-</table>
+                                        <tbody>
+                                            @forelse($distribusiProduk as $i => $item)
+                                            <tr>
+                                                <td>{{ $i + 1 }}</td>
+                                                <td>{{ $item->kategori }}</td>
+                                                <td class="fw-semibold">
+                                                    {{ number_format($item->total, 0, ',', '.') }}
+                                                </td>
+                                            
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center text-muted">
+                                                    Tidak ada data
+                                                </td>
+                                            </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
 
                                 </div>
                             </div>
@@ -150,6 +150,64 @@
                     </div>
                 </div>
             </div>
+
+            <!-- customer terloyal -->
+            <div class="row clearfix">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>Customer Terloyal</h2>
+                            <small>Pelanggan dengan jumlah pesanan terbanyak</small>
+                        </div>
+
+                        <div class="body table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Customer</th>
+                                        <th>Email</th>
+                                        <th>Total Pesanan</th>
+                                        <th>Total Belanja</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($customerTerloyal as $i => $item)
+                                    <tr>
+                                        <td>
+                                            <span class="badge bg-warning text-dark">
+                                                #{{ $i + 1 }}
+                                            </span>
+                                        </td>
+                                        <td class="fw-semibold">
+                                            {{ $item->user->username ?? '-' }}
+                                        </td>
+                                        <td>
+                                            {{ $item->user->email ?? '-' }}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success text-white">
+                                                {{ $item->total_pesanan }} pesanan
+                                            </span>
+                                        </td>
+                                        <td class="text-success fw-bold">
+                                            Rp {{ number_format($item->total_belanja, 0, ',', '.') }}
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">
+                                            Belum ada data customer
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <!--Pesanan -->
             <div class="row clearfix">

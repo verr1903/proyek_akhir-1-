@@ -41,35 +41,7 @@
         {{-- Kanan: Notifikasi dan User --}}
         <ul class="nav navbar-nav navbar-right align-items-center">
 
-            {{-- Notifikasi --}}
-            <li class="dropdown me-3">
-                <a href="javascript:void(0);" class="dropdown-toggle xs-hide" data-toggle="dropdown" role="button">
-                    <i class="zmdi zmdi-notifications notif-shake" style="font-size: 22px;margin-top: 10px;"></i>
-                    <div class="notify">
-                        <span class="heartbit"></span>
-                        <span class="point"></span>
-                    </div>
-                </a>
-                <ul class="dropdown-menu slideDown">
-                    <li class="header">NOTIFICATIONS</li>
-                    <li class="body">
-                        <ul class="menu list-unstyled">
-                            <li>
-                                <a href="javascript:void(0);">
-                                    <div class="icon-circle l-coral">
-                                        <i class="material-icons">person_add</i>
-                                    </div>
-                                    <div class="menu-info">
-                                        <h4>12 new members joined</h4>
-                                        <p><i class="material-icons">access_time</i> 14 mins ago</p>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="footer"><a href="javascript:void(0);">View All Notifications</a></li>
-                </ul>
-            </li>
+            
 
             {{-- Dropdown User --}}
             <li class="dropdown me-3">

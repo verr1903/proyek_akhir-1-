@@ -59,14 +59,18 @@ class DashboardAdminController extends Controller
 
         /* ================= DONUT PRODUK ================= */
         $distribusiProduk = DB::table('order_items')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
             ->join('products', 'products.id', '=', 'order_items.product_id')
             ->select(
                 'products.kategori',
                 DB::raw('SUM(order_items.quantity) as total')
             )
+            ->whereYear('orders.created_at', $tahun)
+            ->where('orders.status', 'selesai')
             ->groupBy('products.kategori')
             ->orderByDesc('total')
             ->get();
+
 
         /* ================= STOK MENIPIS ================= */
         $produkStokMenipis = Product::select(
@@ -80,14 +84,28 @@ class DashboardAdminController extends Controller
 
             ->get();
 
+        /* ================= CUSTOMER TERLOYAL ================= */
+        $customerTerloyal = Order::select(
+            'id_users',
+            DB::raw('COUNT(*) as total_pesanan'),
+            DB::raw('SUM(total_harga) as total_belanja')
+        )
+            ->where('status', 'selesai') // hanya pesanan sukses
+            ->groupBy('id_users')
+            ->orderByDesc('total_pesanan')
+            ->with('user') // relasi ke user
+            ->limit(5) // Top 5 customer
+            ->get();
+
 
         return view('admin.dashboard', [
             'title'             => 'Dashboard',
             'totalProduk'       => $totalProduk,
-            'totalKaryawan'       => $totalKaryawan,
+            'totalKaryawan'     => $totalKaryawan,
             'totalPesanan'      => $totalPesanan,
             'pesananPending'    => $pesananPending,
             'income'            => $income,
+            'customerTerloyal'  => $customerTerloyal,
             'distribusiProduk'  => $distribusiProduk,
             'produkStokMenipis' => $produkStokMenipis,
             'tahun'             => $tahun,
