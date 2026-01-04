@@ -26,15 +26,11 @@
             </div>
             @endif
 
-            <div class="alert alert-info">
-                📢 Iklan “Promo Ramadhan” akan berakhir dalam 2 hari.
-            </div>
-
             <!-- Card Top -->
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-6 col-sm-12 text-center">
                     <div class="card tasks_report p-3">
-                        <div class="card-value">660</div>
+                        <div class="card-value">{{ $totalKaryawan }}</div>
                         <div class="progress">
                             <div class="progress-bar" style="width:100%; background-color:#00ced1;"></div>
                         </div>
@@ -66,15 +62,23 @@
 
                 <div class="col-lg-3 col-md-6 col-sm-12 text-center">
                     <div class="card tasks_report p-3">
-                        <div class="card-value"><i class="fa fa-star" style="font-size: 20px;"></i>
-                            <span style="margin-top: 30px;">4.5</span>
+                        <div class="card-value">
+                            <i class="fa fa-star text-warning" style="font-size: 20px;"></i>
+                            <span class="ms-1">{{ $rataRating }}</span>
+                            <small class="text-muted">/ 5</small>
                         </div>
-                        <div class="progress">
-                            <div class="progress-bar" style="width:100%; background-color:#8fbc8f;"></div>
+
+                        <div class="progress mt-2">
+                            <div
+                                class="progress-bar bg-warning"
+                                style="width: {{ ($rataRating / 5) * 100 }}%;">
+                            </div>
                         </div>
+
                         <h6>Tingkat Kepuasan</h6>
                     </div>
                 </div>
+
 
             </div>
 

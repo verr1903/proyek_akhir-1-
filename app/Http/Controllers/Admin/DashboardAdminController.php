@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Discount;
 use App\Models\Product;
+use App\Models\User;
+use App\Models\Review;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -20,6 +22,14 @@ class DashboardAdminController extends Controller
             ->update(['status' => 'nonaktif']);
 
         $tahun = request('tahun', date('Y'));
+
+        // total karayawan
+        $totalKaryawan = User::where('role', 'karyawan')->count();
+
+        // rating
+        $rataRating = Review::avg('bintang') ?? 0;
+        // Bulatkan 1 angka di belakang koma
+        $rataRating = round($rataRating, 1);
 
         /* ================= CARD TOP ================= */
         $totalProduk   = Product::count();
@@ -74,12 +84,14 @@ class DashboardAdminController extends Controller
         return view('admin.dashboard', [
             'title'             => 'Dashboard',
             'totalProduk'       => $totalProduk,
+            'totalKaryawan'       => $totalKaryawan,
             'totalPesanan'      => $totalPesanan,
             'pesananPending'    => $pesananPending,
             'income'            => $income,
             'distribusiProduk'  => $distribusiProduk,
             'produkStokMenipis' => $produkStokMenipis,
-            'tahun'             => $tahun
+            'tahun'             => $tahun,
+            'rataRating'        => $rataRating
         ]);
     }
 }

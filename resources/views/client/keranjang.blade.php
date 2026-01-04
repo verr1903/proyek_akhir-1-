@@ -625,12 +625,11 @@
                                 'X-CSRF-TOKEN': csrfToken,
                                 'Accept': 'application/json'
                             },
-                            body: JSON.stringify({
+                           body: JSON.stringify({
                                 cart_ids: selected,
-                                address_id: alamatAktifId,
-                                metode_pembayaran: metode,
-                                total_harga: totalHarga
+                                address_id: alamatAktifId
                             })
+
                         });
 
                         const data = await res.json();

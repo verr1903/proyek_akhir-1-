@@ -107,7 +107,11 @@ class PesananAdminController extends Controller
 
         $order->save();
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'metode_pembayaran' => $order->metode_pembayaran,
+            'total_harga' => $order->total_harga,
+        ]);
     }
 
 
@@ -158,7 +162,7 @@ class PesananAdminController extends Controller
         Discount::where('status', 'aktif')
             ->where('end_at', '<', now())
             ->update(['status' => 'nonaktif']);
-            
+
         $products = Product::all();
 
         Debugbar::info($products);

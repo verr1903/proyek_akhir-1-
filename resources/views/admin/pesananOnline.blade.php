@@ -111,7 +111,12 @@
                                                 <i class="zmdi zmdi-truck me-1"></i> Antar
                                             </button>
                                             @elseif ($order->status == 'diantar')
-                                            <button class="btn btn-outline-success btn-sm rounded-pill px-3 py-1 fw-semibold shadow-sm btn-diterima" data-id="{{ $order->id }}">
+                                            <button
+                                                class="btn btn-outline-success btn-sm rounded-pill px-3 py-1 fw-semibold shadow-sm btn-diterima"
+                                                data-id="{{ $order->id }}"
+                                                data-metode="{{ $order->metode_pembayaran }}"
+                                                data-total="{{ $order->total_harga }}"
+                                            >
                                                 <i class="zmdi zmdi-check-circle me-1"></i> Diterima
                                             </button>
                                             @else
@@ -318,11 +323,17 @@
                                         statusCell.textContent = 'Diantar';
                                         statusCell.className = 'badge status-badge bg-primary text-white';
                                         // Ganti tombol aksi jadi "Diterima"
-                                        row.querySelector('.action-cell').innerHTML = `
-                                <button class="btn btn-outline-success btn-sm rounded-pill px-3 py-1 fw-semibold shadow-sm btn-diterima" data-id="${orderId}">
-                                    <i class="zmdi zmdi-check-circle me-1"></i> Diterima
-                                </button>
-                            `;
+                                       row.querySelector('.action-cell').innerHTML = `
+                                        <button
+                                            class="btn btn-outline-success btn-sm rounded-pill px-3 py-1 fw-semibold shadow-sm btn-diterima"
+                                            data-id="${orderId}"
+                                            data-metode="${data.metode_pembayaran}"
+                                            data-total="${data.total_harga}"
+                                        >
+                                            <i class="zmdi zmdi-check-circle me-1"></i> Diterima
+                                        </button>
+                                        `;
+
                                         attachDiterimaHandler(); // pasang ulang listener tombol baru
                                     } else {
                                         Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
@@ -338,56 +349,77 @@
             });
 
             // Fungsi untuk pasang event listener ke tombol "Diterima"
-            function attachDiterimaHandler() {
-                document.querySelectorAll('.btn-diterima').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const row = this.closest('tr');
-                        const orderId = row.dataset.id;
+           function attachDiterimaHandler() {
+    document.querySelectorAll('.btn-diterima').forEach(button => {
+        button.addEventListener('click', function () {
+            const row = this.closest('tr');
+            const orderId = this.dataset.id;
+            const metode = this.dataset.metode;
+            const total = parseInt(this.dataset.total || 0);
 
-                        Swal.fire({
-                            title: 'Konfirmasi Pesanan',
-                            text: 'Apakah pesanan ini sudah diterima oleh pelanggan?',
-                            icon: 'question',
-                            showCancelButton: true,
-                            confirmButtonText: 'Ya, Sudah Diterima',
-                            cancelButtonText: 'Batal',
-                            confirmButtonColor: '#198754',
-                            cancelButtonColor: '#d33',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                fetch(`/admin/orders/${orderId}/status`, {
-                                        method: 'PUT',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                                        },
-                                        body: JSON.stringify({
-                                            status: 'selesai'
-                                        })
-                                    })
-                                    .then(res => res.json())
-                                    .then(data => {
-                                        if (data.success) {
-                                            Swal.fire('Selesai!', 'Pesanan telah selesai.', 'success');
-                                            // Update tampilan status langsung
-                                            const statusCell = row.querySelector('.status-cell span');
-                                            statusCell.textContent = 'Selesai';
-                                            statusCell.className = 'badge status-badge bg-success text-white';
-                                            // Hapus tombol, ganti teks
-                                            row.querySelector('.action-cell').innerHTML = '<span class="text-success fw-semibold">Pesanan Selesai</span>';
-                                        } else {
-                                            Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
-                                        }
-                                    })
-                                    .catch(err => {
-                                        console.error(err);
-                                        Swal.fire('Error', 'Tidak dapat memperbarui status.', 'error');
-                                    });
-                            }
-                        });
-                    });
-                });
+            let title = 'Konfirmasi Pesanan';
+            let text = 'Pastikan pesanan sudah diterima oleh pelanggan';
+            let icon = 'question';
+
+            // 👉 KONDISI COD
+            if (metode === 'cod') {
+                title = 'Terima Pembayaran COD';
+                text = `Terima pembayaran dari pembeli sebesar Rp ${total.toLocaleString('id-ID')}`;
+                icon = 'warning';
             }
+
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Selesaikan Pesanan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/orders/${orderId}/status`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        },
+                        body: JSON.stringify({
+                            status: 'selesai'
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire(
+                                'Selesai!',
+                                metode === 'cod'
+                                    ? 'Pembayaran COD berhasil diterima.'
+                                    : 'Pesanan telah diselesaikan.',
+                                'success'
+                            );
+
+                            // Update status di tabel
+                            const statusCell = row.querySelector('.status-cell span');
+                            statusCell.textContent = 'Selesai';
+                            statusCell.className = 'badge status-badge bg-success text-white';
+
+                            // Hapus tombol
+                            row.querySelector('.action-cell').innerHTML =
+                                '<span class="text-success fw-semibold">Pesanan Selesai</span>';
+                        } else {
+                            Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
+                        }
+                    })
+                    .catch(() => {
+                        Swal.fire('Error', 'Tidak dapat memperbarui status.', 'error');
+                    });
+                }
+            });
+        });
+    });
+}
 
             // Panggil untuk pertama kali
             attachDiterimaHandler();

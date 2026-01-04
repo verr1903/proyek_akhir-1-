@@ -25,7 +25,7 @@ class KeranjangClientController extends Controller
         Discount::where('status', 'aktif')
             ->where('end_at', '<', now())
             ->update(['status' => 'nonaktif']);
-            
+
         $userId = Auth::id();
 
         // Ambil alamat aktif user
@@ -379,90 +379,113 @@ class KeranjangClientController extends Controller
     public function getSnapToken(Request $request)
     {
         $request->validate([
-            'cart_ids' => 'required|array|min:1',
-            'total_harga' => 'required|numeric|min:1000',
+            'cart_ids'   => 'required|array|min:1',
+            'address_id' => 'required|exists:addresses,id',
         ]);
 
         $user = Auth::user();
-        $address = $user->address;
-        $cartItems = \App\Models\Cart::with('product')
+
+        // 🔹 Ambil alamat user
+        $address = Address::where('id', $request->address_id)
+            ->where('id_users', $user->id)
+            ->firstOrFail();
+
+        // 🔹 Ambil cart
+        $cartItems = Cart::with('product.discount')
             ->whereIn('id', $request->cart_ids)
             ->where('user_id', $user->id)
             ->get();
 
         if ($cartItems->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'Keranjang kosong atau tidak valid.']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Keranjang kosong.'
+            ], 422);
         }
 
-        // Buat daftar item untuk Midtrans
         $items = [];
+        $subtotalProduk = 0;
+
         foreach ($cartItems as $cart) {
-            $price = $cart->product->harga;
+            $harga = $cart->product->harga;
+
             if ($cart->product->discount) {
-                $price -= $price * $cart->product->discount->persentase / 100;
+                $harga -= $harga * $cart->product->discount->persentase / 100;
             }
 
+            $subtotal = $harga * $cart->quantity;
+            $subtotalProduk += $subtotal;
+
             $items[] = [
-                'id' => $cart->id,
-                'price' => $price,
+                'id'       => $cart->id,
+                'price'    => (int) $harga,
                 'quantity' => $cart->quantity,
-                'name' => $cart->product->nama,
+                'name'     => $cart->product->nama,
             ];
         }
 
-        // Tambahkan ongkir (opsional)
-        $shippingCost = $request->input('shipping_cost', 0);
+        // 🔹 HITUNG ONGKIR DARI SERVER
+        $shippingCost = $this->calculateShippingCost(
+            $address->kecamatan,
+            $address->kelurahan
+        );
+
         if ($shippingCost > 0) {
             $items[] = [
-                'id' => 'SHIPPING',
-                'price' => $shippingCost,
+                'id'       => 'ONGKIR',
+                'price'    => $shippingCost,
                 'quantity' => 1,
-                'name' => 'Ongkos Kirim'
+                'name'     => 'Ongkos Kirim'
             ];
         }
 
-        // Data transaksi untuk Midtrans
+        $totalBayar = $subtotalProduk + $shippingCost;
+
+        // 🔹 Konfigurasi Midtrans
+        Config::$serverKey    = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized  = true;
+        Config::$is3ds        = true;
+
         $params = [
             'transaction_details' => [
-                'order_id' => 'ORDER-' . uniqid(),
-                'gross_amount' => $request->total_harga,
+                'order_id'     => 'ORDER-' . uniqid(),
+                'gross_amount' => (int) $totalBayar,
             ],
             'item_details' => $items,
             'customer_details' => [
                 'first_name' => $address->nama_penerima,
-                'email' => $user->email,
-                'phone' => $address->nomor_hp ?? '0810000000',
-
-                // 💡 ini bagian penting: tambahkan struktur alamat lengkap
-                'billing_address' => [
-                    'first_name'   => $address->nama_penerima,
-                    'phone'        => $address->nomor_hp ?? '0810000000',
-                    'address'      => "{$address->jalan}, Kel. {$address->kelurahan}, Kec. {$address->kecamatan}",
-                    'city'         => $address->kecamatan ?? '',
-                    'postal_code'  => $address->kode_pos ?? '',
-                    'country_code' => 'IDN'
-                ],
+                'email'      => $user->email,
+                'phone'      => $address->nomor_hp,
                 'shipping_address' => [
                     'first_name'   => $address->nama_penerima,
-                    'phone'        => $address->nomor_hp ?? '0810000000',
-                    'address'      => "{$address->jalan}, Kel. {$address->kelurahan}, Kec. {$address->kecamatan}",
-                    'city'         => $address->kecamatan ?? '',
-                    'postal_code'  => $address->kode_pos ?? '',
+                    'phone'        => $address->nomor_hp,
+                    'address'      => $address->jalan,
+                    'city'         => $address->kecamatan,
+                    'postal_code'  => $address->kode_pos,
                     'country_code' => 'IDN'
-                ],
+                ]
             ],
         ];
 
         try {
             $snapToken = Snap::getSnapToken($params);
-            return response()->json(['success' => true, 'token' => $snapToken]);
+
+            return response()->json([
+                'success' => true,
+                'token'   => $snapToken,
+                'total'   => $totalBayar
+            ]);
         } catch (\Exception $e) {
+            Log::error('Midtrans Error: ' . $e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal membuat token: ' . $e->getMessage()
-            ]);
+                'message' => 'Gagal membuat token pembayaran.'
+            ], 500);
         }
     }
+
 
     public function clearAll()
     {
