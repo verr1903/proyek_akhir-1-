@@ -187,6 +187,9 @@
         </div>
         <!-- end Desktop View -->
 
+
+
+        
         <!-- mobile view -->
         <div class="mobile-view p-3">
 
@@ -202,139 +205,130 @@
             </div>
 
             <!-- Info -->
-            <p class="text-muted small mb-3 text-center">Menampilkan 1 - 6 dari 10 produk</p>
+            <p class="text-muted small mb-3 text-center">
+                Menampilkan {{ $productm->firstItem() }} - {{ $productm->lastItem() }}
+                dari {{ $productm->total() }} produk
+            </p>
 
             <!-- Product List -->
             <div class="row g-3">
 
-                <!-- Single Product -->
-                <div class="col-6">
-                    <a href="shop-single.html" class="text-decoration-none text-dark">
-                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                            <a href="shop-single.html" class="d-block">
-                                <img src="clientAssets/images/product/image.png"
-                                    class="card-img-top product-img"
-                                    alt="Spring Snowflake">
-                            </a>
-                            <div class="card-body text-center p-2">
-                                <h6 class="fw-semibold text-truncate mb-1">Spring Snowflake</h6>
-                                <div class="text-muted small mb-2">
-                                    <span class="fw-bold text-danger">$19.00</span>
-                                    <span class="text-decoration-line-through ms-1">$29.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                @forelse($productm as $product)
+                    @php
+                        $totalStok = ($product->stok_s ?? 0)
+                            + ($product->stok_m ?? 0)
+                            + ($product->stok_l ?? 0)
+                            + ($product->stok_xl ?? 0);
 
+                        $hasDiscount = $product->discount && $product->discount->status === 'aktif';
+                        $discountPrice = $hasDiscount
+                            ? $product->harga - ($product->harga * $product->discount->persentase / 100)
+                            : $product->harga;
+                    @endphp
 
-                <!-- Duplicate for more products -->
-                <div class="col-6">
-                    <a href="shop-single.html" class="text-decoration-none text-dark">
-                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                            <a href="shop-single.html" class="d-block">
-                                <img src="clientAssets/images/product/image.png"
-                                    class="card-img-top product-img"
-                                    alt="Spring Snowflake">
-                            </a>
-                            <div class="card-body text-center p-2">
-                                <h6 class="fw-semibold text-truncate mb-1">Spring Snowflake</h6>
-                                <div class="text-muted small mb-2">
-                                    <span class="fw-bold text-danger">$19.00</span>
-                                    <span class="text-decoration-line-through ms-1">$29.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                    <div class="col-6">
+                        @if($totalStok > 0)
+                            <a href="{{ route('detail', $product->encrypted_id) }}" class="text-decoration-none text-dark">
+                        @else
+                            <div class="text-decoration-none text-dark" style="cursor:not-allowed;">
+                        @endif
 
-                <div class="col-6">
-                    <a href="shop-single.html" class="text-decoration-none text-dark">
-                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                            <a href="shop-single.html" class="d-block">
-                                <img src="clientAssets/images/product/image.png"
-                                    class="card-img-top product-img"
-                                    alt="Spring Snowflake">
-                            </a>
-                            <div class="card-body text-center p-2">
-                                <h6 class="fw-semibold text-truncate mb-1">Spring Snowflake</h6>
-                                <div class="text-muted small mb-2">
-                                    <span class="fw-bold text-danger">$19.00</span>
-                                    <span class="text-decoration-line-through ms-1">$29.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a href="shop-single.html" class="text-decoration-none text-dark">
-                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                            <a href="shop-single.html" class="d-block">
-                                <img src="clientAssets/images/product/image.png"
-                                    class="card-img-top product-img"
-                                    alt="Spring Snowflake">
-                            </a>
-                            <div class="card-body text-center p-2">
-                                <h6 class="fw-semibold text-truncate mb-1">Spring Snowflake</h6>
-                                <div class="text-muted small mb-2">
-                                    <span class="fw-bold text-danger">$19.00</span>
-                                    <span class="text-decoration-line-through ms-1">$29.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a href="shop-single.html" class="text-decoration-none text-dark">
-                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                            <a href="shop-single.html" class="d-block">
-                                <img src="clientAssets/images/product/image.png"
-                                    class="card-img-top product-img"
-                                    alt="Spring Snowflake">
-                            </a>
-                            <div class="card-body text-center p-2">
-                                <h6 class="fw-semibold text-truncate mb-1">Spring Snowflake</h6>
-                                <div class="text-muted small mb-2">
-                                    <span class="fw-bold text-danger">$19.00</span>
-                                    <span class="text-decoration-line-through ms-1">$29.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a href="shop-single.html" class="text-decoration-none text-dark">
-                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                            <a href="shop-single.html" class="d-block">
-                                <img src="clientAssets/images/product/image.png"
-                                    class="card-img-top product-img"
-                                    alt="Spring Snowflake">
-                            </a>
-                            <div class="card-body text-center p-2">
-                                <h6 class="fw-semibold text-truncate mb-1">Spring Snowflake</h6>
-                                <div class="text-muted small mb-2">
-                                    <span class="fw-bold text-danger">$19.00</span>
-                                    <span class="text-decoration-line-through ms-1">$29.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                            <div class="card border-0 shadow-sm rounded-4 overflow-hidden position-relative">
 
-                <!-- Tambahkan produk lainnya dengan pola yang sama -->
+                                {{-- Badge --}}
+                                @if($totalStok <= 0)
+                                    <span class="badge bg-dark position-absolute top-0 start-0 m-2">Sold Out</span>
+                                @elseif($hasDiscount)
+                                    <span class="badge bg-danger position-absolute top-0 start-0 m-2">
+                                        -{{ $product->discount->persentase }}%
+                                    </span>
+                                @endif
+
+                                {{-- Image --}}
+                                <img
+                                    src="{{ asset('storage/' . $product->gambar) }}"
+                                    class="card-img-top product-img"
+                                    alt="{{ $product->nama }}"
+                                    style="{{ $totalStok <= 0 ? 'opacity:0.6;' : '' }}"
+                                >
+
+                                {{-- Content --}}
+                                <div class="card-body text-center p-2">
+                                    <h6 class="fw-semibold text-truncate mb-1">
+                                        {{ $product->nama }}
+                                    </h6>
+
+                                    <div class="text-muted small mb-2">
+                                        @if($hasDiscount)
+                                            <span class="fw-bold text-danger">
+                                                Rp{{ number_format($discountPrice, 0, ',', '.') }}
+                                            </span>
+                                            <span class="text-decoration-line-through ms-1">
+                                                Rp{{ number_format($product->harga, 0, ',', '.') }}
+                                            </span>
+                                        @else
+                                            <span class="fw-bold">
+                                                Rp{{ number_format($product->harga, 0, ',', '.') }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                        @if($totalStok > 0)
+                            </a>
+                        @else
+                            </div>
+                        @endif
+                    </div>
+
+                @empty
+                    <div class="text-center py-5">
+                        <h6 class="text-muted">Belum ada produk tersedia.</h6>
+                    </div>
+                @endforelse
 
             </div>
+
 
             <!-- Pagination -->
-            <div class="page-pagination">
+            <div class="page-pagination mt-3">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item"><a class="page-link prev" href="#">Prev</a></li>
-                    <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link next" href="#">Next</a></li>
+
+                    {{-- Prev --}}
+                    @if ($productm->onFirstPage())
+                        <li class="page-item disabled">
+                            <span class="page-link prev">Prev</span>
+                        </li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link prev" href="{{ $productm->previousPageUrl() }}">Prev</a>
+                        </li>
+                    @endif
+
+                    {{-- Pages --}}
+                    @foreach ($productm->getUrlRange(1, $productm->lastPage()) as $page => $url)
+                        <li class="page-item">
+                            <a class="page-link {{ $page == $productm->currentPage() ? 'active' : '' }}" href="{{ $url }}">
+                                {{ $page }}
+                            </a>
+                        </li>
+                    @endforeach
+
+                    {{-- Next --}}
+                    @if ($productm->hasMorePages())
+                        <li class="page-item">
+                            <a class="page-link next" href="{{ $productm->nextPageUrl() }}">Next</a>
+                        </li>
+                    @else
+                        <li class="page-item disabled">
+                            <span class="page-link next">Next</span>
+                        </li>
+                    @endif
+
                 </ul>
             </div>
+
 
         </div>
         <!-- end mobile view -->
@@ -342,7 +336,59 @@
 
         <x-footer-client></x-footer-client>
     </div>
+@push('styles')
+<style>
+  /* ===== FIX MOBILE IMAGE OVERLAP ===== */
+@media (max-width: 576px) {
 
+    .mobile-view .card {
+        height: auto;
+        overflow: hidden;
+    }
+
+    .mobile-view .card-img-top,
+    .mobile-view .product-img {
+        width: 100%;
+        height: 140px; /* kunci tinggi */
+        object-fit: cover;
+        display: block;
+        position: relative; /* PENTING */
+    }
+
+    .mobile-view .card-body {
+        padding: 6px !important;
+    }
+
+    .mobile-view h6 {
+        font-size: 13px;
+        line-height: 1.2;
+        margin-bottom: 4px;
+    }
+
+    .mobile-view .text-muted {
+        font-size: 12px;
+    }
+
+     .mobile-view h6 {
+        font-size: 13px;
+        line-height: 1.2;
+        margin-bottom: 4px;
+
+        /* INI KUNCINYA */
+        white-space: normal !important;
+        word-break: break-word;
+        overflow-wrap: break-word;
+
+        /* Batasi 2 baris */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
+</style>
+@endpush
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {

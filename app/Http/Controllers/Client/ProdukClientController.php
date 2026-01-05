@@ -28,10 +28,12 @@ class ProdukClientController extends Controller
             $productIds = $discounts->pluck('id_product');
 
             $products = Product::whereIn('id', $productIds)->paginate(9);
+            $productm = Product::whereIn('id', $productIds)->paginate(10);
 
             return view('client.produk', [
                 'title' => 'Promo & Diskon',
                 'products' => $products,
+                'productm' => $productm,
                 'kategoriAktif' => null,
             ]);
         }
@@ -44,10 +46,12 @@ class ProdukClientController extends Controller
         }
 
         $products = $query->paginate(9);
+        $productm = $query->paginate(10);
 
         return view('client.produk', [
             'title' => 'Produk',
             'products' => $products,
+            'productm' => $productm,
             'kategoriAktif' => $kategori
         ]);
     }

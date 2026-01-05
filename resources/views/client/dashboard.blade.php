@@ -10,17 +10,10 @@
                     @foreach ($iklan as $item)
                     <div class="single-slider swiper-slide animation-style-01" style="background-image: url({{ asset('storage/' . $item->gambar) }}); background-size: cover; background-position: center;">
                         <div class="container">
-                            <div class="slider-content ms-3">
+                            <div class="slider-content ms-4 mt-5">
                                 <h2 class="main-title">{!! $item->judul !!}</h2>
                                 <p>{!! $item->sub_judul !!}</p>
-                                <ul class="slider-btn">
-                                    <li>
-                                        <a href="" class="btn btn-round"
-                                            style="background-color: #485444; color: white;">
-                                            Start Shopping
-                                        </a>
-                                    </li>
-                                </ul>
+                                
                             </div>
                         </div>
                     </div>
