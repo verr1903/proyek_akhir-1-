@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Iklan;
 use App\Models\Discount;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 
 class IklanAdminController extends Controller
@@ -41,9 +42,13 @@ class IklanAdminController extends Controller
         // 🔢 Pagination (10 per halaman)
         $iklans = $query->paginate(10)->appends($request->all());
 
+        // ambil produk untuk dropdown
+        $products = Product::orderBy('nama')->get();
+
         return view('admin.iklan', [
             'title' => 'Iklan',
             'iklans' => $iklans,
+            'products' => $products,
         ]);
     }
 
@@ -54,6 +59,7 @@ class IklanAdminController extends Controller
             'judul' => 'required|string|max:255',
             'sub_judul' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'product_id' => 'nullable|exists:products,id',
         ]);
 
         if ($request->hasFile('gambar')) {
@@ -92,10 +98,13 @@ class IklanAdminController extends Controller
             'judul' => 'required|string',
             'sub_judul' => 'required|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'product_id' => 'nullable|exists:products,id',
+
         ]);
 
         $iklan->judul = $request->judul;
         $iklan->sub_judul = $request->sub_judul;
+        $iklan->product_id = $request->product_id;
 
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');

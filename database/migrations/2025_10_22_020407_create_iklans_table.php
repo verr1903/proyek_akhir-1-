@@ -16,6 +16,13 @@ return new class extends Migration
             $table->string('judul');
             $table->text('sub_judul')->nullable();
             $table->string('gambar')->nullable();
+
+            // relasi ke produk
+            $table->foreignId('product_id')
+                ->nullable()
+                ->constrained('products')
+                ->nullOnDelete();
+
             $table->timestamps();
         });
     }

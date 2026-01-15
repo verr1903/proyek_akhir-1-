@@ -10,11 +10,17 @@
                     @foreach ($iklan as $item)
                     <div class="single-slider swiper-slide animation-style-01" style="background-image: url({{ asset('storage/' . $item->gambar) }}); background-size: cover; background-position: center;">
                         <div class="container">
-                            <div class="slider-content ms-4 mt-5">
-                                <h2 class="main-title">{!! $item->judul !!}</h2>
-                                <p>{!! $item->sub_judul !!}</p>
-                                
-                            </div>
+                                <div class="slider-content ms-4 mt-5">
+                                    <h2 class="main-title">{!! $item->judul !!}</h2>
+                                    <p>{!! $item->sub_judul !!}</p>
+
+                                   @if($item->product)
+                                        <a href="{{ route('detail', $item->encrypted_product_id) }}"
+                                        class="btn btn-primary mt-3">
+                                        Lihat Produk
+                                        </a>
+                                    @endif
+                                </div>
                         </div>
                     </div>
                     @endforeach

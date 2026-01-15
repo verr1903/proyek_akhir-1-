@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Iklan;
 use App\Models\Product;
 use App\Models\Discount;
+use Illuminate\Support\Facades\Crypt;
 
 class DashboardClientController extends Controller
 {
@@ -18,7 +19,13 @@ class DashboardClientController extends Controller
             ->update(['status' => 'nonaktif']);
 
         // Data iklan
-        $iklan = Iklan::all();
+        $iklan = Iklan::with('product')->get()->map(function ($item) {
+            if ($item->product) {
+                $item->encrypted_product_id = Crypt::encryptString($item->product->id);
+            }
+            return $item;
+        });
+
 
         // TAB 1 — NEW (produk terbaru)
         $newProducts = Product::with(['discount', 'reviews'])

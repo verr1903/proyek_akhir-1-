@@ -89,8 +89,9 @@
                                         <th style="width: 5%;">No</th>
                                         <th style="width: 15%;">Gambar</th>
                                         <th style="width: 25%;">Judul</th>
-                                        <th style="width: 40%;">Sub Judul</th>
-                                        <th style="width: 15%;">Aksi</th>
+                                        <th style="width: 27%;">Sub Judul</th>
+                                        <th style="width: 15%;">Produk</th>
+                                        <th style="width: 13%;">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -112,6 +113,17 @@
                                             {!! $iklan->judul !!}</h5>
                                         </td>
                                         <td><span class="text-muted">{!! $iklan->sub_judul !!}</span></td>
+                                        <td style="max-width: 200px; white-space: normal;">
+    @if($iklan->product)
+        <span class="badge bg-success text-white d-inline-block text-wrap"
+              style="max-width: 100%;">
+            {{ $iklan->product->nama }}
+        </span>
+    @else
+        <span class="badge bg-secondary">Tanpa Produk</span>
+    @endif
+</td>
+
                                         <td>
 
                                             <!-- edit -->
@@ -123,6 +135,7 @@
                                                 data-id="{{ $iklan->id }}"
                                                 data-judul="{{ $iklan->judul }}"
                                                 data-sub_judul="{{ $iklan->sub_judul }}"
+                                                data-product-id="{{ $iklan->product_id }}"
                                                 data-gambar="{{ $iklan->gambar ? asset('storage/' . $iklan->gambar) : '/Adminassets/images/ecommerce/placeholder.png' }}">
                                                 <i class="zmdi zmdi-edit"></i>
                                             </a>
@@ -200,6 +213,31 @@
                                                         <label for="editDetail" class="form-label fw-semibold">Sub Judul</label>
                                                         <textarea name="sub_judul" class="form-control rounded-3" id="editSubJudul" rows="2"></textarea>
                                                     </div>
+                                                    <div class="mb-3">
+                                                        <label for="editProductId" class="form-label fw-semibold mb-2">
+                                                            Produk Yang Terkait
+                                                        </label>
+                                                        <br>
+                                                        <select name="product_id"
+                                                                id="editProductId"
+                                                                class="form-select rounded-3 shadow-sm border-1"
+                                                                style="
+                                                                    width:100%;
+                                                                    appearance:none;
+                                                                    -webkit-appearance:none;
+                                                                    -moz-appearance:none;
+                                                                    background-image:none;
+                                                                    padding:8px 14px;
+                                                                ">
+                                                            <option value="">— Tidak terhubung ke produk —</option>
+                                                            @foreach($products as $product)
+                                                                <option value="{{ $product->id }}">
+                                                                    {{ $product->nama }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+
+                                                    </div>
 
                                                 </div>
 
@@ -259,6 +297,30 @@
                                                     <div class="mb-3">
                                                         <label for="tambahSubJudul" class="form-label fw-semibold">Sub Judul</label>
                                                         <textarea name="sub_judul" class="form-control rounded-3 shadow-sm" id="tambahSubJudul" rows="2" placeholder="Masukkan sub judul"></textarea>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                       <label class="form-label fw-semibold mb-2">
+                                                            Produk (opsional)
+                                                        </label>
+                                                        <br>
+                                                        <select name="product_id"
+                                                                class="form-select rounded-3 shadow-sm border-1"
+                                                                style="
+                                                                    width:100%;
+                                                                    appearance:none;
+                                                                    -webkit-appearance:none;
+                                                                    -moz-appearance:none;
+                                                                    background-image:none;
+                                                                    padding:8px 14px;
+                                                                ">
+                                                            <option value="">— Tidak terhubung ke produk —</option>
+                                                            @foreach($products as $product)
+                                                                <option value="{{ $product->id }}">
+                                                                    {{ $product->nama }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+
                                                     </div>
                                                 </div>
 
@@ -440,17 +502,20 @@
                 const judul = this.dataset.judul;
                 const sub_judul = this.dataset.sub_judul;
                 const gambar = this.dataset.gambar;
+                const productId = this.dataset.productId;
 
-                // isi data ke form
+                // isi form
                 document.getElementById('editId').value = id;
                 document.getElementById('previewGambarEdit').src = gambar;
-
-                // ubah action form ke route update
                 document.getElementById('formEditProduk').action = `/admin/iklan/${id}`;
 
-                // isi data ke CKEditor (kalau sudah siap)
+                // CKEditor
                 if (editorJudul) editorJudul.setData(judul);
                 if (editorSubJudul) editorSubJudul.setData(sub_judul);
+
+                // 🔥 SET DROPDOWN PRODUK
+                const selectProduct = document.getElementById('editProductId');
+                selectProduct.value = productId ? productId : '';
             });
         });
 

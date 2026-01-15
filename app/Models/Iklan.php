@@ -12,6 +12,12 @@ class Iklan extends Model
     protected $fillable = [
         'judul',
         'sub_judul',
-        'gambar'
+        'gambar',
+        'product_id'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }
