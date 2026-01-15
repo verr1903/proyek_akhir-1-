@@ -145,7 +145,7 @@ Route::prefix('admin')
          Route::get('/pesanan/online', [PesananAdminController::class, 'online'])
             ->name('pesananOnlineAdmin');
          Route::get('/orders/{id}/items', [PesananAdminController::class, 'getItems']);
-         Route::put('/orders/{id}/status', [PesananAdminController::class, 'updateStatus']);
+         Route::post('/orders/{id}/status', [PesananAdminController::class, 'updateStatus']);
 
          // Pesanan Offline
          Route::get('/pesanan/offline/index', [PesananAdminController::class, 'offlineindex'])

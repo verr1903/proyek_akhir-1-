@@ -120,7 +120,13 @@
                                                 <i class="zmdi zmdi-check-circle me-1"></i> Diterima
                                             </button>
                                             @else
-                                            <span class="text-success fw-semibold">Pesanan Selesai</span>
+                                            <button 
+    class="btn btn-outline-success btn-sm rounded-pill px-3 py-1 fw-semibold btn-lihat-bukti"
+    data-bukti="{{ asset('storage/' . $order->bukti_pengiriman) }}"
+>
+    <i class="zmdi zmdi-image"></i> Bukti
+</button>
+
                                             @endif
                                         </td>
                                     </tr>
@@ -305,7 +311,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             fetch(`/admin/orders/${orderId}/status`, {
-                                    method: 'PUT',
+                                    method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
                                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -369,54 +375,91 @@
             }
 
             Swal.fire({
-                title: title,
-                text: text,
-                icon: icon,
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Selesaikan Pesanan',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#198754',
-                cancelButtonColor: '#d33',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch(`/admin/orders/${orderId}/status`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        },
-                        body: JSON.stringify({
-                            status: 'selesai'
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire(
-                                'Selesai!',
-                                metode === 'cod'
-                                    ? 'Pembayaran COD berhasil diterima.'
-                                    : 'Pesanan telah diselesaikan.',
-                                'success'
-                            );
+    title: 'Selesaikan Pesanan',
+    html: `
+        <div style="text-align:center">
+            <label class="fw-semibold mb-1">Upload Bukti Pengiriman</label>
+            <input type="file" id="bukti_pengiriman" class="swal2-file mb-2" accept="image/*">
 
-                            // Update status di tabel
-                            const statusCell = row.querySelector('.status-cell span');
-                            statusCell.textContent = 'Selesai';
-                            statusCell.className = 'badge status-badge bg-success text-white';
+            <div class="text-center" style="text-align:center">
+                <img id="preview_bukti"
+     src=""
+     alt="Preview"
+     style="
+        display:none;
+        max-width:100%;
+        max-height:220px;
+        margin:10px auto;
+        display:block;
+     ">
 
-                            // Hapus tombol
-                            row.querySelector('.action-cell').innerHTML =
-                                '<span class="text-success fw-semibold">Pesanan Selesai</span>';
-                        } else {
-                            Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
-                        }
-                    })
-                    .catch(() => {
-                        Swal.fire('Error', 'Tidak dapat memperbarui status.', 'error');
-                    });
-                }
-            });
+            </div>
+        </div>
+    `,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Ya, Selesaikan Pesanan',
+    cancelButtonText: 'Batal',
+    confirmButtonColor: '#198754',
+    cancelButtonColor: '#d33',
+
+    didOpen: () => {
+        const input = document.getElementById('bukti_pengiriman');
+        const preview = document.getElementById('preview_bukti');
+
+        input.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            }
+        });
+    },
+
+    preConfirm: () => {
+        const file = document.getElementById('bukti_pengiriman').files[0];
+        if (!file) {
+            Swal.showValidationMessage('Bukti pengiriman wajib diupload');
+            return false;
+        }
+        return file;
+    }
+}).then((result) => {
+    if (result.isConfirmed) {
+        const formData = new FormData();
+        formData.append('status', 'selesai');
+        formData.append('bukti_pengiriman', result.value);
+
+        fetch(`/admin/orders/${orderId}/status`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute('content'),
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire('Selesai!', 'Pesanan berhasil diselesaikan.', 'success');
+
+                const statusCell = row.querySelector('.status-cell span');
+                statusCell.textContent = 'Selesai';
+                statusCell.className = 'badge status-badge bg-success text-white';
+
+                row.querySelector('.action-cell').innerHTML =
+                    '<span class="text-success fw-semibold">Pesanan Selesai</span>';
+            } else {
+                Swal.fire('Gagal', data.message || 'Terjadi kesalahan.', 'error');
+            }
+        })
+        .catch(() => {
+            Swal.fire('Error', 'Tidak dapat memperbarui status.', 'error');
+        });
+    }
+});
+
         });
     });
 }
@@ -425,6 +468,35 @@
             attachDiterimaHandler();
         });
     </script>
+
+    <!-- butki pengiriman -->
+     <script>
+document.addEventListener('click', function (e) {
+    if (e.target.closest('.btn-lihat-bukti')) {
+        const button = e.target.closest('.btn-lihat-bukti');
+        const bukti = button.dataset.bukti;
+
+       Swal.fire({
+            title: 'Bukti Pengiriman',
+            imageUrl: bukti,
+            imageAlt: 'Bukti Pengiriman',
+            showCloseButton: true,
+            confirmButtonText: 'Tutup',
+            confirmButtonColor: '#198754',
+            imageWidth: '100%',
+            didOpen: () => {
+                const img = document.querySelector('.swal2-image');
+                if (img) {
+                    img.style.marginTop = '30px';
+                    img.style.padding = '20px';
+                }
+            }
+        });
+
+    }
+});
+</script>
+
     @endpush
 
 </x-layout-admin>

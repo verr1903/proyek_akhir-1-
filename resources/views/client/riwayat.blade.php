@@ -204,6 +204,30 @@
                                 <span class="fw-bold text-danger">Rp. {{ number_format($order->total_harga, 0, ',', '.') }}</span>
                             </div>
 
+                            @if ($order->bukti_pengiriman)
+                            <hr class="my-3">
+
+                            <div class="border rounded-3 p-3">
+                                <h6 class="fw-bold text-dark mb-2">
+                                    <i class="fa fa-truck me-2 text-primary"></i> Bukti Pengiriman
+                                </h6>
+<div class="text-center">
+                                <img src="{{ asset('storage/' . $order->bukti_pengiriman) }}"
+                                    alt="Bukti Pengiriman"
+                                    class="img-fluid rounded shadow-sm"
+                                    style="max-height: 200px; object-fit: contain; cursor: pointer;"
+                                    onclick="lihatBukti('{{ asset('storage/' . $order->bukti_pengiriman) }}')">
+                                    </div>
+                            </div>
+                            @endif
+                            @if (!$order->bukti_pengiriman)
+                            <div class="alert alert-secondary small mt-3">
+                                <i class="fa fa-info-circle me-1"></i>
+                                Bukti pengiriman belum tersedia.
+                            </div>
+                            @endif
+
+
                         </div>
                     </div>
                 </div>
@@ -732,5 +756,25 @@
             });
         });
     </script>
+
+    <!-- zoom bukti pengiriman -->
+     <script>
+function lihatBukti(url) {
+    Swal.fire({
+
+            imageUrl: url,
+        
+            imageWidth: '100%',
+            didOpen: () => {
+                const img = document.querySelector('.swal2-image');
+                if (img) {
+                    img.style.marginTop = '30px';
+                    img.style.padding = '20px';
+                }
+            }
+        });
+}
+</script>
+
     @endpush
 </x-layout-client>

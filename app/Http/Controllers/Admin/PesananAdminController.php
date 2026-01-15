@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Discount;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -83,26 +84,44 @@ class PesananAdminController extends Controller
         $order = Order::find($id);
 
         if (!$order) {
-            return response()->json(['success' => false, 'message' => 'Pesanan tidak ditemukan.'], 404);
+            return response()->json([
+                'success' => false,
+                'message' => 'Pesanan tidak ditemukan.'
+            ], 404);
         }
 
-        $newStatus = $request->input('status');
-        $allowed = ['diproses', 'diantar', 'selesai'];
+        $request->validate([
+            'status' => 'required|in:diproses,diantar,selesai',
+            'bukti_pengiriman' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
 
-        if (!in_array($newStatus, $allowed)) {
-            return response()->json(['success' => false, 'message' => 'Status tidak valid.'], 400);
+        $order->status = $request->status;
+
+        // ==============================
+        // 📦 UPLOAD BUKTI PENGIRIMAN
+        // ==============================
+        if ($request->hasFile('bukti_pengiriman')) {
+
+            // Hapus file lama (jika ada)
+            if ($order->bukti_pengiriman && Storage::disk('public')->exists($order->bukti_pengiriman)) {
+                Storage::disk('public')->delete($order->bukti_pengiriman);
+            }
+
+            $path = $request->file('bukti_pengiriman')
+                ->store('bukti-pengiriman', 'public');
+
+            $order->bukti_pengiriman = $path;
         }
 
-        // Update status
-        $order->status = $newStatus;
-
-        // Tambahkan pencatatan siapa yang melakukan aksi
-        if ($newStatus === 'diantar' && !$order->action_by) {
-            $order->action_by = Auth::id(); // user yang mengantar
+        // ==============================
+        // 👤 CATAT AKSI ADMIN
+        // ==============================
+        if ($request->status === 'diantar' && !$order->action_by) {
+            $order->action_by = Auth::id();
         }
 
-        if ($newStatus === 'selesai' && !$order->action_by_2) {
-            $order->action_by_2 = Auth::id(); // user yang menandai selesai
+        if ($request->status === 'selesai' && !$order->action_by_2) {
+            $order->action_by_2 = Auth::id();
         }
 
         $order->save();
@@ -111,6 +130,9 @@ class PesananAdminController extends Controller
             'success' => true,
             'metode_pembayaran' => $order->metode_pembayaran,
             'total_harga' => $order->total_harga,
+            'bukti_pengiriman' => $order->bukti_pengiriman
+                ? asset('storage/' . $order->bukti_pengiriman)
+                : null
         ]);
     }
 

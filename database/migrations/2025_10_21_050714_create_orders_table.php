@@ -22,9 +22,12 @@ return new class extends Migration
             $table->string('action_by_2')->nullable();
             $table->string('tempat_pesanan');
             $table->string('metode_pembayaran');
+
+            // 🔥 BUKTI PENGIRIMAN
+            $table->string('bukti_pengiriman')->nullable();
+
             $table->timestamps();
 
-            // Relasi foreign key
             $table->foreign('id_users')
                 ->references('id')->on('users')
                 ->nullOnDelete();
