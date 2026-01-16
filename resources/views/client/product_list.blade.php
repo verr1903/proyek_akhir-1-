@@ -7,15 +7,15 @@ $totalStok = ($product->stok_s ?? 0)
 + ($product->stok_xl ?? 0);
 @endphp
 
-<div class="col-lg-4 col-sm-6 mb-2">
+<div class="col-6 col-sm-6 col-lg-4 mb-2">
     <div class="single-product">
         <div class="product-image position-relative">
             @if($totalStok > 0)
             <a href="{{ route('detail', $product->encrypted_id) }}">
-                <img src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}">
+                <img src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}" class="product-thumb">
             </a>
             @else
-            <img src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}" style="opacity: 0.70; cursor: not-allowed;">
+            <img src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama }}" class="product-thumb" style="opacity: 0.70; cursor: not-allowed;">
             @endif
 
             {{-- Jika stok habis --}}

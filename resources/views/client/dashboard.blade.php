@@ -174,6 +174,7 @@
                             </div>
 
                         </div>
+
                         <div id="product-container-sort" class="row justify-content-center d-none"></div>
 
                     </div>
@@ -187,6 +188,27 @@
 
     </div>
 
+    @push('styles')
+
+    <style>
+       @media (max-width: 576px) {
+    .product-image {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background: #f8f8f8;
+        border-radius: 12px;
+    }
+
+    .product-image img.product-thumb {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* ⬅️ TIDAK KEPOTONG */
+    }
+}
+
+    </style>
+    
+    @endpush
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -353,55 +375,51 @@
     </script>
 
 
-
     <script>
         const container = document.querySelector("#tab1 .row");
     </script>
 
     <!-- countdown discount -->
     <script>
-document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
 
-    function updateCountdowns() {
-        document.querySelectorAll('[data-countdown]').forEach(el => {
+            function updateCountdowns() {
+                document.querySelectorAll('[data-countdown]').forEach(el => {
 
-            const end = new Date(el.dataset.countdown);
-            const now = new Date();
-            let diff = end - now;
+                    const end = new Date(el.dataset.countdown);
+                    const now = new Date();
+                    let diff = end - now;
 
-            // 🔴 JIKA WAKTU HABIS
-            if (diff <= 0) {
-                el.innerHTML = `
-                    <div class="single-count"><span class="count">0</span><p>Days</p></div>
-                    <div class="single-count"><span class="count">0</span><p>Hour</p></div>
-                    <div class="single-count"><span class="count">0</span><p>Mint</p></div>
-                    <div class="single-count"><span class="count">0</span><p>Sec</p></div>
-                `;
-                return; // ⛔ STOP hitung
+                    // 🔴 JIKA WAKTU HABIS
+                    if (diff <= 0) {
+                        el.innerHTML = `
+                            <div class="single-count"><span class="count">0</span><p>Days</p></div>
+                            <div class="single-count"><span class="count">0</span><p>Hour</p></div>
+                            <div class="single-count"><span class="count">0</span><p>Mint</p></div>
+                            <div class="single-count"><span class="count">0</span><p>Sec</p></div>
+                        `;
+                        return; // ⛔ STOP hitung
+                    }
+
+                    // 🟢 NORMAL HITUNG
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                    const seconds = Math.floor((diff / 1000) % 60);
+
+                    el.innerHTML = `
+                        <div class="single-count"><span class="count">${days}</span><p>Days</p></div>
+                        <div class="single-count"><span class="count">${hours}</span><p>Hour</p></div>
+                        <div class="single-count"><span class="count">${minutes}</span><p>Mint</p></div>
+                        <div class="single-count"><span class="count">${seconds}</span><p>Sec</p></div>
+                    `;
+                });
             }
 
-            // 🟢 NORMAL HITUNG
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-
-            el.innerHTML = `
-                <div class="single-count"><span class="count">${days}</span><p>Days</p></div>
-                <div class="single-count"><span class="count">${hours}</span><p>Hour</p></div>
-                <div class="single-count"><span class="count">${minutes}</span><p>Mint</p></div>
-                <div class="single-count"><span class="count">${seconds}</span><p>Sec</p></div>
-            `;
+            updateCountdowns();
+            setInterval(updateCountdowns, 1000);
         });
-    }
-
-    updateCountdowns();
-    setInterval(updateCountdowns, 1000);
-});
-</script>
-
-
-
+    </script>
 
     @endpush
 

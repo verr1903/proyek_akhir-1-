@@ -126,9 +126,12 @@
                                 <div class="header-account-list mini-cart">
                                     <a href="{{ route('keranjang') }}">
                                         <i class="icon-shopping-bag"></i>
-                                        <span class="item-count ">2</span>
+                                        @if(!empty($cartCount) && $cartCount > 0)
+                                            <span class="item-count">{{ $cartCount }}</span>
+                                        @endif
                                     </a>
                                 </div>
+
                                 <div class="header-account-list mobile-menu-trigger">
                                     <button id="menu-trigger">
                                         <span></span>

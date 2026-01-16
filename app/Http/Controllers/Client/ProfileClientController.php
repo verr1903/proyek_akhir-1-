@@ -13,10 +13,6 @@ class ProfileClientController extends Controller
 {
     public function index()
     {
-        // Nonaktifkan diskon yang sudah expired (TIDAK DIHAPUS)
-        Discount::where('status', 'aktif')
-            ->where('end_at', '<', now())
-            ->update(['status' => 'nonaktif']);
 
         $user = Auth::user();
 

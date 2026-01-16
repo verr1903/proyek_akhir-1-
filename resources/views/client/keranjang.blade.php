@@ -193,145 +193,150 @@
 
         <!-- mobile view -->
         <div class="mobile-view p-2">
+
             <div class="card mb-3 rounded-4 shadow-sm">
-                <a href="{{ route('lokasi')}}" class="text-decoration-none text-dark">
+                <a href="{{ route('lokasi') }}" class="text-decoration-none text-dark">
                     <div class="card-body">
                         <div class="d-flex align-items-start">
                             <i class="fa fa-map-marker-alt fa-lg text-danger me-2 mt-1"></i>
-                            <div>
-                                <strong>Budi</strong> <span class="text-muted">( +62 8590850174 )</span><br>
-                                Jalan Tegal Sari Ujung, Villamas Permai Blok C No 24, Kelurahan Sri Meranti .......
+
+                            <div class="flex-grow-1 text-wrap" style="word-break: break-word;">
+                                @if($alamatAktif)
+                                    <strong>{{ $alamatAktif->nama_penerima }}</strong>
+                                    <span class="text-muted">
+                                        ( {{ $alamatAktif->nomor_hp }} )
+                                    </span><br>
+
+                                    {{ $alamatAktif->jalan }},
+                                    Kelurahan {{ $alamatAktif->kelurahan }},
+                                    Kecamatan {{ $alamatAktif->kecamatan }},
+                                @else
+                                    <span class="text-muted">
+                                        Belum ada alamat, tap untuk menambahkan
+                                    </span>
+                                @endif
                             </div>
+
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="card mb-3 rounded-4 shadow-sm">
+
+
+
+            @forelse($carts as $cart)
+            <div class="card mb-3 rounded-4 shadow-sm"
+                data-cart-id="{{ $cart->id }}"
+                data-stok="{{ $cart->product->{'stok_' . strtolower($cart->size)} }}">
+                
                 <div class="d-flex align-items-start p-2">
+
                     <!-- Checkbox -->
                     <input type="checkbox" class="form-check-input fci me-2 mt-2 p-2">
 
                     <!-- Gambar Produk -->
-                    <img src="/clientAssets/images/product/image1.png" class="rounded-3 me-3"
+                    <img src="{{ asset('storage/' . $cart->product->gambar) }}"
+                        class="rounded-3 me-3"
                         style="width: 80px; height: 120px; object-fit: cover;">
 
                     <!-- Detail Produk -->
                     <div class="flex-grow-1">
-                        <h6 class="fw-bold mb-1">Tshirt Oversize Series “WHOA”</h6>
-                        <p class="text-muted small mb-2">Kode: TS-01</p>
+                        <h6 class="fw-bold mb-1">{{ $cart->product->nama }}</h6>
+                        <p class="text-muted small mb-2">Kategori: {{ $cart->product->kategori }}</p>
 
-                        <!-- Ukuran + Jumlah sejajar -->
                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                             <div class="d-flex align-items-center gap-2">
-                                <select class="form-select form-select-sm"
+
+                                <!-- Ukuran (readonly sesuai cart) -->
+                                <select class="form-select form-select-sm" disabled
                                     style="font-size: 15px; padding: 2px 30px 2px 10px; height: 40px; width: auto;">
-                                    <option>S</option>
-                                    <option>M</option>
-                                    <option selected>L</option>
-                                    <option>XL</option>
+                                    <option selected>{{ $cart->size }}</option>
                                 </select>
 
+                                <!-- Qty -->
                                 <div class="d-flex align-items-center ms-auto">
                                     <button class="btn btn-outline-secondary btn-sm btn-minus px-2">-</button>
-                                    <input type="text" class="form-control form-control-sm text-center mx-1 qty-input"
-                                        style="width: 40px;" value="2" readonly>
+                                    <input type="text"
+                                        class="form-control form-control-sm text-center mx-1 qty-input"
+                                        style="width: 40px;"
+                                        value="{{ $cart->quantity }}"
+                                        readonly>
                                     <button class="btn btn-outline-secondary btn-sm btn-plus px-2">+</button>
                                 </div>
                             </div>
 
                             <!-- Harga -->
-                            <span class="fw-bold text-danger mt-3" style="font-size: 17px;">Rp80.000</span>
+                            <span class="fw-bold text-danger mt-3" style="font-size: 17px;">
+                                Rp {{ number_format($cart->harga_diskon, 0, ',', '.') }}
+                            </span>
                         </div>
                     </div>
 
-
-
-                    <!-- Tombol Hapus -->
-                    <button class="btn btn-soft-danger btn-sm ms-2 px-3 d-flex align-items-center justify-content-center rounded-4">
+                    <!-- Hapus -->
+                    <button class="btn btn-soft-danger btn-sm rounded-4 btn-delete" style="padding-left: 16px;"
+                            data-id="{{ $cart->id }}">
                         <i class="fa fa-trash"></i>
                     </button>
                 </div>
-
             </div>
-
-            <div class="card mb-3 rounded-4 shadow-sm">
-                <div class="d-flex align-items-start p-2">
-                    <!-- Checkbox -->
-                    <input type="checkbox" class="form-check-input fci me-2 mt-2 p-2">
-
-                    <!-- Gambar Produk -->
-                    <img src="/clientAssets/images/product/image1.png" class="rounded-3 me-3"
-                        style="width: 80px; height: 120px; object-fit: cover;">
-
-                    <!-- Detail Produk -->
-                    <div class="flex-grow-1">
-                        <h6 class="fw-bold mb-1">Tshirt Oversize Series “WHOA”</h6>
-                        <p class="text-muted small mb-2">Kode: TS-01</p>
-
-                        <!-- Ukuran + Jumlah sejajar -->
-                        <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <div class="d-flex align-items-center gap-2">
-                                <select class="form-select form-select-sm"
-                                    style="font-size: 15px; padding: 2px 30px 2px 10px; height: 40px; width: auto;">
-                                    <option>S</option>
-                                    <option>M</option>
-                                    <option selected>L</option>
-                                    <option>XL</option>
-                                </select>
-
-                                <div class="d-flex align-items-center ms-auto">
-                                    <button class="btn btn-outline-secondary btn-sm btn-minus px-2">-</button>
-                                    <input type="text" class="form-control form-control-sm text-center mx-1 qty-input"
-                                        style="width: 40px;" value="2" readonly>
-                                    <button class="btn btn-outline-secondary btn-sm btn-plus px-2">+</button>
-                                </div>
-                            </div>
-
-                            <!-- Harga -->
-                            <span class="fw-bold text-danger mt-3" style="font-size: 17px;">Rp80.000</span>
-                        </div>
-                    </div>
-
-                    <!-- Tombol Hapus -->
-                    <button class="btn btn-soft-danger btn-sm ms-2 px-3 d-flex align-items-center justify-content-center rounded-4">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </div>
-
+            @empty
+            <div class="text-center text-muted py-5">
+                Keranjangmu masih kosong 😢
             </div>
+            @endforelse
+
 
             <div class="card mb-3 rounded-4 shadow-sm border-0">
                 <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 fw-semibold text-dark">Pilih Metode Pembayaran</h6>
-                        <i class="fa fa-chevron-down text-secondary"></i>
+
+                    <h6 class="fw-semibold mb-2">Metode Pembayaran</h6>
+
+                    <div class="payment-option"
+                        onclick="selectMobilePayment(this,'cod')">
+                        <input type="radio" name="mobile_payment" checked>
+                        <i class="fa fa-money-bill-wave text-success"></i>
+                        <span>COD (Bayar di Tempat)</span>
                     </div>
-                    <small class="text-muted d-block mt-1 ms-2">Virtual Account (BCA)</small>
+
+                    <div class="payment-option"
+                        onclick="selectMobilePayment(this,'online')">
+                        <input type="radio" name="mobile_payment">
+                        <i class="fa fa-credit-card text-primary"></i>
+                        <span>Pembayaran Online</span>
+                    </div>
+
                 </div>
             </div>
+
+<select id="metode-pembayaran" hidden>
+    <option value="cod">cod</option>
+    <option value="online">online</option>
+</select>
+
 
             <div class="card shadow-sm border-0 rounded-4 mb-3">
                 <div class="card-body p-3">
                     <h6 class="fw-semibold mb-3 text-dark">Rincian Pembayaran</h6>
 
                     <div class="d-flex justify-content-between small mb-2">
-                        <span class="text-muted">Subtotal Produk</span>
-                        <span class="fw-medium text-dark">Rp 20.000,00</span>
+                        <span>Subtotal Produk</span>
+                        <span class="subtotal">Rp 0</span>
                     </div>
 
                     <div class="d-flex justify-content-between small mb-2">
-                        <span class="text-muted">Subtotal Pengiriman</span>
-                        <span class="fw-medium text-dark">Rp 5.000,00</span>
+                        <span>Subtotal Pengiriman</span>
+                        <span class="pengiriman">Rp {{ number_format($shippingCost, 0, ',', '.') }}</span>
                     </div>
 
                     <hr class="my-3">
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-semibold text-dark">Total Pembayaran</span>
-                        <span class="fw-bold text-danger fs-6">Rp 25.000,00</span>
+                        <span>Total Pembayaran</span>
+                        <span class="total">Rp 0</span>
                     </div>
                 </div>
             </div>
+
 
 
 
@@ -344,17 +349,14 @@
                         <input type="checkbox" id="selectAll" class="form-check-input me-2 fci p-2" style="width:18px; height:18px;">
                         <label for="selectAll" class="mb-0 small text-muted mt-1">Pilih Semua</label>
                     </div>
-                    <button class="btn btn-outline-danger btn-sm rounded-3 mt-1">
-                        Hapus
-                    </button>
                 </div>
 
                 <!-- Baris Total + Tombol -->
                 <div class="d-flex align-items-center justify-content-between px-3 py-3">
                     <div>
-                        <div class="fw-semibold small mb-1">Total <span class="fw-bold text-danger fs-6 mb-0">Rp49.703</span></div>
+                        <div class="fw-semibold small mb-1">Total <span class="fw-bold text-danger fs-6 mb-0">Rp0</span></div>
                     </div>
-                    <button class="btn btn-soft-success rounded-3 px-4 pb-4 fw-semibold">
+                    <button class="btn btn-soft-success btn-lg btn-co-mobl rounded-3 px-4 pb-4 fw-semibold">
                         Buat Pesanan
                     </button>
                 </div>
@@ -818,6 +820,311 @@
             });
         });
 
+    </script>
+
+
+    <!-- js mobile -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // tandai semua card produk mobile
+            document.querySelectorAll('.mobile-view .card.mb-3.shadow-sm').forEach((card, index) => {
+                card.setAttribute('data-mobile-cart', index);
+                
+                // ambil harga dari text
+                const priceEl = card.querySelector('.fw-bold.text-danger');
+                const qtyInput = card.querySelector('.qty-input');
+
+                if (priceEl && qtyInput) {
+                    const price = parseInt(priceEl.textContent.replace(/[^\d]/g, '')) || 0;
+                    card.setAttribute('data-price', price);
+                    card.setAttribute('data-qty', qtyInput.value);
+                }
+            });
+        });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.mobile-view .fci').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const card = cb.closest('.card');
+                card.classList.toggle('toggle-check', cb.checked);
+                card.classList.toggle('active', cb.checked);
+
+                updateMobileSummary();
+            });
+        });
+
+    });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.mobile-view .btn-plus').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const card = btn.closest('.card');
+                const input = card.querySelector('.qty-input');
+                input.value = parseInt(input.value) + 1;
+                card.setAttribute('data-qty', input.value);
+                updateMobileSummary();
+            });
+        });
+
+        document.querySelectorAll('.mobile-view .btn-minus').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const card = btn.closest('.card');
+                const input = card.querySelector('.qty-input');
+                if (parseInt(input.value) > 1) {
+                    input.value = parseInt(input.value) - 1;
+                    card.setAttribute('data-qty', input.value);
+                    updateMobileSummary();
+                }
+            });
+        });
+    });
+    </script>
+
+    <script>
+    function updateMobileSummary() {
+        let subtotal = 0;
+        const shipping = {{ $shippingCost ?? 0 }};
+
+        // hitung dari produk mobile yang dicentang
+        document.querySelectorAll('.mobile-view .card.mb-3.shadow-sm').forEach(card => {
+            const checkbox = card.querySelector('.fci');
+            if (checkbox && checkbox.checked) {
+                const price = parseInt(card.getAttribute('data-price')) || 0;
+                const qty = parseInt(card.getAttribute('data-qty')) || 1;
+                subtotal += price * qty;
+            }
+        });
+
+        const total = subtotal + shipping;
+
+        const formatRp = v => 'Rp ' + v.toLocaleString('id-ID');
+
+        // ✅ UPDATE RINCIAN PEMBAYARAN MOBILE
+        document.querySelectorAll('.mobile-view .subtotal').forEach(el => {
+            el.textContent = formatRp(subtotal);
+        });
+
+        document.querySelectorAll('.mobile-view .total').forEach(el => {
+            el.textContent = formatRp(total);
+        });
+
+        // ✅ UPDATE FOOTER MOBILE
+        const footerTotal = document.querySelector('.checkout-footer .text-danger');
+        if (footerTotal) {
+            footerTotal.textContent = formatRp(total);
+        }
+    }
+    </script>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const selectAll = document.getElementById('selectAll');
+        if (!selectAll) return;
+
+        selectAll.addEventListener('change', () => {
+            document.querySelectorAll('.mobile-view .fci').forEach(cb => {
+                cb.checked = selectAll.checked;
+            });
+            updateMobileSummary();
+        });
+    });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+            const checkoutBtn = document.querySelector('.btn-soft-success.btn-lg.btn-co-mobl');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const alamatAktifId = @json($alamatAktif ? $alamatAktif->id : null);
+            const shippingCost = {{ $shippingCost ?? 0 }};
+
+            function parseRpToNumber(rpString) {
+                return parseInt(String(rpString).replace(/[^\d]/g, '')) || 0;
+            }
+
+            function getDisplayedTotal() {
+                const totalText = document.querySelector('.mobile-view .total').textContent || '';
+                return parseRpToNumber(totalText);
+            }
+
+            checkoutBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                const selected = [...document.querySelectorAll('.mobile-view .fci:checked')]
+                    .map(cb => cb.closest('.card')?.getAttribute('data-cart-id'))
+                    .filter(Boolean);
+
+                if (selected.length === 0)
+                    return Swal.fire('Pilih Produk', 'Pilih setidaknya satu produk untuk melakukan checkout.', 'warning');
+
+                if (!alamatAktifId)
+                    return Swal.fire('Belum ada alamat', 'Silakan pilih atau tambahkan alamat pengiriman terlebih dahulu.', 'warning');
+
+                const metode = document.getElementById('metode-pembayaran').value;
+                if (!metode)
+                    return Swal.fire('Pilih Metode', 'Silakan pilih metode pembayaran.', 'warning');
+
+                const totalHarga = getDisplayedTotal();
+                if (totalHarga <= 0)
+                    return Swal.fire('Total Tidak Valid', 'Total pembayaran tidak valid.', 'error');
+
+                // 🔹 Pembayaran Online (Midtrans)
+                if (metode.toLowerCase() === 'online') {
+                    const confirm = await Swal.fire({
+                        title: 'Konfirmasi Pembayaran',
+                        html: `
+                            Kamu akan melakukan pembayaran dengan <b>${selected.length}</b> produk.<br>
+                            Total: <b>Rp ${new Intl.NumberFormat('id-ID').format(totalHarga)}</b><br>
+                            Metode: <b>${metode.toUpperCase()}</b>
+                        `,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, lanjutkan pembayaran',
+                        cancelButtonText: 'Batal'
+                    });
+                    if (!confirm.isConfirmed) return;
+
+                    try {
+                        // 🔹 Minta token ke server
+                        const res = await fetch("{{ route('midtrans.token') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            },
+                           body: JSON.stringify({
+                                cart_ids: selected,
+                                address_id: alamatAktifId
+                            })
+
+                        });
+
+                        const data = await res.json();
+
+                        if (res.ok && data.success && data.token) {
+                            // 🔹 Jalankan popup pembayaran Midtrans
+                            window.snap.pay(data.token, {
+                                onSuccess: async function (result) {
+                                    console.log('✅ Pembayaran sukses:', result);
+                                    Swal.fire('Berhasil!', 'Pembayaran berhasil diproses.', 'success');
+
+                                    // Kirim ke route checkout.store untuk simpan pesanan
+                                    const res2 = await fetch("{{ route('checkout.store') }}", {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': csrfToken,
+                                            'Accept': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            cart_ids: selected,
+                                            address_id: alamatAktifId,
+                                            metode_pembayaran: metode,
+                                            total_harga: totalHarga
+                                        })
+                                    });
+
+                                    const data2 = await res2.json();
+                                    if (res2.ok && data2.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Pesanan Dibuat',
+                                            text: data2.message || 'Pesanan berhasil dibuat.',
+                                            showConfirmButton: false,
+                                            timer: 1600
+                                        }).then(() => window.location.href = '/riwayat');
+                                    } else {
+                                        Swal.fire('Gagal', data2.message || 'Terjadi kesalahan saat membuat pesanan.', 'error');
+                                    }
+                                },
+                                onPending: function (result) {
+                                    Swal.fire('Dibatalkan', 'Kamu menutup pembayaran sebelum selesai.', 'warning');
+                                },
+                                onError: function (result) {
+                                    console.error('❌ Error pembayaran:', result);
+                                    Swal.fire('Gagal', 'Terjadi kesalahan saat pembayaran.', 'error');
+                                },
+                                onClose: function () {
+                                    Swal.fire('Dibatalkan', 'Kamu menutup pembayaran sebelum selesai.', 'warning');
+                                }
+                            });
+                        } else {
+                            Swal.fire('Error', data.message || 'Gagal mendapatkan token Midtrans.', 'error');
+                        }
+                    } catch (err) {
+                        console.error('❌ Gagal menghubungi server Midtrans:', err);
+                        Swal.fire('Error', 'Gagal menghubungi server Midtrans.', 'error');
+                    }
+
+                    return; // stop lanjut ke bawah
+                }
+
+                // 🔹 Pembayaran COD
+                if (metode.toLowerCase() === 'cod') {
+                    const confirm = await Swal.fire({
+                        title: 'Konfirmasi Pesanan',
+                        html: `
+                            Kamu akan membuat pesanan dengan <b>${selected.length}</b> produk.<br>
+                            Total: <b>Rp ${new Intl.NumberFormat('id-ID').format(totalHarga)}</b><br>
+                            Metode: <b>${metode.toUpperCase()}</b>
+                        `,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, buat pesanan',
+                        cancelButtonText: 'Batal'
+                    });
+                    if (!confirm.isConfirmed) return;
+
+                    try {
+                        const res = await fetch("{{ route('checkout.store') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                cart_ids: selected,
+                                address_id: alamatAktifId,
+                                metode_pembayaran: metode,
+                                total_harga: totalHarga
+                            })
+                        });
+
+                        const data = await res.json();
+                        if (res.ok && data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Pesanan Dibuat',
+                                text: data.message || 'Pesanan berhasil dibuat.',
+                                showConfirmButton: false,
+                                timer: 1600
+                            }).then(() => window.location.href = '/riwayat');
+                        } else {
+                            Swal.fire('Gagal', data.message || 'Terjadi kesalahan saat membuat pesanan.', 'error');
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        Swal.fire('Error', 'Terjadi kesalahan koneksi. Coba lagi.', 'error');
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function selectMobilePayment(el, metode) {
+            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
+            el.classList.add('active');
+
+            document.getElementById('metode-pembayaran').value = metode;
+        }
     </script>
 
     @endpush
