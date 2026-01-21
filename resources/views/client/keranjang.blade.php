@@ -248,17 +248,17 @@
                             <div class="d-flex align-items-center gap-2">
 
                                 <!-- Ukuran (readonly sesuai cart) -->
-                                <select class="form-select form-select-sm" disabled
-                                    style="font-size: 15px; padding: 2px 30px 2px 10px; height: 40px; width: auto;">
+                                <div class="card text-center" disabled
+                                    style="font-size: 15px; padding: 2px 12px 2px 12px;">
                                     <option selected>{{ $cart->size }}</option>
-                                </select>
+</div>
 
                                 <!-- Qty -->
                                 <div class="d-flex align-items-center ms-auto">
                                     <button class="btn btn-outline-secondary btn-sm btn-minus px-2">-</button>
                                     <input type="text"
                                         class="form-control form-control-sm text-center mx-1 qty-input"
-                                        style="width: 40px;"
+                                        style="width: 50px;"
                                         value="{{ $cart->quantity }}"
                                         readonly>
                                     <button class="btn btn-outline-secondary btn-sm btn-plus px-2">+</button>

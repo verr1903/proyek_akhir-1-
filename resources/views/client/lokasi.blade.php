@@ -35,78 +35,6 @@
                     </button>
                 </div>
 
-                <!-- Modal Tambah Alamat -->
-                <div class="modal fade" id="tambahAlamatModal" tabindex="-1" aria-labelledby="tambahAlamatModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content rounded-4 shadow-lg border-0">
-                            <div class="modal-header bg-success text-white rounded-top-4">
-                                <h4 class="modal-title fw-bold text-white" id="tambahAlamatModalLabel">Tambah Alamat Baru</h4>
-                                <button type="button" class="btn-close btn-close-white mt-1" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-
-                            <form action="{{ route('lokasi.store') }}" method="POST">
-                                @csrf
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label">Nama Penerima</label>
-                                        <input type="text" name="nama_penerima" class="form-control" placeholder="Verry Adrian" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Nomor HP</label>
-                                        <input type="number" name="nomor_hp" class="form-control" placeholder="08xxxxxxxxxx" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Jalan</label>
-                                        <textarea name="jalan" class="form-control" rows="2" placeholder="Tegal Sari Ujung" required></textarea>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Kecamatan</label>
-                                                <select id="kecamatan" name="kecamatan" class="form-select w" required>
-                                                    <option value="" selected disabled>Pilih Kecamatan</option>
-                                                    <option value="Sukajadi">Sukajadi</option>
-                                                    <option value="Pekanbaru Kota">Pekanbaru Kota</option>
-                                                    <option value="Lima Puluh">Lima Puluh</option>
-                                                    <option value="Senapelan">Senapelan</option>
-                                                    <option value="Rumbai">Rumbai</option>
-                                                    <option value="Rumbai Barat">Rumbai Barat</option>
-                                                    <option value="Rumbai Timur">Rumbai Timur</option>
-                                                    <option value="Bukit Raya">Bukit Raya</option>
-                                                    <option value="Marpoyan Damai">Marpoyan Damai</option>
-                                                    <option value="Tenayan Raya">Tenayan Raya</option>
-                                                    <option value="Sail">Sail</option>
-                                                    <option value="Payung Sekaki">Payung Sekaki</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Kelurahan</label>
-                                                <select id="kelurahan" name="kelurahan" class="form-select w-100" required disabled>
-                                                    <option value="" selected>Pilih Kelurahan</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-
-
-                                    <!-- Status default nonaktif -->
-                                    <input type="hidden" name="status" value="nonaktif">
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-success rounded-3">Simpan</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
 
                 <!-- Daftar Alamat -->
                 @if ($addresses->count() > 0)
@@ -152,72 +80,7 @@
                 </div>
                 @endif
 
-                <!-- Modal Edit Alamat -->
-                <div class="modal fade" id="editAlamatModal" tabindex="-1" aria-labelledby="editAlamatModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content rounded-4 shadow-lg border-0">
-                            <div class="modal-header bg-warning text-white rounded-top-4">
-                                <h4 class="modal-title fw-bold text-white" id="editAlamatModalLabel">Edit Alamat</h4>
-                                <button type="button" class="btn-close btn-close-white mt-1" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-
-                            <form id="formEditAlamat" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label">Nama Penerima</label>
-                                        <input type="text" name="nama_penerima" id="edit_nama_penerima" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Nomor HP</label>
-                                        <input type="number" name="nomor_hp" id="edit_nomor_hp" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Jalan</label>
-                                        <textarea name="jalan" id="edit_jalan" class="form-control" rows="2" required></textarea>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Kecamatan</label>
-                                                <select id="edit_kecamatan" name="kecamatan" class="form-select" required>
-                                                    <option value="" disabled>Pilih Kecamatan</option>
-                                                    <option value="Sukajadi">Sukajadi</option>
-                                                    <option value="Pekanbaru Kota">Pekanbaru Kota</option>
-                                                    <option value="Lima Puluh">Lima Puluh</option>
-                                                    <option value="Senapelan">Senapelan</option>
-                                                    <option value="Rumbai">Rumbai</option>
-                                                    <option value="Rumbai Barat">Rumbai Barat</option>
-                                                    <option value="Rumbai Timur">Rumbai Timur</option>
-                                                    <option value="Bukit Raya">Bukit Raya</option>
-                                                    <option value="Marpoyan Damai">Marpoyan Damai</option>
-                                                    <option value="Tenayan Raya">Tenayan Raya</option>
-                                                    <option value="Sail">Sail</option>
-                                                    <option value="Payung Sekaki">Payung Sekaki</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Kelurahan</label>
-                                                <select id="edit_kelurahan" name="kelurahan" class="form-select" required disabled>
-                                                    <option value="" selected>Pilih Kelurahan</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-warning rounded-3 text-white">Simpan Perubahan</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                
 
             </div>
         </div>
@@ -235,98 +98,221 @@
             <!-- Header & Tombol Tambah -->
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
                 <h5 class="fw-bold mb-2">Pilih Alamat</h5>
-                <a href="#" class="btn btn-success btn-sm rounded-3 d-flex align-items-center px-3 py-2">
+                <a href="#"
+                class="btn btn-success btn-sm rounded-3 d-flex align-items-center px-3 py-2"
+                data-bs-toggle="modal"
+                data-bs-target="#tambahAlamatModal">
                     <i class="fa fa-plus-circle me-2"></i> Tambah
                 </a>
+
             </div>
 
             <!-- Daftar Alamat -->
             <div class="address-list-mobile">
 
-                <!-- Card 1 -->
+                @forelse ($addresses as $address)
                 <div class="card border-0 shadow-sm rounded-4 mb-3">
                     <div class="card-body p-3">
                         <div class="d-flex flex-column">
+
                             <div class="mb-2">
-                                <strong class="d-block">Budi</strong>
-                                <small class="text-muted d-block mb-1">(+62) 895-35435-54354</small>
+                                <strong class="d-block">{{ $address->nama_penerima }}</strong>
+                                <small class="text-muted d-block mb-1">
+                                    {{ $address->nomor_hp }}
+                                </small>
                                 <span class="small text-secondary d-block">
-                                    Jalan Tegal Sari Ujung, Villamas Permai Blok C No 20, Kelurahan Sri Meranti, Kecamatan Rumbai.
+                                    Jalan {{ $address->jalan }},
+                                    Kelurahan {{ $address->kelurahan }},
+                                    Kecamatan {{ $address->kecamatan }}.
                                 </span>
                             </div>
+
                             <div class="d-flex justify-content-between align-items-center mt-2">
-                                <button class="btn btn-soft-success active rounded-3 flex-fill mx-1 pb-3 fw-semibold">
+
+                                <!-- AKTIFKAN -->
+                                <button
+                                    class="btn btn-soft-success rounded-3 flex-fill mx-1 pb-3 fw-semibold btn-aktifkan-alamat
+                                    {{ $address->status === 'aktif' ? 'active' : '' }}"
+                                    data-id="{{ $address->id }}">
                                     <i class="fa fa-check me-1"></i>
                                 </button>
-                                <button class="btn btn-soft-warning rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-pen me-1"></i>
+
+                                <!-- EDIT -->
+                                <button
+                                    class="btn btn-soft-warning rounded-3 flex-fill mx-1 pb-3 fw-semibold btn-edit-alamat"
+                                    data-id="{{ $address->id }}"
+                                    data-nama="{{ $address->nama_penerima }}"
+                                    data-hp="{{ $address->nomor_hp }}"
+                                    data-jalan="{{ $address->jalan }}"
+                                    data-kecamatan="{{ $address->kecamatan }}"
+                                    data-kelurahan="{{ $address->kelurahan }}">
+                                    <i class="fa fa-edit me-1"></i>
+
                                 </button>
-                                <button class="btn btn-soft-danger rounded-3 flex-fill mx-1 pb-3 fw-semibold">
+
+                                <!-- HAPUS -->
+                                <button
+                                    class="btn btn-soft-danger rounded-3 flex-fill mx-1 pb-3 fw-semibold btn-hapus-alamat"
+                                    data-id="{{ $address->id }}">
                                     <i class="fa fa-trash me-1"></i>
                                 </button>
+
                             </div>
+
                         </div>
                     </div>
                 </div>
-
-                <!-- Card 2 -->
-                <div class="card border-0 shadow-sm rounded-4 mb-3">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-column">
-                            <div class="mb-2">
-                                <strong class="d-block">Andi</strong>
-                                <small class="text-muted d-block mb-1">(+62) 895-35435-43354</small>
-                                <span class="small text-secondary d-block">
-                                    Jalan Indra Puri Perm Puri Sejahtera Blok A No 23, Kelurahan Rejo Sari, Kecamatan Tenayan Raya.
-                                </span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <button class="btn btn-soft-success rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-check me-1"></i>
-                                </button>
-                                <button class="btn btn-soft-warning rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-pen me-1"></i>
-                                </button>
-                                <button class="btn btn-soft-danger rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-trash me-1"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                @empty
+                <div class="alert alert-secondary text-center rounded-3">
+                    Belum ada alamat tersimpan.
                 </div>
+                @endforelse
 
-                <!-- Card 3 -->
-                <div class="card border-0 shadow-sm rounded-4 mb-3">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-column">
-                            <div class="mb-2">
-                                <strong class="d-block">Gilang</strong>
-                                <small class="text-muted d-block mb-1">(+62) 895-35435-54354</small>
-                                <span class="small text-secondary d-block">
-                                    Jalan Umban Sari Perm Meranti Blok B No 31, Kelurahan Sri Meranti, Kecamatan Rumbai.
-                                </span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <button class="btn btn-soft-success rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-check me-1"></i>
-                                </button>
-                                <button class="btn btn-soft-warning rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-pen me-1"></i>
-                                </button>
-                                <button class="btn btn-soft-danger rounded-3 flex-fill mx-1 pb-3 fw-semibold">
-                                    <i class="fa fa-trash me-1"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div> <!-- End address list -->
+            </div>
+ 
+            <!-- End address list -->
 
         </div>
         <!-- End Mobile View -->
 
+        <!-- Modal Edit Alamat -->
+        <div class="modal fade" id="editAlamatModal" tabindex="-1" aria-labelledby="editAlamatModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                <div class="modal-content rounded-4 shadow-lg border-0">
+                    <div class="modal-header bg-warning text-white rounded-top-4">
+                        <h4 class="modal-title fw-bold text-white" id="editAlamatModalLabel">Edit Alamat</h4>
+                        <button type="button" class="btn-close btn-close-white mt-2 me-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
 
+                    <form id="formEditAlamat" method="POST" class="mt-3">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Penerima</label>
+                                <input type="text" name="nama_penerima" id="edit_nama_penerima" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nomor HP</label>
+                                <input type="number" name="nomor_hp" id="edit_nomor_hp" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Jalan</label>
+                                <textarea name="jalan" id="edit_jalan" class="form-control" rows="2" required></textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Kecamatan</label>
+                                        <select id="edit_kecamatan" name="kecamatan" class="form-select" required>
+                                            <option value="" disabled>Pilih Kecamatan</option>
+                                            <option value="Sukajadi">Sukajadi</option>
+                                            <option value="Pekanbaru Kota">Pekanbaru Kota</option>
+                                            <option value="Lima Puluh">Lima Puluh</option>
+                                            <option value="Senapelan">Senapelan</option>
+                                            <option value="Rumbai">Rumbai</option>
+                                            <option value="Rumbai Barat">Rumbai Barat</option>
+                                            <option value="Rumbai Timur">Rumbai Timur</option>
+                                            <option value="Bukit Raya">Bukit Raya</option>
+                                            <option value="Marpoyan Damai">Marpoyan Damai</option>
+                                            <option value="Tenayan Raya">Tenayan Raya</option>
+                                            <option value="Sail">Sail</option>
+                                            <option value="Payung Sekaki">Payung Sekaki</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Kelurahan</label>
+                                        <select id="edit_kelurahan" name="kelurahan" class="form-select" required disabled>
+                                            <option value="" selected>Pilih Kelurahan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary rounded-3" style="width: auto;" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-warning rounded-3 text-white" style="width: auto;">Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Tambah Alamat -->
+        <div class="modal fade" id="tambahAlamatModal" tabindex="-1" aria-labelledby="tambahAlamatModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                <div class="modal-content rounded-4 shadow-lg border-0">
+                    <div class="modal-header bg-success text-white rounded-top-4">
+                        <h4 class="modal-title fw-bold text-white" id="tambahAlamatModalLabel">Tambah Alamat Baru</h4>
+                        <button type="button" class="btn-close btn-close-white mt-2 me-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <form action="{{ route('lokasi.store') }}" method="POST" class="mt-3">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Penerima</label>
+                                <input type="text" name="nama_penerima" class="form-control" placeholder="Verry Adrian" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nomor HP</label>
+                                <input type="number" name="nomor_hp" class="form-control" placeholder="08xxxxxxxxxx" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Jalan</label>
+                                <textarea name="jalan" class="form-control" rows="2" placeholder="Tegal Sari Ujung" required></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Kecamatan</label>
+                                        <select id="kecamatan" name="kecamatan" class="form-select w" required>
+                                            <option value="" selected disabled>Pilih Kecamatan</option>
+                                            <option value="Sukajadi">Sukajadi</option>
+                                            <option value="Pekanbaru Kota">Pekanbaru Kota</option>
+                                            <option value="Lima Puluh">Lima Puluh</option>
+                                            <option value="Senapelan">Senapelan</option>
+                                            <option value="Rumbai">Rumbai</option>
+                                            <option value="Rumbai Barat">Rumbai Barat</option>
+                                            <option value="Rumbai Timur">Rumbai Timur</option>
+                                            <option value="Bukit Raya">Bukit Raya</option>
+                                            <option value="Marpoyan Damai">Marpoyan Damai</option>
+                                            <option value="Tenayan Raya">Tenayan Raya</option>
+                                            <option value="Sail">Sail</option>
+                                            <option value="Payung Sekaki">Payung Sekaki</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Kelurahan</label>
+                                        <select id="kelurahan" name="kelurahan" class="form-select w-100" required disabled>
+                                            <option value="" selected>Pilih Kelurahan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <!-- Status default nonaktif -->
+                            <input type="hidden" name="status" value="nonaktif">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success rounded-3">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <x-footer-client></x-footer-client>
 
     </div>
