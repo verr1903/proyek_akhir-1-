@@ -194,15 +194,7 @@
         <div class="mobile-view p-3">
 
             <!-- Header & Sort -->
-            <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
-
-                <select class="form-select form-select-sm w-100">
-                    <option selected>Sort by</option>
-                    <option>Featured</option>
-                    <option>Best Selling</option>
-                    <option>A-Z</option>
-                </select>
-            </div>
+            
 
             <!-- Info -->
             <p class="text-muted small mb-3 text-center">

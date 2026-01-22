@@ -176,16 +176,22 @@
                                 <li class="mega-dropdown">
                                     <a class="mega-title" href="#">Kategori</a>
                                     <ul class="mega-item">
-                                        <li><a href="{{ route('produk')}}">Hoodie</a></li>
-                                        <li><a href="{{ route('produk')}}">T-Shirt</a></li>
-                                        <li><a href="{{ route('produk')}}">Sweater</a></li>
+                                        <li>
+                                            <a href="{{ route('produk', 'Hoodie') }}">Hoodie</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('produk', 'Tshirt')}}">T-Shirt</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('produk', 'Sweater')}}">Sweater</a>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="mega-dropdown">
                                     <a class="mega-title" href="#">Koleksi Baru</a>
                                     <ul class="mega-item">
-                                        <li><a href="{{ route('produk')}}">Rilisan Terbaru</a></li>
-                                        <li><a href="{{ route('produk')}}">Promo & Diskon</a></li>
+                                        <li><a href="{{ route('produk', ['sort' => 'terbaru']) }}">Rilisan Terbaru</a></li>
+                                        <li><a href="{{ route('produk', ['discount' => 'true']) }}">Promo & Diskon</a></li>
                                     </ul>
                                 </li>
                                 <li class="mega-dropdown">
