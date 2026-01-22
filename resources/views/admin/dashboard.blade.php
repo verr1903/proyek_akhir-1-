@@ -82,6 +82,68 @@
 
             </div>
 
+          @if($pesananDiantarSaya->count() > 0)
+            <div class="row clearfix">
+                <div class="col-lg-12">
+                    <div class="card border-success">
+                        <div class="header">
+                            <h2>Pesanan Saya (Diantar)</h2>
+                            <small>Pesanan yang sedang Anda antar</small>
+                        </div>
+
+                        <div class="body table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>No Pesanan</th>
+                                        <th>Penerima</th>
+                                        <th>Alamat</th>
+                                        <th>Total</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($pesananDiantarSaya as $i => $order)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td>{{ $order->no_pesanan }}</td>
+                                        <td>{{ $order->address->nama_penerima ?? '-' }}</td>
+                                        <td>
+                                            {{ 
+                                                trim(
+                                                    'Jln. ' . ($order->address->jalan ?? '') . ', ' .
+                                                    'Kel. ' . ($order->address->kelurahan ?? '') . ', ' .
+                                                    'Kec. ' . ($order->address->kecamatan ?? '')
+                                                ) ?: '-' 
+                                            }}
+                                        </td>
+                                        <td class="fw-bold text-success">
+                                            Rp {{ number_format($order->total_harga, 0, ',', '.') }}
+                                        </td>
+                                        <td>
+                                            <button
+                                                class="btn btn-success btn-sm btn-diterima p-3"
+                                                data-id="{{ $order->id }}">
+                                                <i class="fa fa-check-circle me-1"></i>
+                                                Diterima
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">
+                                            Tidak ada pesanan yang sedang diantar
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
 
             <!-- Laporan Aktivitas & Kinerja -->
             <div class="row clearfix">
@@ -329,37 +391,93 @@
     </script>
 
 
-<script>
-    Morris.Donut({
-        element: 'donut_chart',
-        data: [
-            @foreach($distribusiProduk as $item)
-            {
-                label: '{{ $item->kategori }}',
-                value: {{ $item->total }}
-            },
-            @endforeach
-        ],
-        colors: ['#00adef', '#fcb711', '#12a682'],
-        formatter: function (y) {
-            return y + ' pcs'
+    <script>
+        Morris.Donut({
+            element: 'donut_chart',
+            data: [
+                @foreach($distribusiProduk as $item)
+                {
+                    label: '{{ $item->kategori }}',
+                    value: {{ $item->total }}
+                },
+                @endforeach
+            ],
+            colors: ['#00adef', '#fcb711', '#12a682'],
+            formatter: function (y) {
+                return y + ' pcs'
+            }
+        });
+    </script>
+
+    <!-- script filter tempat dan tahun -->
+    <script>
+        function updateFilter() {
+            const tahun = document.getElementById('yearFilter').value;
+            const tempat = document.getElementById('tempatFilter').value;
+
+            let url = `?tahun=${tahun}`;
+            if (tempat !== '') {
+                url += `&tempat=${tempat}`;
+            }
+
+            window.location.href = url;
         }
+    </script>
+
+    <script>
+    document.querySelectorAll('.btn-diterima').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const orderId = this.dataset.id;
+
+            Swal.fire({
+                title: 'Konfirmasi Pesanan',
+                html: `
+                    <label class="fw-semibold">Upload Bukti Pengiriman</label>
+                    <input type="file" id="bukti" class="swal2-file">
+                    <img id="preview" style="display:none;max-width:100%;margin-top:10px">
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Selesaikan',
+                didOpen: () => {
+                    document.getElementById('bukti').addEventListener('change', e => {
+                        const preview = document.getElementById('preview');
+                        preview.src = URL.createObjectURL(e.target.files[0]);
+                        preview.style.display = 'block';
+                    });
+                },
+                preConfirm: () => {
+                    const file = document.getElementById('bukti').files[0];
+                    if (!file) {
+                        Swal.showValidationMessage('Bukti wajib diupload');
+                        return false;
+                    }
+                    return file;
+                }
+            }).then(result => {
+                if (result.isConfirmed) {
+                    const fd = new FormData();
+                    fd.append('status', 'selesai');
+                    fd.append('bukti_pengiriman', result.value);
+
+                    fetch(`/admin/orders/${orderId}/status`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document
+                                .querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
+                        },
+                        body: fd
+                    })
+                    .then(res => res.json())
+                    .then(() => {
+                        Swal.fire('Berhasil', 'Pesanan selesai', 'success')
+                            .then(() => location.reload());
+                    });
+                }
+            });
+        });
     });
-</script>
-
-<script>
-    function updateFilter() {
-        const tahun = document.getElementById('yearFilter').value;
-        const tempat = document.getElementById('tempatFilter').value;
-
-        let url = `?tahun=${tahun}`;
-        if (tempat !== '') {
-            url += `&tempat=${tempat}`;
-        }
-
-        window.location.href = url;
-    }
-</script>
+    </script>
 
 
     @endpush

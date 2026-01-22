@@ -11,7 +11,7 @@
     <title>{{$title}} | Jaqyuu</title>
 
     <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
 
     <!-- Favicon-->
     <link rel="shortcut icon" type="image/x-icon" href="/clientAssets/images/logo/logo.jpg">
@@ -25,7 +25,113 @@
     <link rel="stylesheet" href="/AdminAssets/css/color_skins.css">
 
     <style>
-        /* navbar */
+        /* ================= LOGO VISIBILITY ================= */
+
+        /* DESKTOP: sembunyikan logo */
+        @media (min-width: 992px) {
+            .navbar-header img {
+                display: block !important;
+            }
+        }
+
+        /* MOBILE: tampilkan logo */
+        @media (max-width: 991px) {
+            .navbar-header img {
+                display: none !important;
+            }
+        }
+
+
+        /* ================= TOGGLE SIDEBAR ================= */
+
+        /* DESKTOP */
+        @media (min-width: 992px) {
+            .ls-toggle-btn {
+                display: inline-flex;
+            }
+        }
+
+        /* MOBILE */
+        @media (max-width: 991px) {
+            .ls-toggle-btn {
+                display: none  !important;
+                padding: 6px 8px;
+            }
+            .judul{
+                padding-left: 50px;
+            }
+            
+        }
+
+        /* ================= NAVBAR MOBILE ================= */
+        @media (max-width: 991px) {
+
+            /* Navbar container */
+            .navbar .col-12 {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+            }
+
+            /* Header kiri (logo + toggle) */
+            .navbar-header {
+                padding: 10px 0 !important;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            /* Logo */
+            .navbar-header img {
+                max-width: 95px !important;
+                height: 40px !important;
+                margin: 0 !important;
+                box-shadow: 1px 2px 6px #445244;
+            }
+
+            /* Tombol menu mobile */
+            #mobileSidebarToggle {
+                padding: 6px 10px;
+            }
+
+
+            /* Judul halaman */
+            .navbar-left {
+                margin: 0 !important;
+                flex: 1;
+                display: flex;
+                justify-content: center;
+            }
+
+            .navbar-left span {
+                font-size: 16px !important;
+                font-weight: 700;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 180px;
+                text-align: center;
+            }
+
+            /* User info */
+            .user-dropdown .info-container {
+                display: none;
+            }
+
+            .user-dropdown img {
+                width: 36px;
+                height: 36px;
+                margin-right: 0;
+            }
+
+            /* Dropdown position */
+            .dropdown-menu {
+                right: 0 !important;
+                left: auto !important;
+            }
+        }
+
         .notif-shake {
             font-size: 22px;
             margin-top: 10px;
@@ -313,6 +419,7 @@
     <div class="overlay"></div><!-- Search  -->
 
 
+
     <!-- Top Bar -->
     <x-navbar-admin :title="$title" />
 
@@ -344,6 +451,9 @@
     <script src="/AdminAssets/js/pages/index.js"></script>
     <script src="/AdminAssets/js/pages/charts/jquery-knob.min.js"></script>
     @stack('scripts')
+    
+
+
 </body>
 
 </html>

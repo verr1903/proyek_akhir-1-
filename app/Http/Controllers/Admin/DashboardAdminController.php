@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\Review;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class DashboardAdminController extends Controller
@@ -32,6 +33,15 @@ class DashboardAdminController extends Controller
         // Bulatkan 1 angka di belakang koma
         $rataRating = round($rataRating, 1);
 
+        /* ================= PESANAN SAYA (DIANTAR) ================= */
+        $pesananDiantarSaya = Order::with('address')
+            ->where('status', 'diantar')
+            ->where('action_by', Auth::id())
+            ->whereNull('action_by_2') // 🔥 PENTING
+            ->latest()
+            ->get();
+
+
         /* ================= CARD TOP ================= */
         $totalProduk   = Product::count();
         $totalPesanan  = Order::count();
@@ -45,16 +55,16 @@ class DashboardAdminController extends Controller
 
         /* ================= GRAFIK PENDAPATAN ================= */
         $pendapatanBulanan = Order::select(
-        DB::raw('MONTH(created_at) as bulan'),
-        DB::raw('SUM(total_harga) as total')
+            DB::raw('MONTH(created_at) as bulan'),
+            DB::raw('SUM(total_harga) as total')
         )
-        ->whereYear('created_at', $tahun)
-        ->where('status', 'selesai')
-        ->when($tempat, function ($q) use ($tempat) {
-            $q->where('tempat_pesanan', $tempat);
-        })
-        ->groupBy('bulan')
-        ->pluck('total', 'bulan');
+            ->whereYear('created_at', $tahun)
+            ->where('status', 'selesai')
+            ->when($tempat, function ($q) use ($tempat) {
+                $q->where('tempat_pesanan', $tempat);
+            })
+            ->groupBy('bulan')
+            ->pluck('total', 'bulan');
 
 
         $income = [];
@@ -64,20 +74,20 @@ class DashboardAdminController extends Controller
 
         /* ================= DONUT PRODUK ================= */
         $distribusiProduk = DB::table('order_items')
-        ->join('orders', 'orders.id', '=', 'order_items.order_id')
-        ->join('products', 'products.id', '=', 'order_items.product_id')
-        ->select(
-            'products.kategori',
-            DB::raw('SUM(order_items.quantity) as total')
-        )
-        ->whereYear('orders.created_at', $tahun)
-        ->where('orders.status', 'selesai')
-        ->when($tempat, function ($q) use ($tempat) {
-            $q->where('orders.tempat_pesanan', $tempat);
-        })
-        ->groupBy('products.kategori')
-        ->orderByDesc('total')
-        ->get();
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->join('products', 'products.id', '=', 'order_items.product_id')
+            ->select(
+                'products.kategori',
+                DB::raw('SUM(order_items.quantity) as total')
+            )
+            ->whereYear('orders.created_at', $tahun)
+            ->where('orders.status', 'selesai')
+            ->when($tempat, function ($q) use ($tempat) {
+                $q->where('orders.tempat_pesanan', $tempat);
+            })
+            ->groupBy('products.kategori')
+            ->orderByDesc('total')
+            ->get();
 
 
 
@@ -118,6 +128,7 @@ class DashboardAdminController extends Controller
             'distribusiProduk'  => $distribusiProduk,
             'produkStokMenipis' => $produkStokMenipis,
             'tahun'             => $tahun,
+            'pesananDiantarSaya' => $pesananDiantarSaya,
             'rataRating'        => $rataRating
         ]);
     }

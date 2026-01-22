@@ -1,5 +1,6 @@
 <nav class="navbar">
     <div class="col-12">
+
         <div class="navbar-header" style="padding: 27px 0;background-color: white;">
             <img src="/clientAssets/images/logo/logoo.jpg"
                 alt="Banner Logo"
@@ -15,17 +16,18 @@
                 "
                 onmouseover="this.style.transform='rotate(-3deg) scale(1.07)'; this.style.boxShadow='6px 10px 20px rgba(68,82,68,0.6)';"
                 onmouseout="this.style.transform='rotate(0deg) scale(1)'; this.style.boxShadow='2px 4px 12px #445244';">
+            <a href="javascript:void(0);" class="bars"></a>
         </div>
 
         {{-- Judul Halaman --}}
         <ul class="nav navbar-nav navbar-left align-items-center"
             style="margin-top: 10px; margin-left: -20px;">
             <li class="d-flex align-items-center">
-                <a href="javascript:void(0);" class="ls-toggle-btn swap-glow" data-close="true">
+                <a href="javascript:void(0);" class="ls-toggle-btn swap-glow">
                     <i class="zmdi zmdi-swap"></i>
                 </a>
 
-                <span style="
+                <span class="judul" style="
                     font-size: 25px; 
                     font-weight: 800; 
                     color: black; 
@@ -41,7 +43,7 @@
         {{-- Kanan: Notifikasi dan User --}}
         <ul class="nav navbar-nav navbar-right align-items-center">
 
-            
+
 
             {{-- Dropdown User --}}
             <li class="dropdown me-3">
