@@ -21,7 +21,8 @@ class DashboardAdminController extends Controller
             ->where('end_at', '<', now())
             ->update(['status' => 'nonaktif']);
 
-        $tahun = request('tahun', date('Y'));
+        $tahun  = request('tahun', date('Y'));
+        $tempat = request('tempat'); // online | offline | null
 
         // total karayawan
         $totalKaryawan = User::where('role', 'karyawan')->count();
@@ -44,13 +45,17 @@ class DashboardAdminController extends Controller
 
         /* ================= GRAFIK PENDAPATAN ================= */
         $pendapatanBulanan = Order::select(
-            DB::raw('MONTH(created_at) as bulan'),
-            DB::raw('SUM(total_harga) as total')
+        DB::raw('MONTH(created_at) as bulan'),
+        DB::raw('SUM(total_harga) as total')
         )
-            ->whereYear('created_at', $tahun)
-            ->where('status', 'selesai')
-            ->groupBy('bulan')
-            ->pluck('total', 'bulan');
+        ->whereYear('created_at', $tahun)
+        ->where('status', 'selesai')
+        ->when($tempat, function ($q) use ($tempat) {
+            $q->where('tempat_pesanan', $tempat);
+        })
+        ->groupBy('bulan')
+        ->pluck('total', 'bulan');
+
 
         $income = [];
         for ($i = 1; $i <= 12; $i++) {
@@ -59,17 +64,21 @@ class DashboardAdminController extends Controller
 
         /* ================= DONUT PRODUK ================= */
         $distribusiProduk = DB::table('order_items')
-            ->join('orders', 'orders.id', '=', 'order_items.order_id')
-            ->join('products', 'products.id', '=', 'order_items.product_id')
-            ->select(
-                'products.kategori',
-                DB::raw('SUM(order_items.quantity) as total')
-            )
-            ->whereYear('orders.created_at', $tahun)
-            ->where('orders.status', 'selesai')
-            ->groupBy('products.kategori')
-            ->orderByDesc('total')
-            ->get();
+        ->join('orders', 'orders.id', '=', 'order_items.order_id')
+        ->join('products', 'products.id', '=', 'order_items.product_id')
+        ->select(
+            'products.kategori',
+            DB::raw('SUM(order_items.quantity) as total')
+        )
+        ->whereYear('orders.created_at', $tahun)
+        ->where('orders.status', 'selesai')
+        ->when($tempat, function ($q) use ($tempat) {
+            $q->where('orders.tempat_pesanan', $tempat);
+        })
+        ->groupBy('products.kategori')
+        ->orderByDesc('total')
+        ->get();
+
 
 
         /* ================= STOK MENIPIS ================= */

@@ -93,22 +93,49 @@
                                 <small class="text-muted">Menampilkan grafik pendapatan dan distribusi produk berdasarkan tahun.</small>
                             </div>
 
-                            <div class="year-filter">
-                                <label for="yearFilter" class="fw-semibold text-muted mb-0">Filter Tahun:</label>
-                                <select
-                                    id="yearFilter"
-                                    name="tahun"
-                                    class="form-select form-select-sm text-black fw-semibold"
-                                    style="width:120px; backdrop-filter: blur(10px);
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                                <!-- Filter Tempat Pesanan -->
+                                <div>
+                                    <label class="fw-semibold text-muted mb-0">Tempat:</label>
+                                    <select
+                                        id="tempatFilter"
+                                        class="form-select form-select-sm text-black fw-semibold"
+                                        style="width:120px; backdrop-filter: blur(10px);
                                         background: rgba(255,255,255,0.15);
                                         border: 1px solid rgba(255,255,255,0.3);
                                         border-radius: 12px; padding: 5px 12px;"
-                                    onchange="window.location.href='?tahun=' + this.value"
-                                >
-                                    <option value="2026" {{ $tahun == 2026 ? 'selected' : '' }}>2026</option>
-                                    <option value="2025" {{ $tahun == 2025 ? 'selected' : '' }}>2025</option>
-                                </select>
+                                        onchange="updateFilter()"
+                                    >
+                                        <option value="">Semua</option>
+                                        <option value="online" {{ request('tempat') == 'online' ? 'selected' : '' }}>
+                                            Online
+                                        </option>
+                                        <option value="offline" {{ request('tempat') == 'offline' ? 'selected' : '' }}>
+                                            Offline
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Filter Tahun -->
+                                <div>
+                                    <label for="yearFilter" class="fw-semibold text-muted mb-0">Tahun:</label>
+                                    <select
+                                        id="yearFilter"
+                                        class="form-select form-select-sm text-black fw-semibold"
+                                        style="width:120px; backdrop-filter: blur(10px);
+                                        background: rgba(255,255,255,0.15);
+                                        border: 1px solid rgba(255,255,255,0.3);
+                                        border-radius: 12px; padding: 5px 12px;"
+                                        onchange="updateFilter()"
+                                    >
+                                        <option value="2026" {{ $tahun == 2026 ? 'selected' : '' }}>2026</option>
+                                        <option value="2025" {{ $tahun == 2025 ? 'selected' : '' }}>2025</option>
+                                    </select>
+                                </div>
+
                             </div>
+
 
 
                         </div>
@@ -318,6 +345,20 @@
             return y + ' pcs'
         }
     });
+</script>
+
+<script>
+    function updateFilter() {
+        const tahun = document.getElementById('yearFilter').value;
+        const tempat = document.getElementById('tempatFilter').value;
+
+        let url = `?tahun=${tahun}`;
+        if (tempat !== '') {
+            url += `&tempat=${tempat}`;
+        }
+
+        window.location.href = url;
+    }
 </script>
 
 
