@@ -29,7 +29,7 @@ class DashboardAdminController extends Controller
         $totalKaryawan = User::where('role', 'karyawan')->count();
 
         // rating
-        $rataRating = Review::avg('bintang') ?? 0;
+        $rataRating = round(Review::avg('bintang') ?? 0, 1);
         // Bulatkan 1 angka di belakang koma
         $rataRating = round($rataRating, 1);
 

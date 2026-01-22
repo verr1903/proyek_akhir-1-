@@ -28,7 +28,7 @@
 
             <!-- Card Top -->
             <div class="row clearfix">
-                <div class="col-lg-3 col-md-6 col-sm-12 text-center">
+                <div class="col-lg-3 col-6 col-md-3 col-sm-3 text-center">
                     <div class="card tasks_report p-3">
                         <div class="card-value">{{ $totalKaryawan }}</div>
                         <div class="progress">
@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-6 col-sm-12 text-center">
+                <div class="col-lg-3 col-6 col-md-3 col-sm-3 text-center">
                     <a href="{{ route('produkAdmin') }}" style="text-decoration: none;color: black;">
                         <div class="card tasks_report p-3">
                             <div class="card-value">{{ $totalProduk }}</div>
@@ -50,7 +50,7 @@
                     </a>
                 </div>
 
-                <div class="col-lg-3 col-md-6 col-sm-12 text-center">
+                <div class="col-lg-3 col-6 col-md-3 col-sm-3 text-center">
                     <div class="card tasks_report p-3">
                         <div class="card-value">{{ $totalPesanan }}</div>
                         <div class="progress">
@@ -60,11 +60,14 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-6 col-sm-12 text-center">
+                <div class="col-lg-3 col-6 col-md-3 col-sm-3 text-center">
                     <div class="card tasks_report p-3">
                         <div class="card-value">
                             <i class="fa fa-star text-warning" style="font-size: 20px;"></i>
-                            <span class="ms-1">{{ $rataRating }}</span>
+                            <span class="ms-1">
+                                {{ fmod($rataRating, 1) ? number_format($rataRating, 1, ',', '.') : number_format($rataRating, 0) }}
+                            </span>
+
                             <small class="text-muted">/ 5</small>
                         </div>
 
@@ -75,7 +78,7 @@
                             </div>
                         </div>
 
-                        <h6>Tingkat Kepuasan</h6>
+                        <h6>Kepuasan</h6>
                     </div>
                 </div>
 
@@ -433,7 +436,7 @@
                 title: 'Konfirmasi Pesanan',
                 html: `
                     <label class="fw-semibold">Upload Bukti Pengiriman</label>
-                    <input type="file" id="bukti" class="swal2-file">
+                    <input type="file" id="bukti" class="swal2-file" accept="image/*">
                     <img id="preview" style="display:none;max-width:100%;margin-top:10px">
                 `,
                 showCancelButton: true,
