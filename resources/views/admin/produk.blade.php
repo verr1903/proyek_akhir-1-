@@ -46,7 +46,7 @@
                                 </div>
 
                                 <!-- Sort -->
-                                <select name="sort" class="form-select mx-1 form-select-sm border-0 bg-white text-dark rounded-pill px-2"
+                                <select name="sort" class="tgl-dbuat form-select mx-1 form-select-sm border-0 bg-white text-dark rounded-pill px-2"
                                     style="width:170px; height:44px; font-size:14px;">
                                     <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Tanggal dibuat</option>
                                     <option value="nama" {{ request('sort') == 'nama' ? 'selected' : '' }}>Nama Produk</option>
@@ -55,7 +55,7 @@
                                 </select>
 
                                 <!-- Direction -->
-                                <select name="direction" class="form-select mx-1 form-select-sm border-0 bg-white text-dark rounded-pill px-2"
+                                <select name="direction" class="direction form-select mx-1 form-select-sm border-0 bg-white text-dark rounded-pill px-2"
                                     style="width:140px; height:44px; font-size:14px;">
                                     <option value="asc" {{ request('direction') == 'asc' ? 'selected' : '' }}> Naik</option>
                                     <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}> Turun</option>
@@ -83,391 +83,395 @@
 
 
                     <div class="card product_item_list">
-                        <div class="body table-responsive">
-                            <table class="table table-hover m-b-0" style="table-layout: fixed; width: 100%;">
-                                <thead>
-                                    <tr class="text-center">
-                                        <th style="width: 5%;">No</th>
-                                        <th style="width: 10%;">Gambar</th>
-                                        <th style="width: 15%;">Nama Produk</th>
-                                        <th style="width: 30%;">Detail</th>
-                                        <th style="width: 10%;">Kategori</th>
-                                        <th style="width: 10%;">Harga</th>
-                                        <th style="width: 8%;">Stock</th>
-                                        <th style="width: 12%;">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($products as $index => $product)
-                                    <tr class="text-center">
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>
-                                            @if($product->gambar)
-                                            <img src="{{ $product->gambar ? asset('storage/' . $product->gambar) : '/Adminassets/images/ecommerce/placeholder.png' }}"
-                                                width="48"
-                                                alt="Product img"
-                                                class="img-clickable"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#previewImageModal"
-                                                data-src="{{ $product->gambar ? asset('storage/' . $product->gambar) : '/Adminassets/images/ecommerce/placeholder.png' }}">
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table table-hover m-b-0 align-middle">
 
-                                            @else
-                                            <img src="/Adminassets/images/ecommerce/placeholder.png" width="48" alt="No Image">
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ $product->nama }}
-                                        </td>
-                                        <td>{!! $product->detail !!}</td>
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th style="width: 5%;">No</th>
+                                            <th style="width: 10%;">Gambar</th>
+                                            <th style="width: 15%;">Nama Produk</th>
+                                            <th class="d-none d-md-table-cell" style="width: 30%;">Detail</th>
+                                            <th class="d-none d-md-table-cell" style="width: 10%;">Kategori</th>
+                                            <th style="width: 10%;">Harga</th>
+                                            <th style="width: 8%;">Stock</th>
+                                            <th style="width: 12%;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($products as $index => $product)
+                                        <tr class="text-center">
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>
+                                                @if($product->gambar)
+                                                <img src="{{ $product->gambar ? asset('storage/' . $product->gambar) : '/Adminassets/images/ecommerce/placeholder.png' }}"
+                                                    width="48"
+                                                    alt="Product img"
+                                                    class="img-clickable"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#previewImageModal"
+                                                    data-src="{{ $product->gambar ? asset('storage/' . $product->gambar) : '/Adminassets/images/ecommerce/placeholder.png' }}">
 
-                                        <td>{{ $product->kategori }}</td>
-                                        <td>Rp{{ number_format($product->harga, 0, ',', '.') }}</td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0);"
-                                                class="btn-action waves-effect waves-blue btn-detail-stok"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#stokDetailModal"
-                                                data-nama="{{ $product->nama }}"
-                                                data-kategori="{{ $product->kategori }}"
-                                                data-gambar="{{ $product->gambar ? asset('storage/' . $product->gambar) : '/Adminassets/images/ecommerce/placeholder.png' }}"
-                                                data-stok_s="{{ $product->stok_s }}"
-                                                data-stok_m="{{ $product->stok_m }}"
-                                                data-stok_l="{{ $product->stok_l }}"
-                                                data-stok_xl="{{ $product->stok_xl }}"
-                                                title="Lihat Detail Stok">
-                                                <i class="zmdi zmdi-eye"></i>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <!-- edit -->
-                                            <a href="javascript:void(0);" class="btn-action waves-effect waves-yellow btn-action-edit"
-                                                data-id="{{ $product->id }}"
-                                                data-nama="{{ $product->nama }}"
-                                                data-kategori="{{ $product->kategori }}"
-                                                data-detail="{{ $product->detail }}"
-                                                data-harga="{{ $product->harga }}"
-                                                data-stok_s="{{ $product->stok_s }}"
-                                                data-stok_m="{{ $product->stok_m }}"
-                                                data-stok_l="{{ $product->stok_l }}"
-                                                data-stok_xl="{{ $product->stok_xl }}"
-                                                data-gambar="{{ $product->gambar ? asset('storage/' . $product->gambar) : '/Adminassets/images/ecommerce/placeholder.png' }}"
-                                                data-bs-toggle="modal" data-bs-target="#editProdukModal"
-                                                title="Edit">
-                                                <i class="zmdi zmdi-edit"></i>
-                                            </a>
+                                                @else
+                                                <img src="/Adminassets/images/ecommerce/placeholder.png" width="48" alt="No Image">
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ $product->nama }}
+                                            </td>
+                                            <td class="d-none d-md-table-cell">{!! $product->detail !!}</td>
+                                            <td class="d-none d-md-table-cell">{{ $product->kategori }}</td>
+                                            <td>Rp{{ number_format($product->harga, 0, ',', '.') }}</td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0);"
+                                                    class="btn-action waves-effect waves-blue btn-detail-stok"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#stokDetailModal"
+                                                    data-nama="{{ $product->nama }}"
+                                                    data-kategori="{{ $product->kategori }}"
+                                                    data-gambar="{{ $product->gambar ? asset('storage/' . $product->gambar) : '/Adminassets/images/ecommerce/placeholder.png' }}"
+                                                    data-stok_s="{{ $product->stok_s }}"
+                                                    data-stok_m="{{ $product->stok_m }}"
+                                                    data-stok_l="{{ $product->stok_l }}"
+                                                    data-stok_xl="{{ $product->stok_xl }}"
+                                                    title="Lihat Detail Stok">
+                                                    <i class="zmdi zmdi-eye"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    <!-- edit -->
+                                                    <a href="javascript:void(0);" class="btn-action waves-effect waves-yellow btn-action-edit"
+                                                        data-id="{{ $product->id }}"
+                                                        data-nama="{{ $product->nama }}"
+                                                        data-kategori="{{ $product->kategori }}"
+                                                        data-detail="{{ $product->detail }}"
+                                                        data-harga="{{ $product->harga }}"
+                                                        data-stok_s="{{ $product->stok_s }}"
+                                                        data-stok_m="{{ $product->stok_m }}"
+                                                        data-stok_l="{{ $product->stok_l }}"
+                                                        data-stok_xl="{{ $product->stok_xl }}"
+                                                        data-gambar="{{ $product->gambar ? asset('storage/' . $product->gambar) : '/Adminassets/images/ecommerce/placeholder.png' }}"
+                                                        data-bs-toggle="modal" data-bs-target="#editProdukModal"
+                                                        title="Edit">
+                                                        <i class="zmdi zmdi-edit"></i>
+                                                    </a>
 
-                                            <!-- hapus -->
-                                            <form action="{{ route('produkAdmin.destroy', $product->id) }}" method="POST" class="d-inline delete-form">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn-action waves-effect waves-red btn-delete border-0" data-nama="{{ $product->nama }}" title="Hapus">
-                                                    <i class="zmdi zmdi-delete"></i>
+                                                    <!-- hapus -->
+                                                    <form action="{{ route('produkAdmin.destroy', $product->id) }}" method="POST" class="d-inline delete-form">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn-action waves-effect waves-red btn-delete border-0" data-nama="{{ $product->nama }}" title="Hapus">
+                                                            <i class="zmdi zmdi-delete"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted">Belum ada produk</td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+
+                                </table>
+                                <div class="mt-3">
+                                    {{ $products->links('pagination::bootstrap-5') }}
+                                </div>
+
+
+                                <!-- Modal Detail Stok -->
+                                <div class="modal fade" id="stokDetailModal" tabindex="-1" aria-labelledby="stokDetailModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content rounded-4 shadow-lg border-0">
+                                            <div class="modal-header bg-primary text-white rounded-top-4">
+                                                <h5 class="modal-title fw-semibold" id="stokDetailModalLabel">
+                                                    Detail Stok Produk
+                                                </h5>
+                                                <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white; font-size: 22px;">
+                                                    <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
                                                 </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="8" class="text-center text-muted">Belum ada produk</td>
-                                    </tr>
-                                    @endforelse
-                                </tbody>
-
-                            </table>
-                            <div class="mt-3">
-                                {{ $products->links('pagination::bootstrap-5') }}
-                            </div>
 
 
-                            <!-- Modal Detail Stok -->
-                            <div class="modal fade" id="stokDetailModal" tabindex="-1" aria-labelledby="stokDetailModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content rounded-4 shadow-lg border-0">
-                                        <div class="modal-header bg-primary text-white rounded-top-4">
-                                            <h5 class="modal-title fw-semibold" id="stokDetailModalLabel">
-                                                Detail Stok Produk
-                                            </h5>
-                                            <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white; font-size: 22px;">
-                                                <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
-                                            </button>
-
-
-                                        </div>
-
-                                        <div class="modal-body">
-                                            <div class="text-center mb-3">
-                                                <img src="/Adminassets/images/ecommerce/1.png" width="90" class="rounded-3 shadow-sm" alt="Product Image">
-                                                <h5 class="mt-3 fw-bold">List Monochrome</h5>
-                                                <p class="text-muted mb-0">Kategori: <strong>T-shirt</strong></p>
                                             </div>
 
-                                            <table class="table table-bordered align-middle text-center">
-                                                <thead class="table-light">
-                                                    <tr>
-                                                        <th>Ukuran</th>
-                                                        <th>Stok Tersisa</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td><strong>S</strong></td>
-                                                        <td>15</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>M</strong></td>
-                                                        <td>22</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>L</strong></td>
-                                                        <td>18</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>XL</strong></td>
-                                                        <td>10</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                            <div class="modal-body">
+                                                <div class="text-center mb-3">
+                                                    <img src="/Adminassets/images/ecommerce/1.png" width="90" class="rounded-3 shadow-sm" alt="Product Image">
+                                                    <h5 class="mt-3 fw-bold">List Monochrome</h5>
+                                                    <p class="text-muted mb-0">Kategori: <strong>T-shirt</strong></p>
+                                                </div>
 
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn close-footer btn-outline-secondary rounded-3 btn-close-red" data-bs-dismiss="modal">
-                                                <i class="zmdi zmdi-close me-1"></i> Tutup
-                                            </button>
+                                                <table class="table table-bordered align-middle text-center">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Ukuran</th>
+                                                            <th>Stok Tersisa</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>S</strong></td>
+                                                            <td>15</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>M</strong></td>
+                                                            <td>22</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>L</strong></td>
+                                                            <td>18</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>XL</strong></td>
+                                                            <td>10</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn close-footer btn-outline-secondary rounded-3 btn-close-red" data-bs-dismiss="modal">
+                                                    <i class="zmdi zmdi-close me-1"></i> Tutup
+                                                </button>
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Modal Edit Produk -->
-                            <div class="modal fade" id="editProdukModal" tabindex="-1" aria-labelledby="editProdukModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg modal-dialog-centered">
-                                    <div class="modal-content border-0 rounded-4 shadow-lg">
-                                        <div class="modal-header bg-warning text-white rounded-top-4">
-                                            <h5 class="modal-title fw-bold" id="editProdukModalLabel">
-                                                Edit Produk
-                                            </h5>
-                                            <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white; font-size: 22px;">
-                                                <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
-                                            </button>
-                                        </div>
+                                <!-- Modal Edit Produk -->
+                                <div class="modal fade" id="editProdukModal" tabindex="-1" aria-labelledby="editProdukModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content border-0 rounded-4 shadow-lg">
+                                            <div class="modal-header bg-warning text-white rounded-top-4">
+                                                <h5 class="modal-title fw-bold" id="editProdukModalLabel">
+                                                    Edit Produk
+                                                </h5>
+                                                <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white; font-size: 22px;">
+                                                    <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
+                                                </button>
+                                            </div>
 
-                                        <div class="modal-body p-4">
-                                            <form id="formEditProduk" action="" method="POST" enctype="multipart/form-data">
-                                                @csrf
-                                                @method('PUT')
-                                                <input type="hidden" id="editProductId" name="id">
-                                                <div class="container-fluid py-2">
-                                                    <!-- Gambar Produk -->
-                                                    <div class="mb-4 text-center">
-                                                        <label for="editGambar" class="form-label fw-semibold mb-2">Gambar Produk</label>
-                                                        <div class="d-flex flex-column align-items-center">
-                                                            <img id="previewGambarEdit"
-                                                                src="/Adminassets/images/ecommerce/1.png"
-                                                                alt="Preview"
-                                                                class="img-thumbnail rounded-4 shadow-sm mb-3"
-                                                                style="width: 140px; height: auto;">
-                                                            <label for="editGambar" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                                                                <i class="zmdi zmdi-upload me-1"></i> Pilih Gambar
-                                                            </label>
-                                                            <input type="file" name="gambar" id="editGambar" accept="image/*" class="d-none">
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Nama & Kategori -->
-                                                    <div class="row g-3 mb-3 align-items-end">
-                                                        <!-- Nama Produk -->
-                                                        <div class="col-md-6">
-                                                            <label for="editNama" class="form-label fw-semibold mb-2">Nama Produk</label>
-                                                            <input type="text" name="nama" class="form-control rounded-3 shadow-sm border-1"
-                                                                id="editNama" value="List Monochrome"
-                                                                style="padding: 10px 14px; font-weight: 500;">
-                                                        </div>
-
-                                                        <!-- Kategori -->
-                                                        <div class="col-md-6">
-                                                            <label for="editKategori" class="form-label fw-semibold mb-2 kategori">Kategori</label>
-                                                            <select class="form-select rounded-3 kategori-select shadow-sm border-1" id="editKategori"
-                                                                style="padding: 8px 36px 8px 14px;" name="kategori">
-                                                                <option value="Tshirt">Tshirt</option>
-                                                                <option value="Sweater">Sweater</option>
-                                                                <option value="Hoodie">Hoodie</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <!-- Detail Produk -->
-                                                    <div class="mb-3">
-                                                        <label for="editDetail" class="form-label fw-semibold">Detail Produk</label>
-                                                        <textarea class="form-control rounded-3" id="editDetail" rows="3" name="detail"></textarea>
-                                                    </div>
-
-                                                    <!-- Harga -->
-                                                    <div class="mb-4">
-                                                        <label for="editHarga" class="form-label fw-semibold">Harga (Rp)</label>
-                                                        <input type="number" class="form-control rounded-3" id="editHarga" name="harga">
-                                                    </div>
-
-                                                    <!-- Stok per Size -->
-                                                    <div class="mb-2">
-                                                        <label class="form-label fw-semibold mb-2">Stok per Size</label>
-                                                        <div class="row g-3">
-                                                            <div class="col-6 col-md-3">
-                                                                <label for="stokS" class="form-label small mb-1">S</label>
-                                                                <input type="number" class="form-control rounded-3 text-center" name="stok_s" id="stokS" value="10">
-                                                            </div>
-                                                            <div class="col-6 col-md-3">
-                                                                <label for="stokM" class="form-label small mb-1">M</label>
-                                                                <input type="number" class="form-control rounded-3 text-center" name="stok_m" id="stokM" value="8">
-                                                            </div>
-                                                            <div class="col-6 col-md-3">
-                                                                <label for="stokL" class="form-label small mb-1">L</label>
-                                                                <input type="number" class="form-control rounded-3 text-center" name="stok_l" id="stokL" value="5">
-                                                            </div>
-                                                            <div class="col-6 col-md-3">
-                                                                <label for="stokXL" class="form-label small mb-1">XL</label>
-                                                                <input type="number" class="form-control rounded-3 text-center" name="stok_xl" id="stokXL" value="3">
+                                            <div class="modal-body p-4">
+                                                <form id="formEditProduk" action="" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" id="editProductId" name="id">
+                                                    <div class="container-fluid py-2">
+                                                        <!-- Gambar Produk -->
+                                                        <div class="mb-4 text-center">
+                                                            <label for="editGambar" class="form-label fw-semibold mb-2">Gambar Produk</label>
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <img id="previewGambarEdit"
+                                                                    src="/Adminassets/images/ecommerce/1.png"
+                                                                    alt="Preview"
+                                                                    class="img-thumbnail rounded-4 shadow-sm mb-3"
+                                                                    style="width: 140px; height: auto;">
+                                                                <label for="editGambar" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                                                    <i class="zmdi zmdi-upload me-1"></i> Pilih Gambar
+                                                                </label>
+                                                                <input type="file" name="gambar" id="editGambar" accept="image/*" class="d-none">
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
 
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn close-footer btn-outline-secondary rounded-3 btn-close-red" data-bs-dismiss="modal">
-                                                        <i class="zmdi zmdi-close me-1"></i> Batal
-                                                    </button>
-                                                    <button type="submit" class="btn btn-warning text-white rounded-3 fw-semibold">
-                                                        <i class="zmdi zmdi-save me-1"></i> Simpan Perubahan
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Modal Tambah Produk -->
-                            <div class="modal fade" id="tambahProdukModal" tabindex="-1" aria-labelledby="tambahProdukModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg modal-dialog-centered">
-                                    <div class="modal-content border-0 rounded-4 shadow-lg">
-                                        <!-- Header -->
-                                        <div class="modal-header bg-success text-white rounded-top-4">
-                                            <h5 class="modal-title fw-bold" id="tambahProdukModalLabel">
-                                                Tambah Produk
-                                            </h5>
-                                            <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white; font-size: 22px;">
-                                                <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
-                                            </button>
-                                        </div>
-
-                                        <!-- Body -->
-                                        <div class="modal-body p-4">
-                                            <form id="formTambahProduk" action="{{ route('produkAdmin.store') }}" method="POST" enctype="multipart/form-data">
-                                                @csrf
-                                                <div class="container-fluid py-2">
-                                                    <!-- Gambar Produk -->
-                                                    <div class="mb-4 text-center">
-                                                        <label for="tambahGambar" class="form-label fw-semibold mb-2">Gambar Produk</label>
-                                                        <div class="d-flex flex-column align-items-center">
-                                                            <img id="previewGambarTambah"
-                                                                src="/Adminassets/images/ecommerce/placeholder.png"
-                                                                alt="Preview"
-                                                                class="img-thumbnail rounded-4 shadow-sm mb-3"
-                                                                style="width: 140px; height: auto;">
-                                                            <label for="tambahGambar" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                                                                <i class="zmdi zmdi-upload me-1"></i> Pilih Gambar
-                                                            </label>
-                                                            <input type="file" name="gambar" id="tambahGambar" accept="image/*" class="d-none">
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Nama & Kategori -->
-                                                    <div class="row g-3 mb-3 align-items-end">
-                                                        <div class="col-md-6">
-                                                            <label for="tambahNama" class="form-label fw-semibold mb-2">Nama Produk</label>
-                                                            <input type="text" name="nama" class="form-control rounded-3 shadow-sm border-1"
-                                                                id="tambahNama" placeholder="Masukkan nama produk"
-                                                                style="padding: 10px 14px; font-weight: 500;">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="tambahKategori" class="form-label fw-semibold mb-2 kategori">Kategori</label>
-                                                            <select class="form-select rounded-3 kategori-select shadow-sm border-1" id="tambahKategori"
-                                                                style="padding: 8px 36px 8px 14px;" name="kategori">
-                                                                <option selected disabled>Pilih kategori</option>
-                                                                <option value="Tshirt">Tshirt</option>
-                                                                <option value="Sweater">Sweater</option>
-                                                                <option value="Hoodie">Hoodie</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Detail Produk -->
-                                                    <div class="mb-3">
-                                                        <label for="tambahDetail" class="form-label fw-semibold">Detail Produk</label>
-                                                        <textarea name="detail" class="form-control rounded-3 shadow-sm" id="tambahDetail" rows="3" placeholder="Deskripsi produk"></textarea>
-                                                    </div>
-
-                                                    <!-- Harga -->
-                                                    <div class="mb-4">
-                                                        <label for="tambahHarga" class="form-label fw-semibold">Harga (Rp)</label>
-                                                        <input name="harga" type="number" class="form-control rounded-3 shadow-sm" id="tambahHarga" placeholder="Masukkan harga">
-                                                    </div>
-
-                                                    <!-- Stok per Size -->
-                                                    <div class="mb-2">
-                                                        <label class="form-label fw-semibold mb-2">Stok per Size</label>
-                                                        <div class="row g-3">
-                                                            <div class="col-6 col-md-3">
-                                                                <label for="tambahStokS" class="form-label small mb-1">S</label>
-                                                                <input type="number" name="stok_s" class="form-control rounded-3 text-center shadow-sm" id="tambahStokS" value="0">
+                                                        <!-- Nama & Kategori -->
+                                                        <div class="row g-3 mb-3 align-items-end">
+                                                            <!-- Nama Produk -->
+                                                            <div class="col-md-6">
+                                                                <label for="editNama" class="form-label fw-semibold mb-2">Nama Produk</label>
+                                                                <input type="text" name="nama" class="form-control rounded-3 shadow-sm border-1"
+                                                                    id="editNama" value="List Monochrome"
+                                                                    style="padding: 10px 14px; font-weight: 500;">
                                                             </div>
-                                                            <div class="col-6 col-md-3">
-                                                                <label for="tambahStokM" class="form-label small mb-1">M</label>
-                                                                <input type="number" name="stok_m" class="form-control rounded-3 text-center shadow-sm" id="tambahStokM" value="0">
+
+                                                            <!-- Kategori -->
+                                                            <div class="col-md-6">
+                                                                <label for="editKategori" class="form-label fw-semibold mb-2 kategori">Kategori</label>
+                                                                <select class="form-select rounded-3 kategori-select shadow-sm border-1" id="editKategori"
+                                                                    style="padding: 8px 36px 8px 14px;" name="kategori">
+                                                                    <option value="Tshirt">Tshirt</option>
+                                                                    <option value="Sweater">Sweater</option>
+                                                                    <option value="Hoodie">Hoodie</option>
+                                                                </select>
                                                             </div>
-                                                            <div class="col-6 col-md-3">
-                                                                <label for="tambahStokL" class="form-label small mb-1">L</label>
-                                                                <input type="number" name="stok_l" class="form-control rounded-3 text-center shadow-sm" id="tambahStokL" value="0">
-                                                            </div>
-                                                            <div class="col-6 col-md-3">
-                                                                <label for="tambahStokXL" name="stok_xl" class="form-label small mb-1">XL</label>
-                                                                <input type="number" name="stok_xl" class="form-control rounded-3 text-center shadow-sm" id="tambahStokXL" value="0">
+                                                        </div>
+
+
+                                                        <!-- Detail Produk -->
+                                                        <div class="mb-3">
+                                                            <label for="editDetail" class="form-label fw-semibold">Detail Produk</label>
+                                                            <textarea class="form-control rounded-3" id="editDetail" rows="3" name="detail"></textarea>
+                                                        </div>
+
+                                                        <!-- Harga -->
+                                                        <div class="mb-4">
+                                                            <label for="editHarga" class="form-label fw-semibold">Harga (Rp)</label>
+                                                            <input type="number" class="form-control rounded-3" id="editHarga" name="harga">
+                                                        </div>
+
+                                                        <!-- Stok per Size -->
+                                                        <div class="mb-2">
+                                                            <label class="form-label fw-semibold mb-2">Stok per Size</label>
+                                                            <div class="row g-3">
+                                                                <div class="col-6 col-md-3">
+                                                                    <label for="stokS" class="form-label small mb-1">S</label>
+                                                                    <input type="number" class="form-control rounded-3 text-center" name="stok_s" id="stokS" value="10">
+                                                                </div>
+                                                                <div class="col-6 col-md-3">
+                                                                    <label for="stokM" class="form-label small mb-1">M</label>
+                                                                    <input type="number" class="form-control rounded-3 text-center" name="stok_m" id="stokM" value="8">
+                                                                </div>
+                                                                <div class="col-6 col-md-3">
+                                                                    <label for="stokL" class="form-label small mb-1">L</label>
+                                                                    <input type="number" class="form-control rounded-3 text-center" name="stok_l" id="stokL" value="5">
+                                                                </div>
+                                                                <div class="col-6 col-md-3">
+                                                                    <label for="stokXL" class="form-label small mb-1">XL</label>
+                                                                    <input type="number" class="form-control rounded-3 text-center" name="stok_xl" id="stokXL" value="3">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <!-- Footer -->
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn close-footer btn-outline-secondary rounded-3 btn-close-red" data-bs-dismiss="modal">
-                                                        <i class="zmdi zmdi-close me-1"></i> Batal
-                                                    </button>
-                                                    <button type="submit" class="btn btn-success text-white rounded-3 fw-semibold">
-                                                        <i class="zmdi zmdi-check me-1"></i> Simpan Produk
-                                                    </button>
-                                                </div>
-                                            </form>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn close-footer btn-outline-secondary rounded-3 btn-close-red" data-bs-dismiss="modal">
+                                                            <i class="zmdi zmdi-close me-1"></i> Batal
+                                                        </button>
+                                                        <button type="submit" class="btn btn-warning text-white rounded-3 fw-semibold">
+                                                            <i class="zmdi zmdi-save me-1"></i> Simpan Perubahan
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Modal Preview Gambar -->
-                            <div class="modal fade" id="previewImageModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content border-0 bg-transparent">
-                                        <div class="modal-body text-center p-0">
-                                            <img id="previewModalImage" src="" alt="Preview" class="img-fluid rounded-4 shadow-sm">
-                                        </div>
-                                        <div class="modal-footer justify-content-center border-0">
-                                            <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Tutup</button>
+                                <!-- Modal Tambah Produk -->
+                                <div class="modal fade" id="tambahProdukModal" tabindex="-1" aria-labelledby="tambahProdukModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content border-0 rounded-4 shadow-lg">
+                                            <!-- Header -->
+                                            <div class="modal-header bg-success text-white rounded-top-4">
+                                                <h5 class="modal-title fw-bold" id="tambahProdukModalLabel">
+                                                    Tambah Produk
+                                                </h5>
+                                                <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white; font-size: 22px;">
+                                                    <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
+                                                </button>
+                                            </div>
+
+                                            <!-- Body -->
+                                            <div class="modal-body p-4">
+                                                <form id="formTambahProduk" action="{{ route('produkAdmin.store') }}" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="container-fluid py-2">
+                                                        <!-- Gambar Produk -->
+                                                        <div class="mb-4 text-center">
+                                                            <label for="tambahGambar" class="form-label fw-semibold mb-2">Gambar Produk</label>
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <img id="previewGambarTambah"
+                                                                    src="/Adminassets/images/ecommerce/placeholder.png"
+                                                                    alt="Preview"
+                                                                    class="img-thumbnail rounded-4 shadow-sm mb-3"
+                                                                    style="width: 140px; height: auto;">
+                                                                <label for="tambahGambar" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                                                    <i class="zmdi zmdi-upload me-1"></i> Pilih Gambar
+                                                                </label>
+                                                                <input type="file" name="gambar" id="tambahGambar" accept="image/*" class="d-none">
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Nama & Kategori -->
+                                                        <div class="row g-3 mb-3 align-items-end">
+                                                            <div class="col-md-6">
+                                                                <label for="tambahNama" class="form-label fw-semibold mb-2">Nama Produk</label>
+                                                                <input type="text" name="nama" class="form-control rounded-3 shadow-sm border-1"
+                                                                    id="tambahNama" placeholder="Masukkan nama produk"
+                                                                    style="padding: 10px 14px; font-weight: 500;">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="tambahKategori" class="form-label fw-semibold mb-2 kategori">Kategori</label>
+                                                                <select class="form-select rounded-3 kategori-select shadow-sm border-1" id="tambahKategori"
+                                                                    style="padding: 8px 36px 8px 14px;" name="kategori">
+                                                                    <option selected disabled>Pilih kategori</option>
+                                                                    <option value="Tshirt">Tshirt</option>
+                                                                    <option value="Sweater">Sweater</option>
+                                                                    <option value="Hoodie">Hoodie</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Detail Produk -->
+                                                        <div class="mb-3">
+                                                            <label for="tambahDetail" class="form-label fw-semibold">Detail Produk</label>
+                                                            <textarea name="detail" class="form-control rounded-3 shadow-sm" id="tambahDetail" rows="3" placeholder="Deskripsi produk"></textarea>
+                                                        </div>
+
+                                                        <!-- Harga -->
+                                                        <div class="mb-4">
+                                                            <label for="tambahHarga" class="form-label fw-semibold">Harga (Rp)</label>
+                                                            <input name="harga" type="number" class="form-control rounded-3 shadow-sm" id="tambahHarga" placeholder="Masukkan harga">
+                                                        </div>
+
+                                                        <!-- Stok per Size -->
+                                                        <div class="mb-2">
+                                                            <label class="form-label fw-semibold mb-2">Stok per Size</label>
+                                                            <div class="row g-3">
+                                                                <div class="col-6 col-md-3">
+                                                                    <label for="tambahStokS" class="form-label small mb-1">S</label>
+                                                                    <input type="number" name="stok_s" class="form-control rounded-3 text-center shadow-sm" id="tambahStokS" value="0">
+                                                                </div>
+                                                                <div class="col-6 col-md-3">
+                                                                    <label for="tambahStokM" class="form-label small mb-1">M</label>
+                                                                    <input type="number" name="stok_m" class="form-control rounded-3 text-center shadow-sm" id="tambahStokM" value="0">
+                                                                </div>
+                                                                <div class="col-6 col-md-3">
+                                                                    <label for="tambahStokL" class="form-label small mb-1">L</label>
+                                                                    <input type="number" name="stok_l" class="form-control rounded-3 text-center shadow-sm" id="tambahStokL" value="0">
+                                                                </div>
+                                                                <div class="col-6 col-md-3">
+                                                                    <label for="tambahStokXL" name="stok_xl" class="form-label small mb-1">XL</label>
+                                                                    <input type="number" name="stok_xl" class="form-control rounded-3 text-center shadow-sm" id="tambahStokXL" value="0">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Footer -->
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn close-footer btn-outline-secondary rounded-3 btn-close-red" data-bs-dismiss="modal">
+                                                            <i class="zmdi zmdi-close me-1"></i> Batal
+                                                        </button>
+                                                        <button type="submit" class="btn btn-success text-white rounded-3 fw-semibold">
+                                                            <i class="zmdi zmdi-check me-1"></i> Simpan Produk
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
+                                <!-- Modal Preview Gambar -->
+                                <div class="modal fade" id="previewImageModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content border-0 bg-transparent">
+                                            <div class="modal-body text-center p-0">
+                                                <img id="previewModalImage" src="" alt="Preview" class="img-fluid rounded-4 shadow-sm">
+                                            </div>
+                                            <div class="modal-footer justify-content-center border-0">
+                                                <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Tutup</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -476,6 +480,79 @@
 
 
     </section>
+    @push('styles')
+    <style>
+        @media (max-width: 768px) {
+
+            /* tabel lebih enak dibaca */
+            table th,
+            table td {
+                font-size: 12px;
+                white-space: nowrap;
+            }
+
+            /* gambar produk */
+            table img {
+                width: 40px;
+                height: auto;
+            }
+
+            /* tombol tambah produk */
+            .btn-rounded {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* pagination */
+            .pagination {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            /* modal biar full di mobile */
+            .modal-dialog {
+                margin: 10px;
+            }
+
+            /* container filter jadi kolom */
+            form .d-flex.flex-wrap {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            /* semua item filter = full width */
+            form .flex-grow-1,
+            .tgl-dbuat,
+            .direction,
+            form .d-flex.align-items-center {
+                width: 100% !important;
+                max-width: 100% !important;
+                flex: 0 0 100%;
+            }
+
+            /* input & select full */
+            input.form-control,
+            select.form-select {
+                width: 100% !important;
+            }
+
+            /* tombol cari & reset */
+            form .d-flex.align-items-center {
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            form .d-flex.align-items-center .btn,
+            form .d-flex.align-items-center a.btn {
+                flex: 1;
+                justify-content: center;
+                height: 44px;
+            }
+        }
+    </style>
+    @endpush
+
     @push('scripts')
 
     <!-- menghilangkan alert -->
