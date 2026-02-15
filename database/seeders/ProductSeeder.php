@@ -120,6 +120,17 @@ class ProductSeeder extends Seeder
                 'stok_l' => 15,
                 'stok_xl' => 0,
             ],
+            [
+                'nama' => 'TSHIRT vintage series "ninerealms"',
+                'kategori' => 'Tshirt',
+                'detail' => '<p><strong>T-Shirt Oversize vintage Series “ninerealms”</strong>Hadir dengan gaya retro yang timeless dan potongan oversize kekinian yang nyaman dipakai seharian. Terbuat dari <strong>material premium cotton</strong> yang adem dan lembut di kulit — cocok buat kamu yang suka<strong> tampil santai dengan style vintage</strong></p>',
+                'harga' => 94000,
+                'gambar' => 'produk/qqR6kyICxAVQdH8niyMColc7DSrdt9z3SOLJVTet.jpg',
+                'stok_s' => 10,
+                'stok_m' => 5,
+                'stok_l' => 1,
+                'stok_xl' => 0,
+            ],
         ]);
     }
 }

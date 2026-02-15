@@ -12,7 +12,17 @@
                         <div class="container">
                                 <div class="slider-content ms-4 mt-5">
                                     <h2 class="main-title">{!! $item->judul !!}</h2>
-                                    <p>{!! $item->sub_judul !!}</p>
+                                    <p>
+                                        @php
+                                            $words = explode(' ', strip_tags($item->sub_judul));
+                                            $chunks = array_chunk($words, 5);
+                                        @endphp
+
+                                        @foreach ($chunks as $chunk)
+                                            {{ implode(' ', $chunk) }}<br>
+                                        @endforeach
+                                    </p>
+
 
                                    @if($item->product)
                                         <a href="{{ route('detail', $item->encrypted_product_id) }}"
