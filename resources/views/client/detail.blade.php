@@ -15,7 +15,7 @@
 
 
         <!--Shop Single Start-->
-        <div class="shop-single-page section-padding-4">
+        <div class="shop-single-page section-padding-1">
             <div class="container">
 
 
