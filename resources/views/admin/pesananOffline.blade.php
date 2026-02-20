@@ -126,6 +126,71 @@
                         </div>
                     </div>
 
+                    <div class="modal fade" id="produkEditModal" tabindex="-1">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content rounded-4">
+                                <!-- Header -->
+                                <div class="modal-header bg-warning text-white rounded-top-4">
+                                    <h5 class="modal-title fw-semibold" id="stokDetailModalLabel">
+                                        Edit Produk
+                                    </h5>
+                                    <button type="button" class="btn btn-link p-0 m-0 border-0" data-bs-dismiss="modal" aria-label="Close" style="color: white; font-size: 22px;">
+                                        <i class="zmdi zmdi-close-circle" style="font-size: 25px;"></i>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <!-- PILIH PRODUK -->
+                                    <div class="mb-3">
+                                        <label for="editModalProduk" class="form-label fw-semibold mb-2 ">Produk</label>
+                                        <select class="form-select rounded-3 kategori-select shadow-sm border-1" style="padding: 8px 36px 8px 14px;" id="editModalProduk">
+                                            <option value="">Pilih Produk</option>
+                                            @foreach($products as $p)
+                                            <option
+                                                value="{{ $p->id }}"
+                                                data-nama="{{ $p->nama }}"
+                                                data-harga="{{ $p->harga }}"
+                                                data-s="{{ $p->stok_s }}"
+                                                data-m="{{ $p->stok_m }}"
+                                                data-l="{{ $p->stok_l }}"
+                                                data-xl="{{ $p->stok_xl }}">
+                                                {{ $p->nama }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- UKURAN -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold">Ukuran</label>
+                                        <div class="d-flex">
+                                            <button class="btn btn-outline-dark ukuran-btn" data-size="S">S</button>
+                                            <button class="btn btn-outline-dark ukuran-btn" data-size="M">M</button>
+                                            <button class="btn btn-outline-dark ukuran-btn" data-size="L">L</button>
+                                            <button class="btn btn-outline-dark ukuran-btn" data-size="XL">XL</button>
+                                        </div>
+                                        <div class="mt-2 text-muted small" id="editStokInfo">Stok: -</div>
+                                    </div>
+
+                                    <!-- JUMLAH -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold">Jumlah</label>
+                                        <input type="number" min="1" class="form-control" id="editModalJumlah">
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                    <button class="btn btn-primary" id="updateProduk">
+                                    Update Produk
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
@@ -273,28 +338,7 @@
             const subtotal = harga * jumlah;
 
             /* === MODE EDIT === */
-            if (editRow) {
-                editRow.innerHTML = `
-            <td>${opt.dataset.nama}</td>
-            <td>${selectedSize}</td>
-            <td>${jumlah}</td>
-            <td>${formatRupiah(harga)}</td>
-            <td class="subtotal" data-value="${subtotal}">
-                ${formatRupiah(subtotal)}
-            </td>
-             <td>
-                        <a type="button" class="btn-action edit waves-effect waves-yellow" title="Edit">
-                            <i class="zmdi zmdi-edit"></i>
-                        </a>                                            
-                        <a type="button" class="btn-action hapus waves-effect waves-red " title="Edit">
-                            <i class="zmdi zmdi-delete"></i>
-                        </a>                                                                 
-                    </td>
-        `;
-                editRow = null;
-            }
-            /* === MODE TAMBAH === */
-            else {
+            
                 const row = document.createElement("tr");
                 row.dataset.productId = opt.value;
                 row.innerHTML = `
@@ -315,7 +359,7 @@
                     </td>
                 `;
                 cartBody.appendChild(row);
-            }
+            
 
             hitungTotal();
 
@@ -337,51 +381,128 @@
             }
         });
 
-        cartBody.addEventListener("click", (e) => {
+    </script>
 
-            /* === EDIT === */
-            if (e.target.classList.contains("edit")) {
-                editRow = e.target.closest("tr");
+    <!-- sciprt edit -->
+     <script>
 
-                const namaProduk = editRow.children[0].textContent;
-                const ukuran = editRow.children[1].textContent;
-                const jumlah = editRow.children[2].textContent;
+let editSelectedSize = null;
+let editSelectedStock = 0;
 
-                // pilih produk sesuai nama
-                [...modalProduk.options].forEach(opt => {
-                    if (opt.dataset.nama === namaProduk) {
-                        opt.selected = true;
-                    }
-                });
+const editModalProduk = document.getElementById("editModalProduk");
+const editStokInfo = document.getElementById("editStokInfo");
 
-                // set ukuran
-                document.querySelectorAll(".ukuran-btn").forEach(btn => {
-                    btn.classList.remove("btn-success");
-                    btn.classList.add("btn-outline-dark");
+/* ================================
+   PILIH UKURAN DI MODAL EDIT
+================================ */
+document.querySelectorAll("#produkEditModal .ukuran-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
 
-                    if (btn.dataset.size === ukuran) {
-                        btn.classList.remove("btn-outline-dark");
-                        btn.classList.add("btn-success");
-                        selectedSize = ukuran;
+        document.querySelectorAll("#produkEditModal .ukuran-btn").forEach(b => {
+            b.classList.remove("btn-success");
+            b.classList.add("btn-outline-dark");
+        });
 
-                        const opt = modalProduk.selectedOptions[0];
-                        selectedStock = parseInt(opt.dataset[ukuran.toLowerCase()]);
-                        stokInfo.textContent = "Stok: " + selectedStock;
-                    }
-                });
+        this.classList.remove("btn-outline-dark");
+        this.classList.add("btn-success");
 
-                document.getElementById("modalJumlah").value = jumlah;
+        editSelectedSize = this.dataset.size;
 
-                new bootstrap.Modal(document.getElementById("produkModal")).show();
-            }
+        const opt = editModalProduk.selectedOptions[0];
+        editSelectedStock = opt ? parseInt(opt.dataset[editSelectedSize.toLowerCase()]) : 0;
 
-            /* === HAPUS === */
-            if (e.target.classList.contains("hapus")) {
-                e.target.closest("tr").remove();
-                hitungTotal();
+        editStokInfo.textContent = "Stok: " + editSelectedStock;
+    });
+});
+
+
+/* ================================
+   KLIK EDIT DI TABEL
+================================ */
+cartBody.addEventListener("click", (e) => {
+
+    if (e.target.closest(".edit")) {
+
+        editRow = e.target.closest("tr");
+
+        const namaProduk = editRow.children[0].textContent;
+        const ukuran = editRow.children[1].textContent;
+        const jumlah = editRow.children[2].textContent;
+
+        // set dropdown produk
+        [...editModalProduk.options].forEach(opt => {
+            if (opt.dataset.nama === namaProduk) {
+                opt.selected = true;
             }
         });
-    </script>
+
+        // set ukuran
+        document.querySelectorAll("#produkEditModal .ukuran-btn").forEach(btn => {
+            btn.classList.remove("btn-success");
+            btn.classList.add("btn-outline-dark");
+
+            if (btn.dataset.size === ukuran) {
+                btn.classList.remove("btn-outline-dark");
+                btn.classList.add("btn-success");
+
+                editSelectedSize = ukuran;
+
+                const opt = editModalProduk.selectedOptions[0];
+                editSelectedStock = parseInt(opt.dataset[ukuran.toLowerCase()]);
+                editStokInfo.textContent = "Stok: " + editSelectedStock;
+            }
+        });
+
+        document.getElementById("editModalJumlah").value = jumlah;
+
+        new bootstrap.Modal(document.getElementById("produkEditModal")).show();
+    }
+});
+
+
+/* ================================
+   TOMBOL UPDATE PRODUK
+================================ */
+document.getElementById("updateProduk").addEventListener("click", () => {
+
+    const opt = editModalProduk.selectedOptions[0];
+    const jumlah = parseInt(document.getElementById("editModalJumlah").value);
+
+    if (!opt || !editSelectedSize || !jumlah) {
+        alert("Lengkapi produk, ukuran, dan jumlah");
+        return;
+    }
+
+    if (jumlah > editSelectedStock) {
+        alert("Jumlah melebihi stok");
+        return;
+    }
+
+    const harga = parseInt(opt.dataset.harga);
+    const subtotal = harga * jumlah;
+
+    editRow.innerHTML = `
+        <td>${opt.dataset.nama}</td>
+        <td>${editSelectedSize}</td>
+        <td>${jumlah}</td>
+        <td>${formatRupiah(harga)}</td>
+        <td class="subtotal" data-value="${subtotal}">
+            ${formatRupiah(subtotal)}
+        </td>
+        <td>
+            <a class="btn-action edit"><i class="zmdi zmdi-edit"></i></a>
+            <a class="btn-action hapus"><i class="zmdi zmdi-delete"></i></a>
+        </td>
+    `;
+
+    editRow = null;
+    hitungTotal();
+
+    bootstrap.Modal.getInstance(document.getElementById("produkEditModal")).hide();
+});
+
+</script>
+
 
     <!-- co -->
     <script>
