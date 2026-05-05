@@ -16,7 +16,7 @@
 
 
         <!-- DESKTOP VIEW -->
-        <div class="login-page py-5 desktop-view" style="background-color:#f8f9fa; min-height:100vh;">
+        <div class="login-page desktop-view" style="background-color:#f8f9fa; min-height:100vh;">
 
             <!-- Alert Success -->
             @if(session('success'))
